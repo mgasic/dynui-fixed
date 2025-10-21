@@ -1,0 +1,30 @@
+// Quality Gates from FS-03
+name: CI
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile=false
+      - name: Gate A — TypeScript & ESLint & Prettier
+        run: |
+          pnpm typecheck
+          pnpm lint
+          pnpm exec prettier --check .
+      - name: Build
+        run: pnpm build
+      - name: Gate B — Unit tests (vitest)
+        run: pnpm test -- --run
