@@ -9,7 +9,7 @@ function TestComponent() {
   })
 
   return (
-    <div ref={containerRef} data-testid="container">
+    <div ref={containerRef as React.RefObject<HTMLDivElement>} data-testid="container">
       <button>Item 1</button>
       <button>Item 2</button>
       <button>Item 3</button>
@@ -39,7 +39,6 @@ describe('useArrowNavigation', () => {
     const firstButton = screen.getByText('Item 1')
     const lastButton = screen.getByText('Item 3')
     
-    // Focus middle item
     screen.getByText('Item 2').focus()
     
     await user.keyboard('{Home}')
