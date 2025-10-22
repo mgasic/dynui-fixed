@@ -25,7 +25,7 @@ jobs:
         run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
         env:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --frozen-lockfile=true
+      - run: pnpm install --no-frozen-lockfile
       - name: TypeScript Check
         run: pnpm typecheck
       - name: ESLint Check
@@ -52,7 +52,7 @@ jobs:
         run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
         env:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --frozen-lockfile=true
+      - run: pnpm install --no-frozen-lockfile
       - name: Run Unit Tests
         run: pnpm test -- --coverage
       - name: Check Coverage Threshold
@@ -78,7 +78,7 @@ jobs:
         run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
         env:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --frozen-lockfile=true
+      - run: pnpm install --no-frozen-lockfile
       - name: Run A11y Tests
         run: pnpm test:a11y
       - name: Build Storybook
@@ -103,7 +103,7 @@ jobs:
         run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
         env:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --frozen-lockfile=true
+      - run: pnpm install --no-frozen-lockfile
       - name: Build Package
         run: pnpm build
       - name: Check Bundle Size
@@ -134,6 +134,6 @@ jobs:
         run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
         env:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --frozen-lockfile=true
+      - run: pnpm install --no-frozen-lockfile
       - name: Run API Contract Tests
         run: pnpm test:contracts

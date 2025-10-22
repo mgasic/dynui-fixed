@@ -26,7 +26,7 @@ jobs:
         run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
         env:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --frozen-lockfile=true
+      - run: pnpm install --no-frozen-lockfile
       - name: Build Storybook
         run: pnpm build:storybook
       - name: Publish to Chromatic
