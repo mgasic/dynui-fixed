@@ -1,0 +1,22 @@
+import type { Meta } from '@storybook/react'
+import { Title, Subtitle, Description, Primary, ArgsTable, Stories } from '@storybook/blocks'
+import * as Types from '../src/types/components/dyn-select.types'
+
+const meta: Meta = {
+  title: 'Docs/API/DynSelect',
+  parameters: {
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Subtitle>API Reference</Subtitle>
+          <Description>DynSelect/DynSelectOption props i a11y napomene.</Description>
+          <Primary />
+          <ArgsTable of={Types} />
+          <Stories />
+        </>
+      )
+    }
+  }
+}
+export default meta

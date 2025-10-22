@@ -1,0 +1,22 @@
+import type { Meta } from '@storybook/react'
+import { ArgsTable, Title, Subtitle, Description, Primary, Stories } from '@storybook/blocks'
+import * as Types from '../src/types/components/dyn-input.types'
+
+const meta: Meta = {
+  title: 'Docs/API/DynInput',
+  parameters: {
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Subtitle>API Reference</Subtitle>
+          <Description>DynInput props i API prema FS-02 specifikaciji.</Description>
+          <Primary />
+          <ArgsTable of={Types} />
+          <Stories />
+        </>
+      )
+    }
+  }
+}
+export default meta
