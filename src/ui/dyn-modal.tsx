@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { DynModalProps } from '../types/components/dyn-modal.types'
+import { useFocusTrap } from '../hooks/use-focus-trap'
+import { useKeyboard } from '../hooks/use-keyboard'
 import { classNames } from '../utils'
 
 export function DynModal({
@@ -13,45 +15,39 @@ export function DynModal({
   'data-testid': dataTestId
 }: DynModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
-  const previousFocusRef = useRef<HTMLElement | null>(null)
+  const focusTrapRef = useFocusTrap({
+    enabled: open,
+    initialFocus: true,
+    returnFocus: true
+  })
+
+  // Handle Escape key
+  useKeyboard('Escape', () => {
+    if (open) onClose?.()
+  }, { enabled: open })
 
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
 
     if (open) {
-      previousFocusRef.current = document.activeElement as HTMLElement
       dialog.showModal()
-      // Focus first focusable element
-      const firstFocusable = dialog.querySelector(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      ) as HTMLElement
-      firstFocusable?.focus()
+      // Set focus trap container to dialog
+      if (focusTrapRef.current !== dialog) {
+        ;(focusTrapRef as any).current = dialog
+      }
     } else {
       dialog.close()
-      previousFocusRef.current?.focus()
     }
-  }, [open])
+  }, [open, focusTrapRef])
 
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
 
     const handleClose = () => onClose?.()
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault()
-        onClose?.()
-      }
-    }
-
     dialog.addEventListener('close', handleClose)
-    dialog.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      dialog.removeEventListener('close', handleClose)
-      dialog.removeEventListener('keydown', handleKeyDown)
-    }
+    return () => dialog.removeEventListener('close', handleClose)
   }, [onClose])
 
   const cls = classNames(
@@ -63,6 +59,7 @@ export function DynModal({
     <dialog
       ref={dialogRef}
       className={cls}
+      aria-modal="true"
       aria-label={ariaLabel || title}
       aria-labelledby={ariaLabelledby || (title ? 'modal-title' : undefined)}
       data-testid={dataTestId}
