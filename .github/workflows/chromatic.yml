@@ -20,7 +20,13 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile=false
+          registry-url: 'https://npm.pkg.github.com/'
+          scope: '@mgasic'
+      - name: Auth for GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_TOKEN}" >> ~/.npmrc
+        env:
+          GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+      - run: pnpm install --frozen-lockfile=true
       - name: Build Storybook
         run: pnpm build:storybook
       - name: Publish to Chromatic
