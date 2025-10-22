@@ -1,37 +1,24 @@
 {
-  "name": "@mgasic/dynui-fixed",
-  "version": "0.1.0",
-  "private": false,
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mgasic/dynui-fixed.git"
-  },
+  "name": "@dynui/fixed-monorepo",
+  "version": "1.0.0",
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "sideEffects": false,
-  "scripts": {
-    "build": "tsup --config tsup.config.ts",
-    "dev": "tsup --config tsup.config.ts --watch",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit -p tsconfig.build.json",
-    "test": "vitest run --coverage --config vitest.config.ts",
-    "test:a11y": "vitest run -t a11y --config vitest.config.ts",
-    "test:contracts": "tsd",
-    "storybook": "storybook dev -p 6006",
-    "build:storybook": "storybook build"
-  },
-  "files": [
-    "dist",
-    "src"
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
   ],
-  "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "test": "turbo test",
+    "test:a11y": "turbo test:a11y", 
+    "typecheck": "turbo typecheck",
+    "lint": "turbo lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "turbo clean",
+    "storybook": "cd apps/storybook && pnpm storybook",
+    "build:storybook": "cd apps/storybook && pnpm build:storybook"
   },
   "devDependencies": {
     "@axe-core/react": "^4.7.3",

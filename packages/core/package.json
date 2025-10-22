@@ -1,0 +1,78 @@
+{
+  "name": "@dynui/core",
+  "version": "1.0.0",
+  "description": "DynUI Component Library - Production Ready",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles": "./dist/styles.css"
+  },
+  "files": ["dist", "README.md"],
+  "sideEffects": ["**/*.css"],
+  "scripts": {
+    "build": "tsup --config tsup.config.ts",
+    "dev": "tsup --config tsup.config.ts --watch",
+    "test": "vitest run --coverage --config vitest.config.ts",
+    "test:a11y": "vitest run -t a11y --config vitest.config.ts",
+    "test:contracts": "tsd",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "classnames": "^2.5.1"
+  },
+  "devDependencies": {
+    "@axe-core/react": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "eslint": "catalog:",
+    "jsdom": "catalog:",
+    "prettier": "catalog:",
+    "tsup": "catalog:",
+    "tsd": "^0.30.7",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "vitest-axe": "catalog:"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mgasic/dynui-fixed.git",
+    "directory": "packages/core"
+  },
+  "keywords": [
+    "react",
+    "component-library", 
+    "typescript",
+    "accessibility",
+    "design-system"
+  ]
+}
