@@ -2,15 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "baseUrl": ".",
-    "paths": {
-      "@dynui/design-tokens": ["../design-tokens/src"],
-      "@dynui/icons": ["../icons/src"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src/**/*"],
-  "references": [
-    { "path": "../design-tokens" },
-    { "path": "../icons" }
-  ]
+  "include": ["src/**/*"]
 }
