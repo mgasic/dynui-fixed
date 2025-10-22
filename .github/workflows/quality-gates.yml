@@ -19,7 +19,13 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile=false
+          registry-url: 'https://npm.pkg.github.com/'
+          scope: '@mgasic'
+      - name: Auth for GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
+        env:
+          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      - run: pnpm install --no-frozen-lockfile
       - name: TypeScript Check
         run: pnpm typecheck
       - name: ESLint Check
@@ -40,11 +46,18 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile=false
+          registry-url: 'https://npm.pkg.github.com/'
+          scope: '@mgasic'
+      - name: Auth for GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
+        env:
+          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      - run: pnpm install --no-frozen-lockfile
       - name: Run Unit Tests
         run: pnpm test -- --coverage
       - name: Check Coverage Threshold
-        run: echo "Coverage check placeholder - add coverage threshold validation"
+        run: |
+          echo "Coverage check placeholder - add coverage threshold validation"
 
   gate-c-a11y:
     name: "Gate C: Accessibility"
@@ -59,7 +72,13 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile=false
+          registry-url: 'https://npm.pkg.github.com/'
+          scope: '@mgasic'
+      - name: Auth for GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
+        env:
+          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      - run: pnpm install --no-frozen-lockfile
       - name: Run A11y Tests
         run: pnpm test:a11y
       - name: Build Storybook
@@ -78,7 +97,13 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile=false
+          registry-url: 'https://npm.pkg.github.com/'
+          scope: '@mgasic'
+      - name: Auth for GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
+        env:
+          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      - run: pnpm install --no-frozen-lockfile
       - name: Build Package
         run: pnpm build
       - name: Check Bundle Size
@@ -103,6 +128,12 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile=false
+          registry-url: 'https://npm.pkg.github.com/'
+          scope: '@mgasic'
+      - name: Auth for GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
+        env:
+          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      - run: pnpm install --no-frozen-lockfile
       - name: Run API Contract Tests
         run: pnpm test:contracts
