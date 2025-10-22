@@ -1,0 +1,21 @@
+import type { Meta } from '@storybook/react'
+import { Title, Subtitle, Description, Primary, ArgsTable, Stories } from '@storybook/blocks'
+import * as Types from '../../src/types/components/dyn-modal.types'
+
+const meta: Meta = {
+  title: 'Docs/Accessibility/Forms',
+  parameters: {
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Subtitle>Accessibility Scenarios</Subtitle>
+          <Description>Primeri sa aria-describedby, aria-invalid, required indikatorima.</Description>
+          <Primary />
+          <Stories />
+        </>
+      )
+    }
+  }
+}
+export default meta

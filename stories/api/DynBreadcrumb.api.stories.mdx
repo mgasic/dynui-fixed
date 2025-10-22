@@ -1,0 +1,22 @@
+import type { Meta } from '@storybook/react'
+import { Title, Subtitle, Description, Primary, ArgsTable, Stories } from '@storybook/blocks'
+import * as Types from '../../src/types/components/dyn-breadcrumb.types'
+
+const meta: Meta = {
+  title: 'Docs/API/DynBreadcrumb',
+  parameters: {
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Subtitle>API Reference</Subtitle>
+          <Description>DynBreadcrumb/DynBreadcrumbItem sa overflow (maxItems) i aria-current="page".</Description>
+          <Primary />
+          <ArgsTable of={Types} />
+          <Stories />
+        </>
+      )
+    }
+  }
+}
+export default meta
