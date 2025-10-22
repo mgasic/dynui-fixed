@@ -1,130 +1,111 @@
-import { createContext, useContext, useId, useMemo, useRef, useState } from 'react'
-import type { DynTabsProps, DynTabItem } from '../types/components/dyn-tabs.types'
-import { useArrowNavigation } from '../hooks/use-arrow-navigation'
-import { classNames } from '../utils'
+import React, { forwardRef, useState } from 'react';
+import type { DynTabsProps, DynTabProps, DynTabPanelProps } from '../types/components/dyn-tabs.types';
+import { useArrowNavigation } from '../hooks/use-arrow-navigation';
+import { classNames } from '../utils';
 
-interface TabsCtx {
-  value: string
-  setValue: (v: string) => void
-  activation: 'auto' | 'manual'
-  orientation: 'horizontal' | 'vertical'
-  tabsId: string
-}
-const TabsContext = createContext<TabsCtx | null>(null)
+export const DynTabs = forwardRef<HTMLDivElement, DynTabsProps>(
+  ({
+    value,
+    defaultValue,
+    orientation = 'horizontal',
+    children,
+    className,
+    onChange,
+    'data-testid': testId,
+    ...props
+  }, ref) => {
+    const [activeTab, setActiveTab] = useState(value || defaultValue || '');
+    
+    const { containerRef } = useArrowNavigation({
+      orientation,
+      selector: '[role="tab"]:not([aria-disabled="true"])',
+      typeahead: false
+    });
 
-export function DynTabs({
-  as: As = 'div',
-  value,
-  defaultValue,
-  onChange,
-  orientation = 'horizontal',
-  activation = 'auto',
-  fitted,
-  'aria-label': ariaLabel,
-  'aria-labelledby': ariaLabelledby,
-  'data-testid': dataTestId,
-  children
-}: React.PropsWithChildren<DynTabsProps>) {
-  const [internal, setInternal] = useState(defaultValue ?? '')
-  const current = value ?? internal
-  const setValue = (v: string) => {
-    if (value === undefined) setInternal(v)
-    onChange?.(v)
+    const handleTabChange = (tabValue: string) => {
+      if (value === undefined) {
+        setActiveTab(tabValue);
+      }
+      onChange?.(tabValue);
+    };
+
+    const currentTab = value ?? activeTab;
+
+    return (
+      <div
+        {...props}
+        ref={ref}
+        className={classNames('dyn-tabs', `dyn-tabs--${orientation}`, className)}
+        data-testid={testId}
+      >
+        <div
+          ref={containerRef}
+          role="tablist"
+          className="dyn-tabs__list"
+        >
+          {React.Children.map(children, (child) => {
+            if (React.isValidElement(child) && child.type === DynTab) {
+              return React.cloneElement(child, {
+                isActive: child.props.value === currentTab,
+                onSelect: handleTabChange
+              });
+            }
+            return null;
+          })}
+        </div>
+        <div className="dyn-tabs__content">
+          {React.Children.map(children, (child) => {
+            if (React.isValidElement(child) && child.type === DynTabPanel) {
+              return React.cloneElement(child, {
+                isActive: child.props.value === currentTab
+              });
+            }
+            return null;
+          })}
+        </div>
+      </div>
+    );
   }
-  
-  const tabsId = useId()
-  const ctx = useMemo(() => ({ value: current, setValue, activation, orientation, tabsId }), [current, activation, orientation, tabsId])
-  
-  const { containerRef } = useArrowNavigation({
-    orientation: orientation === 'horizontal' ? 'horizontal' : 'vertical',
-    selector: '[role="tab"]:not([aria-disabled="true"])',
-    typeahead: true
-  })
+);
 
-  return (
-    <As 
-      ref={containerRef}
-      role="tablist" 
-      aria-orientation={orientation} 
-      aria-label={ariaLabel} 
-      aria-labelledby={ariaLabelledby} 
-      data-testid={dataTestId}
-      className={classNames(
-        'dyn-tabs',
-        `dyn-tabs--${orientation}`,
-        fitted && 'dyn-tabs--fitted'
-      )}
-    >
-      <TabsContext.Provider value={ctx}>{children}</TabsContext.Provider>
-    </As>
-  )
-}
+DynTabs.displayName = 'DynTabs';
 
-export function DynTab({ item }: { item: DynTabItem }) {
-  const ctx = useContext(TabsContext)
-  if (!ctx) throw new Error('DynTab must be used within DynTabs')
-  
-  const isSelected = ctx.value === item.value
-  const btnRef = useRef<HTMLButtonElement>(null)
-  const panelId = `${ctx.tabsId}-panel-${item.value}`
-  const tabId = `${ctx.tabsId}-tab-${item.value}`
-  
-  const handleClick = () => {
-    ctx.setValue(item.value)
-  }
-  
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Manual activation: require Enter/Space to activate
-    if (ctx.activation === 'manual' && (e.key === 'Enter' || e.key === ' ')) {
-      e.preventDefault()
-      ctx.setValue(item.value)
-    }
-  }
-  
-  return (
+export const DynTab = forwardRef<HTMLButtonElement, DynTabProps>(
+  ({ value, children, isActive, onSelect, disabled, className, ...props }, ref) => (
     <button
-      ref={btnRef}
-      id={tabId}
+      {...props}
+      ref={ref}
       role="tab"
-      aria-selected={isSelected}
-      aria-controls={panelId}
-      aria-disabled={item.disabled}
-      tabIndex={isSelected ? 0 : -1}
-      disabled={item.disabled}
+      aria-selected={isActive}
+      aria-disabled={disabled}
+      tabIndex={isActive ? 0 : -1}
       className={classNames(
         'dyn-tab',
-        isSelected && 'dyn-tab--selected',
-        item.disabled && 'dyn-tab--disabled'
+        isActive && 'dyn-tab--active',
+        disabled && 'dyn-tab--disabled',
+        className
       )}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
+      onClick={() => !disabled && onSelect?.(value)}
     >
-      {item.label}
+      {children}
     </button>
   )
-}
+);
 
-export function DynTabPanel({ item, children }: React.PropsWithChildren<{ item: DynTabItem }>) {
-  const ctx = useContext(TabsContext)
-  if (!ctx) throw new Error('DynTabPanel must be used within DynTabs')
-  
-  const isSelected = ctx.value === item.value
-  const panelId = `${ctx.tabsId}-panel-${item.value}`
-  const tabId = `${ctx.tabsId}-tab-${item.value}`
-  
-  return (
-    <div 
-      id={panelId} 
-      role="tabpanel" 
-      aria-labelledby={tabId} 
-      hidden={!isSelected}
-      tabIndex={isSelected ? 0 : -1}
-      className={classNames(
-        'dyn-tabpanel',
-        !isSelected && 'dyn-tabpanel--hidden'
-      )}
+DynTab.displayName = 'DynTab';
+
+export const DynTabPanel = forwardRef<HTMLDivElement, DynTabPanelProps>(
+  ({ value, children, isActive, className, ...props }, ref) => (
+    <div
+      {...props}
+      ref={ref}
+      role="tabpanel"
+      hidden={!isActive}
+      className={classNames('dyn-tab-panel', className)}
     >
-      {isSelected && children}
+      {children}
     </div>
   )
-}
+);
+
+DynTabPanel.displayName = 'DynTabPanel';

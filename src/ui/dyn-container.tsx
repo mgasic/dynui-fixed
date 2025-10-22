@@ -1,32 +1,42 @@
-import type { DynContainerProps } from '../types/components/dyn-container.types'
-import { classNames, getSpacingStyles } from '../utils'
+import React, { forwardRef } from 'react';
+import type { DynContainerProps } from '../types/components/dyn-container.types';
+import { getSpacingStyles, classNames } from '../utils';
 
-export function DynContainer({
-  as: As = 'div',
-  children,
-  size = 'lg',
-  maxWidth,
-  centered = true,
-  p,
-  m,
-  fluid = false,
-  'data-testid': dataTestId
-}: DynContainerProps) {
-  const cls = classNames(
-    'dyn-container',
-    `dyn-container--${size}`,
-    maxWidth && `dyn-container--max-${maxWidth}`,
-    centered && 'dyn-container--centered',
-    fluid && 'dyn-container--fluid',
-    p && `dyn-container--p-${p}`,
-    m && `dyn-container--m-${m}`
-  )
+export const DynContainer = forwardRef<HTMLDivElement, DynContainerProps>(
+  ({ 
+    maxWidth,
+    p, 
+    m,
+    children,
+    className,
+    style,
+    'data-testid': testId,
+    ...props 
+  }, ref) => {
+    // Fix exactOptionalPropertyTypes by explicit undefined handling
+    const spacingStyles = getSpacingStyles({ 
+      p: p !== undefined ? p : undefined, 
+      m: m !== undefined ? m : undefined 
+    });
 
-  const styles = getSpacingStyles({ p, m })
+    const combinedStyle = {
+      ...spacingStyles,
+      maxWidth: maxWidth !== undefined ? maxWidth : undefined,
+      ...style
+    };
 
-  return (
-    <As className={cls} style={styles} data-testid={dataTestId}>
-      {children}
-    </As>
-  )
-}
+    return (
+      <div
+        {...props}
+        ref={ref}
+        className={classNames('dyn-container', className)}
+        style={combinedStyle}
+        data-testid={testId}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+DynContainer.displayName = 'DynContainer';

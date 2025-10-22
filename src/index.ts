@@ -1,17 +1,16 @@
 // Components
 export * from './components'
 
-// Theme and Theming
-export * from './theme'
-
-// Icons
-export * from './icons'
-
-// Utilities
-export * from './utils'
-
-// Hooks
+// Hooks  
 export * from './hooks'
 
-// All Types
-export * from './types'
+// Types
+export type * from './types/components'
+export type * from './types/common.types'
+
+// Utils (without SpacingValue to avoid ambiguity)
+export { classNames, getSpacingStyles } from './utils'
+export type { StyleProps } from './utils/style-props'
+
+// Theme
+export * from './theme'

@@ -1,7 +1,7 @@
-import React, { forwardRef, useRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import type { DynTableProps, DynTableSort } from '../types/components/dyn-table.types';
-import { useArrowNavigation } from '../hooks/useArrowNavigation';
-import { classNames } from '../utils/classNames';
+import { useArrowNavigation } from '../hooks/use-arrow-navigation';
+import { classNames } from '../utils';
 
 export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
   ({
@@ -15,27 +15,24 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
   }, ref) => {
     const [sortState, setSortState] = useState<DynTableSort | null>(null);
     
-    // Handle sorting - safe implementation without regex literals
     const handleSort = (columnKey: string) => {
       if (!sortable || !onSort) return;
       
       const newDirection = 
         sortState?.column === columnKey && sortState.direction === 'asc'
-          ? 'desc'
-          : 'asc';
+          ? 'desc' as const
+          : 'asc' as const;
       
       const newSortState = { column: columnKey, direction: newDirection };
       setSortState(newSortState);
-      onSort(newSortState);
+      onSort(columnKey, newDirection);
     };
 
-    // Map aria-sort values to WAI-ARIA tokens
     const getAriaSort = (columnKey: string): 'none' | 'ascending' | 'descending' => {
       if (sortState?.column !== columnKey) return 'none';
       return sortState.direction === 'asc' ? 'ascending' : 'descending';
     };
 
-    // Arrow navigation for table rows
     const { containerRef } = useArrowNavigation({
       orientation: 'vertical',
       selector: 'tbody tr[tabindex="0"]',
@@ -71,7 +68,7 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
                     }
                   }}
                 >
-                  {column.header}
+                  {column.label}
                   {sortable && column.sortable && sortState?.column === column.key && (
                     <span className="dyn-table__sort-indicator">
                       {sortState.direction === 'asc' ? '↑' : '↓'}

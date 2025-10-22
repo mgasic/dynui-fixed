@@ -1,84 +1,67 @@
-import { useId } from 'react'
-import type { DynFieldContainerProps } from '../types/components/dyn-field-container.types'
-import { classNames } from '../utils'
+import React, { forwardRef } from 'react';
+import type { DynFieldContainerProps } from '../types/components/dyn-field-container.types';
+import { classNames } from '../utils';
 
-export function DynFieldContainer({
-  as: As = 'div',
-  children,
-  label,
-  description,
-  error,
-  required = false,
-  disabled = false,
-  'aria-labelledby': ariaLabelledby,
-  'aria-describedby': ariaDescribedby,
-  'data-testid': dataTestId
-}: DynFieldContainerProps) {
-  const labelId = useId()
-  const descriptionId = useId()
-  const errorId = useId()
+export const DynFieldContainer = forwardRef<HTMLDivElement, DynFieldContainerProps>(
+  ({ 
+    label,
+    error,
+    helpText,
+    required = false,
+    children,
+    className,
+    'data-testid': testId,
+    ...props 
+  }, ref) => {
+    const fieldId = `field-${Math.random().toString(36).substr(2, 9)}`;
+    const errorId = error ? `${fieldId}-error` : undefined;
+    const helpId = helpText ? `${fieldId}-help` : undefined;
 
-  const cls = classNames(
-    'dyn-field-container',
-    required && 'dyn-field-container--required',
-    disabled && 'dyn-field-container--disabled',
-    error && 'dyn-field-container--error'
-  )
+    // Fix callable children type issue
+    const renderChildren = () => {
+      if (typeof children === 'function') {
+        return children({
+          id: fieldId,
+          'aria-describedby': [errorId, helpId].filter(Boolean).join(' ') || undefined,
+          'aria-invalid': !!error
+        });
+      }
+      return children;
+    };
 
-  const describedBy = [
-    ariaDescribedby,
-    description && descriptionId,
-    error && errorId
-  ].filter(Boolean).join(' ') || undefined
-
-  return (
-    <As className={cls} data-testid={dataTestId}>
-      {label && (
-        <label 
-          id={labelId}
-          className="dyn-field-container__label"
-          aria-labelledby={ariaLabelledby}
-        >
-          {label}
-          {required && (
-            <span className="dyn-field-container__required" aria-label="required">
-              *
-            </span>
-          )}
-        </label>
-      )}
-      
-      <div className="dyn-field-container__control">
-        {typeof children === 'function' 
-          ? children({
-              'aria-labelledby': label ? labelId : ariaLabelledby,
-              'aria-describedby': describedBy,
-              'aria-invalid': !!error,
-              disabled
-            })
-          : children
-        }
+    return (
+      <div
+        {...props}
+        ref={ref}
+        className={classNames(
+          'dyn-field-container',
+          error && 'dyn-field-container--error',
+          className
+        )}
+        data-testid={testId}
+      >
+        {label && (
+          <label htmlFor={fieldId} className="dyn-field-container__label">
+            {label}
+            {required && <span className="dyn-field-container__required">*</span>}
+          </label>
+        )}
+        <div className="dyn-field-container__input">
+          {renderChildren()}
+        </div>
+        {error && (
+          <div id={errorId} className="dyn-field-container__error">
+            {error}
+          </div>
+        )}
+        {helpText && (
+          <div id={helpId} className="dyn-field-container__help">
+            {helpText}
+          </div>
+        )}
       </div>
-      
-      {description && (
-        <div 
-          id={descriptionId}
-          className="dyn-field-container__description"
-        >
-          {description}
-        </div>
-      )}
-      
-      {error && (
-        <div 
-          id={errorId}
-          className="dyn-field-container__error"
-          role="alert"
-          aria-live="polite"
-        >
-          {error}
-        </div>
-      )}
-    </As>
-  )
-}
+    );
+  }
+);
+
+DynFieldContainer.displayName = 'DynFieldContainer';

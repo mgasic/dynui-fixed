@@ -1,94 +1,54 @@
-import type { DynBreadcrumbProps, DynBreadcrumbItemProps, BreadcrumbItem } from '../types/components/dyn-breadcrumb.types'
-import { classNames } from '../utils'
+import React, { forwardRef } from 'react';
+import type { DynBreadcrumbProps, DynBreadcrumbItemProps } from '../types/components/dyn-breadcrumb.types';
+import { classNames } from '../utils';
 
-export function DynBreadcrumb({
-  as: As = 'nav',
-  items = [],
-  separator = '/',
-  maxItems,
-  'aria-label': ariaLabel = 'Breadcrumb',
-  'aria-labelledby': ariaLabelledby,
-  'data-testid': dataTestId,
-  children
-}: React.PropsWithChildren<DynBreadcrumbProps>) {
-  const displayItems = maxItems && items.length > maxItems
-    ? [
-        ...items.slice(0, 1),
-        { key: 'ellipsis', value: 'ellipsis', label: '...' },
-        ...items.slice(-maxItems + 2)
-      ]
-    : items
-
-  return (
-    <As
-      role="navigation"
-      aria-label={ariaLabel}
-      aria-labelledby={ariaLabelledby}
-      data-testid={dataTestId}
-      className="dyn-breadcrumb"
+export const DynBreadcrumb = forwardRef<HTMLNavElement, DynBreadcrumbProps>(
+  ({ children, className, 'data-testid': testId, ...props }, ref) => (
+    <nav
+      {...props}
+      ref={ref}
+      aria-label="Breadcrumb"
+      className={classNames('dyn-breadcrumb', className)}
+      data-testid={testId}
     >
       <ol className="dyn-breadcrumb__list">
-        {children || displayItems.map((item, index) => (
-          <DynBreadcrumbItem
-            key={item.key}
-            item={item}
-            isLast={index === displayItems.length - 1}
-            separator={separator}
-          />
-        ))}
+        {React.Children.map(children, (child, index) => {
+          if (React.isValidElement(child) && child.type === DynBreadcrumbItem) {
+            const isLast = index === React.Children.count(children) - 1;
+            return React.cloneElement(child, {
+              isLast,
+              key: child.key || index
+            });
+          }
+          return child;
+        })}
       </ol>
-    </As>
+    </nav>
   )
-}
+);
 
-export function DynBreadcrumbItem({
-  item,
-  isLast = false,
-  separator,
-  onClick
-}: DynBreadcrumbItemProps) {
-  const handleClick = (e: React.MouseEvent) => {
-    if (item.disabled || isLast || item.value === 'ellipsis') {
-      e.preventDefault()
-      return
-    }
-    onClick?.(item.value)
-  }
+DynBreadcrumb.displayName = 'DynBreadcrumb';
 
-  const content = item.href ? (
-    <a
-      href={item.href}
-      className={classNames(
-        'dyn-breadcrumb__link',
-        item.disabled && 'dyn-breadcrumb__link--disabled',
-        isLast && 'dyn-breadcrumb__link--current'
-      )}
-      aria-current={isLast ? 'page' : undefined}
-      aria-disabled={item.disabled}
-      onClick={handleClick}
+export const DynBreadcrumbItem = forwardRef<HTMLLIElement, DynBreadcrumbItemProps>(
+  ({ children, href, isLast, className, 'data-testid': testId, ...props }, ref) => (
+    <li
+      {...props}
+      ref={ref}
+      className={classNames('dyn-breadcrumb__item', className)}
+      data-testid={testId}
     >
-      {item.label}
-    </a>
-  ) : (
-    <span
-      className={classNames(
-        'dyn-breadcrumb__text',
-        isLast && 'dyn-breadcrumb__text--current'
-      )}
-      aria-current={isLast ? 'page' : undefined}
-    >
-      {item.label}
-    </span>
-  )
-
-  return (
-    <li className="dyn-breadcrumb__item">
-      {content}
-      {!isLast && (
-        <span className="dyn-breadcrumb__separator" aria-hidden="true">
-          {separator}
+      {href ? (
+        <a href={href} className="dyn-breadcrumb__link" aria-current={isLast ? 'page' : undefined}>
+          {children}
+        </a>
+      ) : (
+        <span className="dyn-breadcrumb__text" aria-current={isLast ? 'page' : undefined}>
+          {children}
         </span>
       )}
+      {!isLast && <span className="dyn-breadcrumb__separator">/</span>}
     </li>
   )
-}
+);
+
+DynBreadcrumbItem.displayName = 'DynBreadcrumbItem';
