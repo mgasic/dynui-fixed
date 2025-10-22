@@ -1,26 +1,33 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "jsx": "react-jsx",
-    "moduleResolution": "Bundler",
-    "allowJs": false,
+    "moduleResolution": "bundler",
+    
+    // Strict type checking
     "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
     "exactOptionalPropertyTypes": true,
+    
+    // Module handling
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "skipLibCheck": true,
+    
+    // Output
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "dist",
-    "baseUrl": ".",
-    "paths": {
-      "@dynui/*": ["src/*"]
-    }
+    "removeComments": true,
+    
+    // JSX
+    "jsx": "react-jsx"
   },
-  "include": ["src", "tests", "stories"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["node_modules", "dist", "build", "storybook-static"]
 }

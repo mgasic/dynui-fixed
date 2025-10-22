@@ -10,12 +10,16 @@ export interface TableSortState {
   direction: 'asc' | 'desc'
 }
 
+// Back-compat alias for implementation
+export type DynTableSort = { column: string; direction: 'asc' | 'desc' }
+
 export interface DynTableProps {
   columns: TableColumn[]
   data: Record<string, any>[]
   sortable?: boolean
   sortState?: TableSortState
   onSort?: (key: string, direction: 'asc' | 'desc') => void
+  className?: string
   'aria-label'?: string
   'aria-labelledby'?: string
   'data-testid'?: string

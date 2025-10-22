@@ -1,0 +1,50 @@
+packages:
+  - 'packages/*'
+  - 'apps/*'
+  - '.'
+
+catalog:
+  # Core React Ecosystem - Stabilne verzije
+  react: ^18.3.1
+  react-dom: ^18.3.1
+  '@types/react': ^18.3.12
+  '@types/react-dom': ^18.3.1
+
+  # TypeScript Ecosystem - LTS verzije
+  typescript: ^5.6.3
+  '@types/node': ^20.17.6
+
+  # Build & Development Tools
+  vite: ^5.4.10
+  tsup: ^8.3.5
+  '@vitejs/plugin-react': ^4.3.3
+
+  # Testing Stack - Stabilne 2.x verzije
+  vitest: ^2.1.5
+  '@testing-library/react': ^16.0.1
+  '@testing-library/jest-dom': ^6.6.3
+  '@testing-library/user-event': ^14.5.2
+  jsdom: ^25.0.1
+  vitest-axe: ^0.1.0
+
+  # Storybook - Stabilna 8.x serija
+  storybook: ^8.3.5
+  '@storybook/addon-a11y': ^8.3.5
+  '@storybook/addon-essentials': ^8.3.5
+  '@storybook/react-vite': ^8.3.5
+  chromatic: ^11.12.6
+
+  # Code Quality
+  eslint: ^9.15.0
+  prettier: ^3.3.3
+  '@typescript-eslint/parser': ^8.15.0
+  '@typescript-eslint/eslint-plugin': ^8.15.0
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - 'esbuild'
+
+peerDependencyRules:
+  allowedVersions:
+    react: '18'
+    react-dom: '18'
