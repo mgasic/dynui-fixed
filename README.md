@@ -40,12 +40,14 @@ pnpm typecheck
 ## 📦 Complete Component Catalog
 
 ### 🧭 Navigation & Structure
+
 - **DynTabs/DynTab/DynTabPanel**: WAI-ARIA compliant tablist with Arrow/Home/End/Typeahead
 - **DynStepper/DynStep**: Step navigation with focus management and forwardRef
 - **DynMenu/DynMenuItem**: Context menus with Escape/Arrow/Enter navigation
 - **DynBreadcrumb/DynBreadcrumbItem**: Hierarchical navigation with overflow handling
 
 ### 📝 Form Controls
+
 - **DynInput**: Text input with controlled/uncontrolled support, icons, prefix/suffix
 - **DynTextArea**: Multi-line input with auto-resize options
 - **DynSelect/DynSelectOption**: Dropdown with search, Arrow navigation, Escape close
@@ -54,6 +56,7 @@ pnpm typecheck
 - **DynButton**: Multi-variant buttons with loading states and icons
 
 ### 📊 Data Display
+
 - **DynTable**: Sortable data tables with proper ARIA and keyboard sorting
 - **DynTreeView/DynTreeNode**: Hierarchical data with expansion/selection
 - **DynListView**: Single/multi-select lists with aria-multiselectable
@@ -62,6 +65,7 @@ pnpm typecheck
 - **DynIcon**: Icon component with dictionary integration
 
 ### 📐 Layout & Containers
+
 - **DynBox**: Flexible layout container with spacing utilities
 - **DynContainer**: Responsive wrapper with size/maxWidth/fluid options
 - **DynGrid/DynGridItem**: CSS Grid system with colSpan/rowSpan support
@@ -245,6 +249,7 @@ pnpm build
 ## 🛠️ Development Workflow
 
 ### Project Structure
+
 ```
 src/
 ├── components/          # Component barrel exports
