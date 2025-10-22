@@ -1,0 +1,22 @@
+import type { Meta } from '@storybook/react'
+import { Title, Subtitle, Description } from '@storybook/blocks'
+
+const meta: Meta = {
+  title: 'Docs/Home',
+  parameters: {
+    docs: {
+      page: () => (
+        <>
+          <Title>DynUI Fixed</Title>
+          <Subtitle>Complete FS-01/02/03 Implementation</Subtitle>
+          <Description>
+            Ove stranice sadrže kompletan API i scenario vodič za sve komponente.
+            Navigiraj preko Docs/API sekcije za detalje po komponenti i Scenario priča
+            za edge-case i a11y demoe.
+          </Description>
+        </>
+      )
+    }
+  }
+}
+export default meta

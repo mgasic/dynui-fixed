@@ -1,0 +1,22 @@
+import type { Meta } from '@storybook/react'
+import { Title, Subtitle, Description, Primary, ArgsTable, Stories } from '@storybook/blocks'
+import * as Types from '../../src/types/components/dyn-badge.types'
+
+const meta: Meta = {
+  title: 'Docs/API/DynBadge',
+  parameters: {
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Subtitle>API Reference</Subtitle>
+          <Description>DynBadge kao status indikator, varijante i veličine.</Description>
+          <Primary />
+          <ArgsTable of={Types} />
+          <Stories />
+        </>
+      )
+    }
+  }
+}
+export default meta

@@ -1,0 +1,22 @@
+import type { Meta } from '@storybook/react'
+import { Title, Subtitle, Description, Primary, ArgsTable, Stories } from '@storybook/blocks'
+import * as Types from '../../src/types/components/dyn-grid.types'
+
+const meta: Meta = {
+  title: 'Docs/API/DynGrid',
+  parameters: {
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Subtitle>API Reference</Subtitle>
+          <Description>DynGrid i DynGridItem (CSS Grid props: colSpan/rowSpan/starts).</Description>
+          <Primary />
+          <ArgsTable of={Types} />
+          <Stories />
+        </>
+      )
+    }
+  }
+}
+export default meta
