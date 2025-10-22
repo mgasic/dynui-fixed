@@ -9,52 +9,187 @@ importers:
     devDependencies:
       '@axe-core/react':
         specifier: ^4.7.3
-        version: 4.7.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 4.7.3(react-dom@18.3.1)(react@18.3.1)
       '@storybook/addon-a11y':
         specifier: ^8.2.0
-        version: 8.2.0
+        version: 8.2.0(storybook@8.2.0)
       '@storybook/addon-essentials':
         specifier: ^8.2.0
-        version: 8.2.0
+        version: 8.2.0(storybook@8.2.0)
       '@storybook/react-vite':
         specifier: ^8.2.0
-        version: 8.2.0
+        version: 8.2.0(storybook@8.2.0)(typescript@5.6.3)(vite@5.4.8)
       '@testing-library/react':
         specifier: ^16.0.0
-        version: 16.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 16.0.0(react-dom@18.3.1)(react@18.3.1)
+      '@types/react':
+        specifier: ^18.3.5
+        version: 18.3.5
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.0
+      '@vitejs/plugin-react':
+        specifier: ^4.3.1
+        version: 4.3.1(vite@5.4.8)
       chromatic:
         specifier: ^11.10.5
         version: 11.10.5
+      eslint:
+        specifier: ^9.11.0
+        version: 9.11.0
+      eslint-config-prettier:
+        specifier: ^9.1.0
+        version: 9.1.0(eslint@9.11.0)
+      eslint-plugin-react:
+        specifier: ^7.36.1
+        version: 7.36.1(eslint@9.11.0)
+      jsdom:
+        specifier: ^25.0.0
+        version: 25.0.0
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
+      storybook:
+        specifier: ^8.2.0
+        version: 8.2.0
       tsd:
         specifier: ^0.30.7
         version: 0.30.7
+      tsup:
+        specifier: ^8.2.4
+        version: 8.2.4(typescript@5.6.3)
       typescript:
         specifier: ^5.6.3
         version: 5.6.3
       vitest:
         specifier: ^2.1.3
-        version: 2.1.3
+        version: 2.1.3(jsdom@25.0.0)
 
 packages:
   '@axe-core/react@4.7.3':
-    resolution: {integrity: sha512-mock-integrity-hash}
+    resolution: {integrity: sha512-9axaGJ5z3v0DGwH1pNhEGfp+9Ks6fJPE1vJgXfzq-rNRVKCE5l0Hj1d/oW8Z+gB4k3nN7tSI8VhDQSVAHCEng==}
+    engines: {node: '>=10'}
     peerDependencies:
       react: '>=16.0'
       react-dom: '>=16.0'
     dev: true
 
+  '@storybook/addon-a11y@8.2.0':
+    resolution: {integrity: sha512-hZ6wqux0n3HH84H5P4J2yLCBB9EgvYKHqSkPHjOAH3/p8rKi4QbBkKNJ7JpfNcC5Ey0xXcJ3vT0nSuI7c3TcA==}
+    peerDependencies:
+      storybook: ^8.2.0
+    dev: true
+
+  '@storybook/addon-essentials@8.2.0':
+    resolution: {integrity: sha512-NzCUWDTMxoL2BwkfYHNNjK6MZL6v4n7ZC+QPjZA2VLU4x2wnHDf7pEbZ7Xx4JmJbQg1QHCKGrKdQ+1kZK/s5A==}
+    peerDependencies:
+      storybook: ^8.2.0
+    dev: true
+
+  '@storybook/react-vite@8.2.0':
+    resolution: {integrity: sha512-7aCBXD5CiWzLEwzQE6NiBqjqMJmpQ4NkT6DT8eUBKsVUHc4z2t4pZCgGy5Gh7A9ckxV6Y9CQCjRNXDCj8C6A==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      storybook: ^8.2.0
+      typescript: ^4.9.0 || ^5.0.0
+      vite: ^4.0.0 || ^5.0.0
+    dev: true
+
+  '@testing-library/react@16.0.0':
+    resolution: {integrity: sha512-guuxUiWWx7FrKu3yq9VUdYKlb7OfQNbE3IpSUgqcN8V4A2gB2MeCzMCXqHTUEcgqE8Qb2VWl8iVk8Q5lrF3jA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@types/react': ^18.0.0
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+    dev: true
+
+  '@types/react@18.3.5':
+    resolution: {integrity: sha512-WeqMfGJLGuLCqHGYRGHxnKrXcTitc6L/nBUWfWPcTarG3t9PsquqUMuVeXZeca+mglY4o5IhZgNjjiWcWfWOg==}
+    dev: true
+
+  '@types/react-dom@18.3.0':
+    resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
+    dev: true
+
+  '@vitejs/plugin-react@4.3.1':
+    resolution: {integrity: sha512-m/V2syj5CuVnaxcUJOQRel/Wr31FFXRFlnOoq1TVtkCxsY5veGMTEmpWHndrhB2U8ScHtCQB1e+4hWYExQc6Lg==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      vite: ^4.2.0 || ^5.0.0
+    dev: true
+
   'chromatic@11.10.5':
-    resolution: {integrity: sha512-mock-integrity-hash}
+    resolution: {integrity: sha512-3SqKx5LxYlFoySUOFxrvxb/tOVWQKv5xw0L8WnQnL2TLr+D9KsRCqFXZKsZ4zGC7fYrY8JvQtTCZTJ2KZcO5Q==}
+    hasBin: true
+    dev: true
+
+  'eslint@9.11.0':
+    resolution: {integrity: sha512-yVS6XODx3tOLL1hti7X3+9bhJp9RCQj9NjqZP2ycEOJUg2nPTQQ8yubHQb8wKqp7Dkp6v7mK7mKBGe04K8Klg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    hasBin: true
+    dev: true
+
+  'eslint-config-prettier@9.1.0':
+    resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
+    hasBin: true
+    peerDependencies:
+      eslint: '>=7.0.0'
+    dev: true
+
+  'eslint-plugin-react@7.36.1':
+    resolution: {integrity: sha512-/qwbqNXZoq+VP30s1d4Nc1C5GTxjJQjk4Jzs4Wq2qzxFM7dSmuG2UkIjg2USMLh3A/aVcUNrK7v0J5U1XEGfQ==}
+    engines: {node: '>=4'}
+    peerDependencies:
+      eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
+    dev: true
+
+  'jsdom@25.0.0':
+    resolution: {integrity: sha512-OhoaFj/YKRmL3CPEwN0krnj4lzOO5LiP+6KqoBhxubP7fCU0IBAomBIqfL4tBNz4KFkZBCGi3GQJdAH7BYyQ==}
+    engines: {node: '>=18'}
+    dev: true
+
+  'prettier@3.3.3':
+    resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  'storybook@8.2.0':
+    resolution: {integrity: sha512-IqzgJ1eOuYgGfXGNj6N/z3MQQIr8PKgbdvCxOQfW5Chns8KaI8zD3bF8W6tWjQ9FJwXKdj7Sf2WZC1tHjHm8Q==}
+    hasBin: true
     dev: true
 
   'tsd@0.30.7':
-    resolution: {integrity: sha512-mock-integrity-hash}
+    resolution: {integrity: sha512-bGcK3dQty9LZl6swbgffeE3kOGCfnwChHIjX1cRjBxG8qTd0u+gp8T7ksxgI8NbJHhj/wK7s4v7P3WGZSmkWw==}
+    engines: {node: '>=14.16'}
+    hasBin: true
+    dev: true
+
+  'tsup@8.2.4':
+    resolution: {integrity: sha512-akpoCJpKbS8S2Y8kr/V2jU9RYKr5MoqvJOhPw7aHmcYoG2V3LB7HDgJtL8wdLnqd3HwOa/rqMNbdD8xBvdrfg==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      typescript: '>=4.5.0'
     dev: true
 
   'typescript@5.6.3':
-    resolution: {integrity: sha512-mock-integrity-hash}
+    resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
     dev: true
 
   'vitest@2.1.3':
-    resolution: {integrity: sha512-mock-integrity-hash}
+    resolution: {integrity: sha512-Zrxbg4QQ7zspaFBoUaQCnEfaEj/IorOLrwbFvd7hGIkJD4DFsSWsZ3sUL7QO1H2Yz83vU8PYOBCfxBjyiuMxg==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      jsdom: '*'
+    dev: true
+
+  'vite@5.4.8':
+    resolution: {integrity: sha512-FqrItQ4DT1NC4zCUqMB4c4AZORMKIa0m8/URVCZ77OZ/QSNeJ54bU1vrFADbDsuwfIPcgknRkmqakQcgnL4GiQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
     dev: true

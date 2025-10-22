@@ -23,9 +23,9 @@ jobs:
           registry-url: 'https://npm.pkg.github.com/'
           scope: '@mgasic'
       - name: Auth for GitHub Packages
-        run: echo "//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_TOKEN}" >> ~/.npmrc
+        run: echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
         env:
-          GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
       - run: pnpm install --frozen-lockfile=true
       - name: Build Storybook
         run: pnpm build:storybook
