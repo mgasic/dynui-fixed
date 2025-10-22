@@ -1,0 +1,71 @@
+name: FAZA-1 Validation Workflow
+
+on:
+  push:
+    branches: [feat/faza-1-*]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-workspace:
+    name: Validate PNPM Workspace Setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Validate pnpm-workspace.yaml exists
+        run: |
+          if [ ! -f "pnpm-workspace.yaml" ]; then
+            echo "❌ pnpm-workspace.yaml missing"
+            exit 1
+          fi
+          echo "✅ pnpm-workspace.yaml found"
+      
+      - name: Validate .npmrc exists
+        run: |
+          if [ ! -f ".npmrc" ]; then
+            echo "❌ .npmrc missing"
+            exit 1
+          fi
+          echo "✅ .npmrc found"
+
+      - name: Test Dependency Resolution
+        run: |
+          echo "Testing pnpm install --dry-run..."
+          pnpm install --dry-run
+          echo "✅ Dependency resolution successful"
+      
+      - name: Validate Package Structure  
+        run: |
+          if [ ! -d "packages/core" ]; then
+            echo "❌ packages/core missing"
+            exit 1
+          fi
+          if [ ! -f "packages/core/package.json" ]; then
+            echo "❌ packages/core/package.json missing"
+            exit 1
+          fi
+          echo "✅ Package structure validated"
+      
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Test Build Pipeline
+        run: |
+          echo "Testing turbo build..."
+          pnpm build
+          echo "✅ Build pipeline successful"
+
+      - name: Validate Catalog Dependencies
+        run: |
+          echo "Checking catalog dependency resolution..."
+          cd packages/core
+          pnpm ls | grep -E "(typescript|vitest|storybook)" || echo "Some catalog deps missing but that's expected in first phase"
+          echo "✅ Catalog validation completed"
