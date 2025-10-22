@@ -1,137 +1,129 @@
-import { useState, useCallback } from 'react'
-import type { DynTreeViewProps, DynTreeNodeProps, TreeNode } from '../types/components/dyn-tree.types'
-import { classNames } from '../utils'
+import React, { forwardRef, useState } from 'react';
+import type { DynTreeViewProps, DynTreeNodeProps } from '../types/components/dyn-tree.types';
+import { classNames } from '../utils';
 
-export function DynTreeView({
-  nodes = [],
-  value,
-  defaultValue,
-  multiSelect = false,
-  disabled,
-  onChange,
-  'aria-label': ariaLabel,
-  'aria-labelledby': ariaLabelledby,
-  'data-testid': dataTestId
-}: DynTreeViewProps) {
-  const [internal, setInternal] = useState<string | string[] | undefined>(defaultValue)
-  const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set())
-  const current = value ?? internal ?? (multiSelect ? [] : '')
+export const DynTreeView = forwardRef<HTMLDivElement, DynTreeViewProps>(
+  ({
+    data = [],
+    selectedNode,
+    expandedNodes = [],
+    onNodeSelect,
+    onNodeExpand,
+    multiSelect = false,
+    className,
+    'data-testid': testId,
+    ...props
+  }, ref) => {
+    const [internalExpanded, setInternalExpanded] = useState<string[]>(expandedNodes);
+    const [internalSelected, setInternalSelected] = useState<string[]>([]);
 
-  const setValue = useCallback((next: string | string[]) => {
-    if (value === undefined) setInternal(next)
-    onChange?.(next)
-  }, [value, onChange])
+    const handleToggle = (nodeId: string) => {
+      const newExpanded = internalExpanded.includes(nodeId)
+        ? internalExpanded.filter(id => id !== nodeId)
+        : [...internalExpanded, nodeId];
+      setInternalExpanded(newExpanded);
+      onNodeExpand?.(nodeId);
+    };
 
-  const isSelected = useCallback((nodeValue: string) => {
-    return Array.isArray(current) ? current.includes(nodeValue) : current === nodeValue
-  }, [current])
-
-  const toggle = useCallback((nodeValue: string) => {
-    if (disabled) return
-    if (multiSelect) {
-      const next = Array.isArray(current) 
-        ? (isSelected(nodeValue) ? current.filter(v => v !== nodeValue) : [...current, nodeValue])
-        : [nodeValue]
-      setValue(next)
-    } else {
-      setValue(nodeValue)
-    }
-  }, [disabled, multiSelect, current, isSelected, setValue])
-
-  const toggleExpansion = useCallback((nodeValue: string) => {
-    setExpandedNodes(prev => {
-      const next = new Set(prev)
-      if (next.has(nodeValue)) {
-        next.delete(nodeValue)
-      } else {
-        next.add(nodeValue)
+    const handleSelect = (nodeId: string) => {
+      if (multiSelect) {
+        const newSelected = internalSelected.includes(nodeId)
+          ? internalSelected.filter(id => id !== nodeId)
+          : [...internalSelected, nodeId];
+        setInternalSelected(newSelected);
       }
-      return next
-    })
-  }, [])
+      onNodeSelect?.(nodeId);
+    };
 
-  return (
-    <div
-      role="tree"
-      aria-label={ariaLabel}
-      aria-labelledby={ariaLabelledby}
-      aria-multiselectable={multiSelect || undefined}
-      className="dyn-tree"
-      data-testid={dataTestId}
-    >
-      {nodes.map((node) => (
-        <DynTreeNode
-          key={node.key}
-          node={node}
-          level={0}
-          expanded={expandedNodes.has(node.value)}
-          selected={isSelected(node.value)}
-          onToggle={() => toggle(node.value)}
-          onExpand={() => toggleExpansion(node.value)}
-        />
-      ))}
-    </div>
-  )
-}
+    const renderNode = (node: any, level = 0) => {
+      const isExpanded = internalExpanded.includes(node.id);
+      const isSelected = multiSelect 
+        ? internalSelected.includes(node.id)
+        : selectedNode === node.id;
+      const hasChildren = node.children && node.children.length > 0;
 
-export function DynTreeNode({
-  node,
-  level = 0,
-  expanded = false,
-  selected = false,
-  onToggle,
-  onExpand
-}: DynTreeNodeProps & { selected?: boolean; onToggle?: () => void; onExpand?: () => void }) {
-  const hasChildren = node.children && node.children.length > 0
-  const cls = classNames(
-    'dyn-tree-node',
-    `dyn-tree-node--level-${level}`,
-    selected && 'dyn-tree-node--selected',
-    node.disabled && 'dyn-tree-node--disabled',
-    hasChildren && 'dyn-tree-node--expandable',
-    expanded && 'dyn-tree-node--expanded'
-  )
+      return (
+        <div key={node.id}>
+          <DynTreeNode
+            node={node}
+            level={level}
+            expanded={isExpanded}
+            selected={isSelected}
+            hasChildren={hasChildren}
+            onToggle={hasChildren ? () => handleToggle(node.id) : undefined}
+            onSelect={() => handleSelect(node.id)}
+          />
+          {isExpanded && hasChildren && (
+            <div className="dyn-tree-view__children">
+              {node.children.map((childNode: any) => renderNode(childNode, level + 1))}
+            </div>
+          )}
+        </div>
+      );
+    };
 
-  return (
-    <div className={cls}>
+    return (
       <div
+        {...props}
+        ref={ref}
+        role="tree"
+        className={classNames('dyn-tree-view', className)}
+        data-testid={testId}
+      >
+        {data.map(node => renderNode(node))}
+      </div>
+    );
+  }
+);
+
+DynTreeView.displayName = 'DynTreeView';
+
+export const DynTreeNode = forwardRef<HTMLDivElement, DynTreeNodeProps>(
+  ({
+    node,
+    level,
+    expanded,
+    selected,
+    hasChildren,
+    onToggle,
+    onSelect,
+    className,
+    ...props
+  }, ref) => {
+    return (
+      <div
+        {...props}
+        ref={ref}
         role="treeitem"
-        aria-selected={selected}
         aria-expanded={hasChildren ? expanded : undefined}
-        aria-disabled={node.disabled}
+        aria-selected={selected}
         aria-level={level + 1}
-        className="dyn-tree-node__content"
-        onClick={() => !node.disabled && onToggle?.()}
-        style={{ paddingLeft: `${level * 1.5}rem` }}
+        tabIndex={0}
+        className={classNames(
+          'dyn-tree-node',
+          selected && 'dyn-tree-node--selected',
+          hasChildren && 'dyn-tree-node--expandable',
+          className
+        )}
+        style={{ paddingLeft: `${level * 20}px` }}
+        onClick={onSelect}
       >
         {hasChildren && (
           <button
-            className="dyn-tree-node__expander"
+            className="dyn-tree-node__toggle"
             onClick={(e) => {
-              e.stopPropagation()
-              onExpand?.()
+              e.stopPropagation();
+              onToggle?.();
             }}
             aria-label={expanded ? 'Collapse' : 'Expand'}
           >
-            {expanded ? '−' : '+'}
+            {expanded ? '▼' : '▶'}
           </button>
         )}
         <span className="dyn-tree-node__label">{node.label}</span>
       </div>
-      {hasChildren && expanded && (
-        <div className="dyn-tree-node__children">
-          {node.children!.map((child) => (
-            <DynTreeNode
-              key={child.key}
-              node={child}
-              level={level + 1}
-              expanded={false} // TODO: Implement nested expansion state
-              onToggle={onToggle}
-              onExpand={onExpand}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
+    );
+  }
+);
+
+DynTreeNode.displayName = 'DynTreeNode';

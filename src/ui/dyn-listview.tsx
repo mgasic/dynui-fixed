@@ -1,33 +1,72 @@
-import { useMemo, useState } from 'react'
-import type { DynListViewProps, ListViewItem } from '../types/components/dyn-listview.types'
+import { useState, forwardRef } from 'react';
+import type { DynListViewProps } from '../types/components/dyn-listview.types';
+import { useArrowNavigation } from '../hooks/use-arrow-navigation';
+import { classNames } from '../utils';
 
-export function DynListView({ items = [], value, defaultValue, multiSelect = false, disabled, onChange, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledby, 'data-testid': dataTestId }: DynListViewProps) {
-  const [internal, setInternal] = useState<string | string[] | undefined>(defaultValue)
-  const current = value ?? internal ?? (multiSelect ? [] : '')
+export const DynListView = forwardRef<HTMLDivElement, DynListViewProps>(
+  ({
+    items = [],
+    selectedItem,
+    onSelectionChange,
+    multiSelect = false,
+    className,
+    'data-testid': testId,
+    ...props
+  }, ref) => {
+    const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    
+    const { containerRef } = useArrowNavigation({
+      orientation: 'vertical',
+      selector: '.dyn-list-item:not(.dyn-list-item--disabled)',
+      typeahead: true
+    });
 
-  const setValue = (next: string | string[]) => {
-    if (value === undefined) setInternal(next)
-    onChange?.(next)
+    const handleItemSelect = (itemId: string) => {
+      if (multiSelect) {
+        const newSelection = selectedItems.includes(itemId)
+          ? selectedItems.filter(id => id !== itemId)
+          : [...selectedItems, itemId];
+        setSelectedItems(newSelection);
+        onSelectionChange?.(newSelection);
+      } else {
+        onSelectionChange?.([itemId]);
+      }
+    };
+
+    return (
+      <div
+        {...props}
+        ref={ref || containerRef}
+        role="listbox"
+        aria-multiselectable={multiSelect}
+        className={classNames('dyn-list-view', className)}
+        data-testid={testId}
+      >
+        {items.map((item, index) => {
+          const isSelected = multiSelect 
+            ? selectedItems.includes(item.id)
+            : selectedItem === item.id;
+            
+          return (
+            <div
+              key={item.id || index}
+              role="option"
+              aria-selected={isSelected}
+              tabIndex={0}
+              className={classNames(
+                'dyn-list-item',
+                isSelected && 'dyn-list-item--selected',
+                item.disabled && 'dyn-list-item--disabled'
+              )}
+              onClick={() => !item.disabled && handleItemSelect(item.id)}
+            >
+              {item.label}
+            </div>
+          );
+        })}
+      </div>
+    );
   }
+);
 
-  const isSelected = (v: string) => (Array.isArray(current) ? current.includes(v) : current === v)
-  const toggle = (v: string) => {
-    if (disabled) return
-    if (multiSelect) {
-      const next = Array.isArray(current) ? (isSelected(v) ? current.filter(x => x !== v) : [...current, v]) : [v]
-      setValue(next)
-    } else {
-      setValue(v)
-    }
-  }
-
-  return (
-    <div role="listbox" aria-multiselectable={multiSelect || undefined} aria-label={ariaLabel} aria-labelledby={ariaLabelledby} data-testid={dataTestId}>
-      {items.map((it: ListViewItem) => (
-        <div key={it.key} role="option" aria-selected={isSelected(it.value)} aria-disabled={it.disabled} onClick={() => !it.disabled && toggle(it.value)}>
-          {it.label}
-        </div>
-      ))}
-    </div>
-  )
-}
+DynListView.displayName = 'DynListView';
