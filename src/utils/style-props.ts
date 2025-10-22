@@ -1,17 +1,17 @@
-import type { SpacingValue } from '../types/components/dyn-box.types'
+// utility types
+export type SpacingValue = number | string
 
-export interface StyleProps {
-  p?: SpacingValue
-  m?: SpacingValue
-  gap?: SpacingValue
+export type StyleProps = {
+  p?: SpacingValue | undefined
+  m?: SpacingValue | undefined
+  gap?: SpacingValue | undefined
+  // add other optional props as needed
 }
 
-export function getSpacingStyles(props: StyleProps) {
-  const styles: Record<string, string> = {}
-  
-  if (props.p) styles['--spacing-p'] = `var(--spacing-${props.p})`
-  if (props.m) styles['--spacing-m'] = `var(--spacing-${props.m})`
-  if (props.gap) styles['--spacing-gap'] = `var(--spacing-${props.gap})`
-  
-  return styles
+export function getStyleProps(props: StyleProps) {
+  const style: Record<string, any> = {}
+  if (props.p !== undefined) style.padding = props.p
+  if (props.m !== undefined) style.margin = props.m
+  if (props.gap !== undefined) style.gap = props.gap
+  return style
 }
