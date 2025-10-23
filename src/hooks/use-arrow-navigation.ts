@@ -1,21 +1,17 @@
 import { useRef, useCallback } from 'react';
 
-let navTimer: ReturnType<typeof setTimeout> | null = null;
-
 export interface ArrowNavigationOptions {
   orientation?: 'horizontal' | 'vertical' | 'both';
   selector?: string;
-  typeahead?: boolean;
 }
 
 export function useArrowNavigation(options: ArrowNavigationOptions = {}) {
   const {
     orientation = 'vertical',
-    selector = '[tabindex="0"], button:not(:disabled), input:not(:disabled)',
-    typeahead = false
+    selector = '[tabindex="0"], button:not(:disabled), input:not(:disabled)'
   } = options;
 
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const focusElement = useCallback((element: Element) => {
     if (element instanceof HTMLElement) {
@@ -72,7 +68,7 @@ export function useArrowNavigation(options: ArrowNavigationOptions = {}) {
         break;
     }
 
-    if (nextIndex !== currentIndex) {
+    if (nextIndex !== currentIndex && focusableElements[nextIndex]) {
       focusElement(focusableElements[nextIndex]);
     }
   }, [orientation, selector, focusElement]);
