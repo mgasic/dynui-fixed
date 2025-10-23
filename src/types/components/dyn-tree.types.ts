@@ -1,5 +1,3 @@
-import type React from 'react';
-
 export interface TreeNode {
   id: string;
   label: string;

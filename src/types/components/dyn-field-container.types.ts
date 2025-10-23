@@ -1,5 +1,3 @@
-import type React from 'react';
-
 interface RenderPropArgs {
   id: string;
   'aria-describedby'?: string;

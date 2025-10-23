@@ -1,20 +1,15 @@
-export type Size = 'sm' | 'md' | 'lg'
-export type Variant = 'solid' | 'outline' | 'ghost'
-export type Color = 'neutral' | 'info' | 'success' | 'warning' | 'danger'
+export type Size = 'sm' | 'md' | 'lg';
+export type Variant = 'primary' | 'secondary' | 'danger' | 'warning' | 'success' | 'info';
+export type SpacingValue = number | string;
 
 export interface ControlProps<T> {
-  id?: string
-  name?: string
-  value?: T
-  defaultValue?: T
-  disabled?: boolean
-  required?: boolean
-  onChange?: (value: T) => void
-  onFocus?: () => void
-  onBlur?: () => void
-  'aria-label'?: string
-  'aria-labelledby'?: string
-  'aria-describedby'?: string
-  'aria-invalid'?: boolean
-  'data-testid'?: string
+  value?: T;
+  defaultValue?: T;
+  onChange?: (value: T) => void;
+  disabled?: boolean;
+  required?: boolean;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'data-testid'?: string;
 }

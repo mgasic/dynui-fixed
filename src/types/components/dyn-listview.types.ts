@@ -1,5 +1,3 @@
-import type React from 'react';
-
 export interface ListViewItem {
   id: string;
   label: string;

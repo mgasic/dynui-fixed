@@ -2,13 +2,11 @@ import { useRef, useCallback, useState } from 'react';
 
 export interface DropdownOptions {
   trigger?: 'hover' | 'click' | 'focus';
-  closeOnOutsideClick?: boolean;
 }
 
 export function useDropdown(options: DropdownOptions = {}) {
   const {
-    trigger = 'click',
-    closeOnOutsideClick = true
+    trigger = 'click'
   } = options;
 
   const targetRef = useRef<HTMLElement>(null);

@@ -1,5 +1,3 @@
-import type React from 'react';
-
 export interface StepItem {
   id: string;
   title: string;
