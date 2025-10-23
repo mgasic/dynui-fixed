@@ -18,8 +18,7 @@ export const DynTabs = forwardRef<HTMLDivElement, DynTabsProps>(
     
     const { containerRef } = useArrowNavigation({
       orientation,
-      selector: '[role="tab"]:not([aria-disabled="true"])',
-      typeahead: false
+      selector: '[role="tab"]:not([aria-disabled="true"])'
     });
 
     const handleTabChange = (tabValue: string) => {
@@ -39,13 +38,14 @@ export const DynTabs = forwardRef<HTMLDivElement, DynTabsProps>(
         data-testid={testId}
       >
         <div
-          ref={containerRef}
+          ref={containerRef as React.RefObject<HTMLDivElement>}
           role="tablist"
           className="dyn-tabs__list"
         >
           {React.Children.map(children, (child) => {
-            if (React.isValidElement(child) && child.type === DynTab) {
+            if (React.isValidElement<DynTabProps>(child) && child.type === DynTab) {
               return React.cloneElement(child, {
+                ...child.props,
                 isActive: child.props.value === currentTab,
                 onSelect: handleTabChange
               });
@@ -55,8 +55,9 @@ export const DynTabs = forwardRef<HTMLDivElement, DynTabsProps>(
         </div>
         <div className="dyn-tabs__content">
           {React.Children.map(children, (child) => {
-            if (React.isValidElement(child) && child.type === DynTabPanel) {
+            if (React.isValidElement<DynTabPanelProps>(child) && child.type === DynTabPanel) {
               return React.cloneElement(child, {
+                ...child.props,
                 isActive: child.props.value === currentTab
               });
             }

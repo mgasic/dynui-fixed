@@ -35,12 +35,11 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
 
     const { containerRef } = useArrowNavigation({
       orientation: 'vertical',
-      selector: 'tbody tr[tabindex="0"]',
-      typeahead: false
+      selector: 'tbody tr[tabindex="0"]'
     });
 
     return (
-      <div ref={containerRef} className={classNames('dyn-table-container', className)}>
+      <div ref={containerRef as React.RefObject<HTMLDivElement>} className={classNames('dyn-table-container', className)}>
         <table
           {...props}
           ref={ref}
