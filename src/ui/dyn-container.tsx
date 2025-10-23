@@ -13,11 +13,12 @@ export const DynContainer = forwardRef<HTMLDivElement, DynContainerProps>(
     'data-testid': testId,
     ...props 
   }, ref) => {
-    // Fix exactOptionalPropertyTypes by explicit conversion
-    const spacingStyles = getSpacingStyles({ 
-      p: p !== undefined ? (typeof p === 'string' ? p : `${p}px`) : undefined, 
-      m: m !== undefined ? (typeof m === 'string' ? m : `${m}px`) : undefined
-    });
+    // Filter out undefined values for exactOptionalPropertyTypes
+    const spacingArgs: { p?: number | string; m?: number | string } = {};
+    if (p !== undefined) spacingArgs.p = p;
+    if (m !== undefined) spacingArgs.m = m;
+    
+    const spacingStyles = getSpacingStyles(spacingArgs);
 
     const combinedStyle = {
       ...spacingStyles,

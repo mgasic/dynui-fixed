@@ -13,9 +13,11 @@ export const DynGrid = forwardRef<HTMLDivElement, DynGridProps>(
     'data-testid': testId,
     ...props 
   }, ref) => {
-    const spacingStyles = getSpacingStyles({ 
-      gap: gap !== undefined ? (typeof gap === 'string' ? gap : `${gap}px`) : undefined
-    });
+    // Filter out undefined values for exactOptionalPropertyTypes
+    const spacingArgs: { gap?: number | string } = {};
+    if (gap !== undefined) spacingArgs.gap = gap;
+    
+    const spacingStyles = getSpacingStyles(spacingArgs);
 
     const combinedStyle = {
       ...spacingStyles,
@@ -32,7 +34,7 @@ export const DynGrid = forwardRef<HTMLDivElement, DynGridProps>(
         ref={ref}
         className={classNames(
           'dyn-grid',
-          columns && `dyn-grid--columns-${columns}`,
+          columns && Number(columns) > 0 && `dyn-grid--columns-${columns}`,
           rows && Number(rows) > 0 && `dyn-grid--rows-${rows}`,
           className
         )}

@@ -68,8 +68,11 @@ export function useArrowNavigation(options: ArrowNavigationOptions = {}) {
         break;
     }
 
-    if (nextIndex !== currentIndex && focusableElements[nextIndex]) {
-      focusElement(focusableElements[nextIndex]);
+    if (nextIndex !== currentIndex) {
+      const targetElement = focusableElements[nextIndex];
+      if (targetElement) {
+        focusElement(targetElement);
+      }
     }
   }, [orientation, selector, focusElement]);
 

@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import type { DynRadioGroupProps, DynRadioProps } from '../types/components/dyn-radio.types';
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
@@ -110,15 +110,16 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
       >
         {React.Children.map(children, (child, index) => {
           if (React.isValidElement<DynRadioProps>(child) && child.type === DynRadio) {
-            return React.cloneElement(child, {
+            const childProps: Partial<DynRadioProps> = {
               ...child.props,
               name: name || `radio-group-${Math.random().toString(36).substr(2, 9)}`,
               checked: value !== undefined ? child.props.value === value : undefined,
-              defaultChecked: defaultValue !== undefined && child.props.value === defaultValue,
-              disabled: disabled || child.props.disabled,
+              defaultChecked: defaultValue !== undefined ? child.props.value === defaultValue : undefined,
+              disabled: disabled || child.props.disabled || undefined,
               onChange: handleChange,
               key: child.props.value || index
-            });
+            };
+            return React.cloneElement(child, childProps);
           }
           return child;
         })}

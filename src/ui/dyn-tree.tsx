@@ -49,7 +49,7 @@ export const DynTreeView = forwardRef<HTMLDivElement, DynTreeViewProps>(
             level={level}
             expanded={isExpanded}
             selected={isSelected}
-            hasChildren={hasChildren}
+            hasChildren={hasChildren || undefined}
             onToggle={hasChildren ? () => handleToggle(node.id) : undefined}
             onSelect={() => handleSelect(node.id)}
           />

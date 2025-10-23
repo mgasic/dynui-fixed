@@ -16,12 +16,13 @@ export const DynFieldContainer = forwardRef<HTMLDivElement, DynFieldContainerPro
     const fieldId = `field-${Math.random().toString(36).substr(2, 9)}`;
     const errorId = error ? `${fieldId}-error` : undefined;
     const helpId = helpText ? `${fieldId}-help` : undefined;
+    const ariaDescribedBy = [errorId, helpId].filter(Boolean).join(' ') || undefined;
 
     const renderChildren = () => {
       if (typeof children === 'function') {
         return children({
           id: fieldId,
-          'aria-describedby': [errorId, helpId].filter(Boolean).join(' ') || undefined,
+          'aria-describedby': ariaDescribedBy,
           'aria-invalid': !!error
         });
       }
