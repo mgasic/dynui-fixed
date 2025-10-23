@@ -1,12 +1,17 @@
+import type React from 'react';
+
+interface RenderPropArgs {
+  id: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: boolean;
+}
+
 export interface DynFieldContainerProps {
-  as?: React.ElementType
-  children?: React.ReactNode
-  label?: string
-  description?: string
-  error?: string
-  required?: boolean
-  disabled?: boolean
-  'aria-labelledby'?: string
-  'aria-describedby'?: string
-  'data-testid'?: string
+  label?: string;
+  error?: string;
+  helpText?: string;
+  required?: boolean;
+  children?: React.ReactNode | ((args: RenderPropArgs) => React.ReactNode);
+  className?: string;
+  'data-testid'?: string;
 }

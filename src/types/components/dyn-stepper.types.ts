@@ -1,11 +1,15 @@
-export interface StepItem { key: string; value: string; label: string; disabled?: boolean }
-export interface DynStepperRef { focus: (idx: number) => void }
+import type React from 'react';
+
+export interface StepItem {
+  id: string;
+  title: string;
+  description?: string;
+}
+
 export interface DynStepperProps {
-  as?: React.ElementType
-  value?: string
-  defaultValue?: string
-  onChange?: (value: string) => void
-  'aria-label'?: string
-  'aria-labelledby'?: string
-  'data-testid'?: string
+  items?: StepItem[];
+  currentStep?: number;
+  orientation?: 'horizontal' | 'vertical';
+  className?: string;
+  'data-testid'?: string;
 }

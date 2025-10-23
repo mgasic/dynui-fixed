@@ -1,26 +1,29 @@
+import type React from 'react';
+
 export interface TreeNode {
-  key: string
-  value: string
-  label: string
-  disabled?: boolean
-  children?: TreeNode[]
+  id: string;
+  label: string;
+  children?: TreeNode[];
 }
 
 export interface DynTreeViewProps {
-  nodes?: TreeNode[]
-  value?: string | string[]
-  defaultValue?: string | string[]
-  multiSelect?: boolean
-  disabled?: boolean
-  onChange?: (value: string | string[]) => void
-  'aria-label'?: string
-  'aria-labelledby'?: string
-  'data-testid'?: string
+  data?: TreeNode[];
+  selectedNode?: string;
+  expandedNodes?: string[];
+  onNodeSelect?: (nodeId: string) => void;
+  onNodeExpand?: (nodeId: string) => void;
+  multiSelect?: boolean;
+  className?: string;
+  'data-testid'?: string;
 }
 
 export interface DynTreeNodeProps {
-  node: TreeNode
-  level?: number
-  expanded?: boolean
-  onToggle?: () => void
+  node?: TreeNode;
+  level?: number;
+  expanded?: boolean;
+  selected?: boolean;
+  hasChildren?: boolean;
+  onToggle?: () => void;
+  onSelect?: () => void;
+  className?: string;
 }

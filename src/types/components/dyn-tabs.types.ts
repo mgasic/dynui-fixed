@@ -1,13 +1,27 @@
-export interface DynTabItem { key: string; value: string; label: string; disabled?: boolean }
+import type React from 'react';
+
 export interface DynTabsProps {
-  as?: React.ElementType
-  value?: string
-  defaultValue?: string
-  onChange?: (value: string) => void
-  orientation?: 'horizontal' | 'vertical'
-  activation?: 'auto' | 'manual'
-  fitted?: boolean
-  'aria-label'?: string
-  'aria-labelledby'?: string
-  'data-testid'?: string
+  value?: string;
+  defaultValue?: string;
+  orientation?: 'horizontal' | 'vertical';
+  children?: React.ReactNode;
+  className?: string;
+  onChange?: (value: string) => void;
+  'data-testid'?: string;
+}
+
+export interface DynTabProps {
+  value: string;
+  children?: React.ReactNode;
+  isActive?: boolean;
+  onSelect?: (value: string) => void;
+  disabled?: boolean;
+  className?: string;
+}
+
+export interface DynTabPanelProps {
+  value: string;
+  children?: React.ReactNode;
+  isActive?: boolean;
+  className?: string;
 }
