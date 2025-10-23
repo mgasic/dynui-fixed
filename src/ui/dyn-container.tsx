@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { DynContainerProps } from '../types/components/dyn-container.types';
 import { getSpacingStyles, classNames } from '../utils';
 
@@ -13,15 +13,16 @@ export const DynContainer = forwardRef<HTMLDivElement, DynContainerProps>(
     'data-testid': testId,
     ...props 
   }, ref) => {
-    // Fix exactOptionalPropertyTypes by explicit undefined handling
+    // Fix exactOptionalPropertyTypes by explicit conversion
     const spacingStyles = getSpacingStyles({ 
-      p: p !== undefined ? p : undefined, 
-      m: m !== undefined ? m : undefined 
+      p: p !== undefined ? (typeof p === 'string' ? p : `${p}px`) : undefined, 
+      m: m !== undefined ? (typeof m === 'string' ? m : `${m}px`) : undefined
     });
 
     const combinedStyle = {
       ...spacingStyles,
-      maxWidth: maxWidth !== undefined ? maxWidth : undefined,
+      maxWidth: maxWidth !== undefined ? 
+        (typeof maxWidth === 'string' ? maxWidth : `${maxWidth}px`) : undefined,
       ...style
     };
 
