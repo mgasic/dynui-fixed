@@ -1,114 +1,47 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
-import type { DropdownPlacement, DropdownTrigger } from '../types/components/dyn-dropdown.types'
+import { useRef, useCallback, useState } from 'react';
 
-interface UseDropdownOptions {
-  placement?: DropdownPlacement
-  trigger?: DropdownTrigger
-  closeOnSelect?: boolean
-  disabled?: boolean
+export interface DropdownOptions {
+  trigger?: 'hover' | 'click' | 'focus';
+  closeOnOutsideClick?: boolean;
 }
 
-export function useDropdown({
-  placement = 'bottom-start',
-  trigger = 'click',
-  closeOnSelect = true,
-  disabled = false
-}: UseDropdownOptions = {}) {
-  const [isOpen, setIsOpen] = useState(false)
-  const triggerRef = useRef<HTMLElement>(null)
-  const contentRef = useRef<HTMLElement>(null)
+export function useDropdown(options: DropdownOptions = {}) {
+  const {
+    trigger = 'click',
+    closeOnOutsideClick = true
+  } = options;
 
-  const open = useCallback(() => {
-    if (!disabled) setIsOpen(true)
-  }, [disabled])
+  const targetRef = useRef<HTMLElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const close = useCallback(() => {
-    setIsOpen(false)
-  }, [])
+  const openDropdown = useCallback(() => {
+    setIsOpen(true);
+  }, []);
 
-  const toggle = useCallback(() => {
-    isOpen ? close() : open()
-  }, [isOpen, open, close])
+  const closeDropdown = useCallback(() => {
+    setIsOpen(false);
+  }, []);
 
-  const handleSelect = useCallback(() => {
-    if (closeOnSelect) close()
-  }, [closeOnSelect, close])
+  const toggleDropdown = useCallback(() => {
+    setIsOpen(prev => !prev);
+  }, []);
 
-  // Handle click outside
-  useEffect(() => {
-    if (!isOpen) return
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node
-      const triggerElement = triggerRef.current
-      const contentElement = contentRef.current
-
-      if (
-        triggerElement && !triggerElement.contains(target) &&
-        contentElement && !contentElement.contains(target)
-      ) {
-        close()
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isOpen, close])
-
-  // Handle escape key
-  useEffect(() => {
-    if (!isOpen) return
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        close()
-      }
-    }
-
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
-  }, [isOpen, close])
-
-  // Handle trigger events
-  useEffect(() => {
-    const triggerElement = triggerRef.current
-    if (!triggerElement || disabled) return
-
-    const handlers: { [key: string]: () => () => void } = {
-      click: () => {
-        triggerElement.addEventListener('click', toggle)
-        return () => triggerElement.removeEventListener('click', toggle)
-      },
-      hover: () => {
-        triggerElement.addEventListener('mouseenter', open)
-        triggerElement.addEventListener('mouseleave', close)
-        return () => {
-          triggerElement.removeEventListener('mouseenter', open)
-          triggerElement.removeEventListener('mouseleave', close)
-        }
-      },
-      focus: () => {
-        triggerElement.addEventListener('focusin', open)
-        triggerElement.addEventListener('focusout', close)
-        return () => {
-          triggerElement.removeEventListener('focusin', open)
-          triggerElement.removeEventListener('focusout', close)
-        }
-      }
-    }
-
-    const cleanup = handlers[trigger]?.()
-    return cleanup
-  }, [trigger, toggle, open, close, disabled])
+  const dropdownProps = {
+    onClick: trigger === 'click' ? toggleDropdown : undefined,
+    onMouseEnter: trigger === 'hover' ? openDropdown : undefined,
+    onMouseLeave: trigger === 'hover' ? closeDropdown : undefined,
+    onFocus: trigger === 'focus' ? openDropdown : undefined,
+    onBlur: trigger === 'focus' ? closeDropdown : undefined
+  };
 
   return {
+    targetRef,
+    dropdownRef,
     isOpen,
-    triggerRef,
-    contentRef,
-    open,
-    close,
-    toggle,
-    handleSelect
-  }
+    openDropdown,
+    closeDropdown,
+    toggleDropdown,
+    dropdownProps
+  };
 }

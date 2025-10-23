@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { DynGridProps, DynGridItemProps } from '../types/components/dyn-grid.types';
 import { getSpacingStyles, classNames } from '../utils';
 
@@ -14,13 +14,15 @@ export const DynGrid = forwardRef<HTMLDivElement, DynGridProps>(
     ...props 
   }, ref) => {
     const spacingStyles = getSpacingStyles({ 
-      gap: gap !== undefined ? gap : undefined 
+      gap: gap !== undefined ? (typeof gap === 'string' ? gap : `${gap}px`) : undefined
     });
 
     const combinedStyle = {
       ...spacingStyles,
-      gridTemplateColumns: columns ? `repeat(${columns}, 1fr)` : undefined,
-      gridTemplateRows: rows && rows > 0 ? `repeat(${rows}, 1fr)` : undefined,
+      gridTemplateColumns: columns ? 
+        (typeof columns === 'number' ? `repeat(${columns}, 1fr)` : columns) : undefined,
+      gridTemplateRows: rows && Number(rows) > 0 ? 
+        (typeof rows === 'number' ? `repeat(${rows}, 1fr)` : rows) : undefined,
       ...style
     };
 
@@ -31,7 +33,7 @@ export const DynGrid = forwardRef<HTMLDivElement, DynGridProps>(
         className={classNames(
           'dyn-grid',
           columns && `dyn-grid--columns-${columns}`,
-          rows && rows > 0 && `dyn-grid--rows-${rows}`, // Prevent 0 from being string
+          rows && Number(rows) > 0 && `dyn-grid--rows-${rows}`,
           className
         )}
         style={combinedStyle}
@@ -60,13 +62,13 @@ export const DynGridItem = forwardRef<HTMLDivElement, DynGridItemProps>(
         ref={ref}
         className={classNames(
           'dyn-grid-item',
-          colSpan && colSpan > 0 && `dyn-grid-item--col-span-${colSpan}`,
-          rowSpan && rowSpan > 0 && `dyn-grid-item--row-span-${rowSpan}`, // Prevent 0 from being string
+          colSpan && Number(colSpan) > 0 && `dyn-grid-item--col-span-${colSpan}`,
+          rowSpan && Number(rowSpan) > 0 && `dyn-grid-item--row-span-${rowSpan}`,
           className
         )}
         style={{
-          gridColumn: colSpan ? `span ${colSpan}` : undefined,
-          gridRow: rowSpan ? `span ${rowSpan}` : undefined
+          gridColumn: colSpan && Number(colSpan) > 0 ? `span ${colSpan}` : undefined,
+          gridRow: rowSpan && Number(rowSpan) > 0 ? `span ${rowSpan}` : undefined
         }}
         data-testid={testId}
       >

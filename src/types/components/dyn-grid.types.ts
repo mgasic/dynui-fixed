@@ -1,25 +1,20 @@
-import type { SpacingValue } from './dyn-box.types'
-
-export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
-export type GridSpan = 'auto' | GridColumns | 'full'
+import type React from 'react';
+import type { SpacingValue } from '../common.types';
 
 export interface DynGridProps {
-  as?: React.ElementType
-  children?: React.ReactNode
-  cols?: GridColumns
-  rows?: number
-  gap?: SpacingValue
-  gapX?: SpacingValue
-  gapY?: SpacingValue
-  'data-testid'?: string
+  columns?: number | string;
+  rows?: number | string;
+  gap?: SpacingValue;
+  children?: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+  'data-testid'?: string;
 }
 
 export interface DynGridItemProps {
-  as?: React.ElementType
-  children?: React.ReactNode
-  colSpan?: GridSpan
-  rowSpan?: number
-  colStart?: GridColumns
-  rowStart?: number
-  'data-testid'?: string
+  colSpan?: number | string;
+  rowSpan?: number | string;
+  children?: React.ReactNode;
+  className?: string;
+  'data-testid'?: string;
 }

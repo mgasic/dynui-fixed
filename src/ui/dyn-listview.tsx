@@ -17,8 +17,7 @@ export const DynListView = forwardRef<HTMLDivElement, DynListViewProps>(
     
     const { containerRef } = useArrowNavigation({
       orientation: 'vertical',
-      selector: '.dyn-list-item:not(.dyn-list-item--disabled)',
-      typeahead: true
+      selector: '.dyn-list-item:not(.dyn-list-item--disabled)'
     });
 
     const handleItemSelect = (itemId: string) => {
@@ -36,7 +35,7 @@ export const DynListView = forwardRef<HTMLDivElement, DynListViewProps>(
     return (
       <div
         {...props}
-        ref={ref || containerRef}
+        ref={ref || (containerRef as React.RefObject<HTMLDivElement>)}
         role="listbox"
         aria-multiselectable={multiSelect}
         className={classNames('dyn-list-view', className)}

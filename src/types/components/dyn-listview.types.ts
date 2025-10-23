@@ -1,12 +1,16 @@
-export interface ListViewItem { key: string; value: string; label: string; disabled?: boolean }
+import type React from 'react';
+
+export interface ListViewItem {
+  id: string;
+  label: string;
+  disabled?: boolean;
+}
+
 export interface DynListViewProps {
-  items?: ListViewItem[]
-  value?: string | string[]
-  defaultValue?: string | string[]
-  multiSelect?: boolean
-  disabled?: boolean
-  onChange?: (value: string | string[]) => void
-  'aria-label'?: string
-  'aria-labelledby'?: string
-  'data-testid'?: string
+  items?: ListViewItem[];
+  selectedItem?: string;
+  onSelectionChange?: (selectedIds: string[]) => void;
+  multiSelect?: boolean;
+  className?: string;
+  'data-testid'?: string;
 }

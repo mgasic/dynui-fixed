@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import type { DynBreadcrumbProps, DynBreadcrumbItemProps } from '../types/components/dyn-breadcrumb.types';
 import { classNames } from '../utils';
 
-export const DynBreadcrumb = forwardRef<HTMLNavElement, DynBreadcrumbProps>(
+export const DynBreadcrumb = forwardRef<HTMLElement, DynBreadcrumbProps>(
   ({ children, className, 'data-testid': testId, ...props }, ref) => (
     <nav
       {...props}
@@ -13,9 +13,10 @@ export const DynBreadcrumb = forwardRef<HTMLNavElement, DynBreadcrumbProps>(
     >
       <ol className="dyn-breadcrumb__list">
         {React.Children.map(children, (child, index) => {
-          if (React.isValidElement(child) && child.type === DynBreadcrumbItem) {
+          if (React.isValidElement<DynBreadcrumbItemProps>(child) && child.type === DynBreadcrumbItem) {
             const isLast = index === React.Children.count(children) - 1;
             return React.cloneElement(child, {
+              ...child.props,
               isLast,
               key: child.key || index
             });

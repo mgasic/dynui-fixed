@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { DynStepperProps, StepItem } from '../types/components/dyn-stepper.types';
 import { classNames } from '../utils';
 

@@ -1,5 +1,5 @@
-import React, { forwardRef, useState } from 'react';
-import type { DynTreeViewProps, DynTreeNodeProps } from '../types/components/dyn-tree.types';
+import { forwardRef, useState } from 'react';
+import type { DynTreeViewProps, DynTreeNodeProps, TreeNode } from '../types/components/dyn-tree.types';
 import { classNames } from '../utils';
 
 export const DynTreeView = forwardRef<HTMLDivElement, DynTreeViewProps>(
@@ -35,7 +35,7 @@ export const DynTreeView = forwardRef<HTMLDivElement, DynTreeViewProps>(
       onNodeSelect?.(nodeId);
     };
 
-    const renderNode = (node: any, level = 0) => {
+    const renderNode = (node: TreeNode, level = 0): React.ReactNode => {
       const isExpanded = internalExpanded.includes(node.id);
       const isSelected = multiSelect 
         ? internalSelected.includes(node.id)
@@ -55,7 +55,7 @@ export const DynTreeView = forwardRef<HTMLDivElement, DynTreeViewProps>(
           />
           {isExpanded && hasChildren && (
             <div className="dyn-tree-view__children">
-              {node.children.map((childNode: any) => renderNode(childNode, level + 1))}
+              {node.children?.map((childNode) => renderNode(childNode, level + 1))}
             </div>
           )}
         </div>
@@ -81,7 +81,7 @@ DynTreeView.displayName = 'DynTreeView';
 export const DynTreeNode = forwardRef<HTMLDivElement, DynTreeNodeProps>(
   ({
     node,
-    level,
+    level = 0,
     expanded,
     selected,
     hasChildren,
@@ -90,6 +90,8 @@ export const DynTreeNode = forwardRef<HTMLDivElement, DynTreeNodeProps>(
     className,
     ...props
   }, ref) => {
+    if (!node) return null;
+
     return (
       <div
         {...props}

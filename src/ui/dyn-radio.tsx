@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { DynRadioGroupProps, DynRadioProps } from '../types/components/dyn-radio.types';
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
@@ -84,8 +84,7 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
   }, ref) => {
     const { containerRef } = useArrowNavigation({
       orientation,
-      selector: 'input[type="radio"]:not(:disabled)',
-      typeahead: false
+      selector: 'input[type="radio"]:not(:disabled)'
     });
 
     const handleChange = (selectedValue: string, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,7 +95,7 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
     return (
       <div
         {...props}
-        ref={ref || containerRef}
+        ref={ref || (containerRef as React.RefObject<HTMLDivElement>)}
         role="radiogroup"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
@@ -112,13 +111,14 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
         {React.Children.map(children, (child, index) => {
           if (React.isValidElement<DynRadioProps>(child) && child.type === DynRadio) {
             return React.cloneElement(child, {
+              ...child.props,
               name: name || `radio-group-${Math.random().toString(36).substr(2, 9)}`,
               checked: value !== undefined ? child.props.value === value : undefined,
               defaultChecked: defaultValue !== undefined && child.props.value === defaultValue,
               disabled: disabled || child.props.disabled,
               onChange: handleChange,
               key: child.props.value || index
-            } as Partial<DynRadioProps>);
+            });
           }
           return child;
         })}

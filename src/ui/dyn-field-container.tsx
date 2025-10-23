@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { DynFieldContainerProps } from '../types/components/dyn-field-container.types';
 import { classNames } from '../utils';
 
@@ -17,7 +17,6 @@ export const DynFieldContainer = forwardRef<HTMLDivElement, DynFieldContainerPro
     const errorId = error ? `${fieldId}-error` : undefined;
     const helpId = helpText ? `${fieldId}-help` : undefined;
 
-    // Fix callable children type issue
     const renderChildren = () => {
       if (typeof children === 'function') {
         return children({

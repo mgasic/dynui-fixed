@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { DynBoxProps } from '../types/components/dyn-box.types';
 import { getSpacingStyles, classNames } from '../utils';
 
@@ -13,11 +13,11 @@ export const DynBox = forwardRef<HTMLDivElement, DynBoxProps>(
     'data-testid': testId,
     ...props 
   }, ref) => {
-    // Proper initialization of spacing props
+    // Fix exactOptionalPropertyTypes by explicit conversion
     const spacingStyles = getSpacingStyles({ 
-      p: p ?? undefined, 
-      m: m ?? undefined, 
-      gap: gap ?? undefined 
+      p: p !== undefined ? (typeof p === 'string' ? p : `${p}px`) : undefined, 
+      m: m !== undefined ? (typeof m === 'string' ? m : `${m}px`) : undefined, 
+      gap: gap !== undefined ? (typeof gap === 'string' ? gap : `${gap}px`) : undefined
     });
 
     const combinedStyle = {

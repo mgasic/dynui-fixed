@@ -1,12 +1,18 @@
-export type MenuDivider = { type: 'divider' }
-export type MenuAction = { type: 'item'; value: string; label: string; disabled?: boolean }
-export type MenuItem = MenuDivider | MenuAction
+import type React from 'react';
+
 export interface DynMenuProps {
-  as?: React.ElementType
-  items?: MenuItem[]
-  orientation?: 'horizontal' | 'vertical'
-  onAction?: (value: string) => void
-  'aria-label'?: string
-  'aria-labelledby'?: string
-  'data-testid'?: string
+  children?: React.ReactNode;
+  orientation?: 'horizontal' | 'vertical';
+  onAction?: (key: string) => void;
+  className?: string;
+  'data-testid'?: string;
+}
+
+export interface DynMenuItemProps {
+  children?: React.ReactNode;
+  disabled?: boolean;
+  action?: string;
+  onAction?: (key: string) => void;
+  className?: string;
+  'data-testid'?: string;
 }
