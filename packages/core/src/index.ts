@@ -1,11 +1,22 @@
-// DynUI Core Library - Placeholder Export
-// This file will be populated with component exports in FAZA 1 - KORAK 2 (File Migration)
+// DynUI Core Library - Complete Component Export
+// Migration from src/ to packages/core/src/ (FAZA 1 - KORAK 2)
 
-// Temporary export to enable successful build
-export const DYNUI_VERSION = '1.0.0';
+// Components
+export * from './components'
 
-// TODO: Add component exports after file migration:
-// export { DynButton } from './ui/dyn-button';
-// export { DynInput } from './ui/dyn-input';
-// export { DynModal } from './ui/dyn-modal';
-// ... etc
+// Hooks  
+export * from './hooks'
+
+// Types
+export type * from './types/components'
+export type * from './types/common.types'
+
+// Utils (without SpacingValue to avoid ambiguity)
+export { classNames, getSpacingStyles } from './utils'
+export type { StyleProps } from './utils/style-props'
+
+// Theme
+export * from './theme'
+
+// Version info
+export const DYNUI_VERSION = '1.0.0'
