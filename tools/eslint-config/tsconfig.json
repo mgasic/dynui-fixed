@@ -1,5 +1,5 @@
 {
-  "extends": "@dynui/build-config/tsconfig.base",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
     "baseUrl": "."

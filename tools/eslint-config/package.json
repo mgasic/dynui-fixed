@@ -1,0 +1,22 @@
+{
+  "name": "@dynui/eslint-config",
+  "version": "0.1.0",
+  "description": "Shared ESLint configuration presets for DynUI.",
+  "type": "commonjs",
+  "main": "index.cjs",
+  "exports": {
+    ".": "./index.cjs",
+    "./react": "./react.cjs"
+  },
+  "files": ["index.cjs", "react.cjs", "README.md"],
+  "peerDependencies": {
+    "eslint": ">=9",
+    "eslint-config-prettier": ">=9",
+    "eslint-plugin-react": ">=7"
+  },
+  "devDependencies": {
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-react": "catalog:"
+  }
+}

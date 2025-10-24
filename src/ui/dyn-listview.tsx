@@ -21,6 +21,19 @@ export const DynListView = forwardRef<HTMLDivElement, DynListViewProps>(
       selector: '.dyn-list-item:not(.dyn-list-item--disabled)'
     });
 
+    const setRefs = useCallback(
+      (node: HTMLDivElement | null) => {
+        containerRef.current = node;
+
+        if (typeof ref === 'function') {
+          ref(node);
+        } else if (ref) {
+          (ref as MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+      },
+      [containerRef, ref]
+    );
+
     const handleItemSelect = (itemId: string) => {
       if (multiSelect) {
         const newSelection = selectedItems.includes(itemId)
