@@ -1,55 +1,80 @@
+import { forwardRef } from 'react'
 import type { DynTextAreaProps } from '../types/components/dyn-textarea.types'
+import { useControlled } from '../hooks/use-controlled'
 import { classNames } from '../utils'
 
-export function DynTextArea({
-  id,
-  value,
-  defaultValue,
-  disabled,
-  required,
-  placeholder,
-  readonly,
-  rows = 4,
-  cols,
-  size = 'md',
-  variant = 'outline',
-  resize = 'vertical',
-  onChange,
-  onFocus,
-  onBlur,
-  'aria-label': ariaLabel,
-  'aria-labelledby': ariaLabelledby,
-  'aria-describedby': ariaDescribedby,
-  'data-testid': dataTestId
-}: DynTextAreaProps) {
-  const cls = classNames(
-    'dyn-textarea',
-    `dyn-textarea--${size}`,
-    `dyn-textarea--${variant}`,
-    `dyn-textarea--resize-${resize}`,
-    disabled && 'dyn-textarea--disabled',
-    readonly && 'dyn-textarea--readonly'
-  )
+/**
+ * DynTextArea - Multi-line text input component
+ */
+export const DynTextArea = forwardRef<HTMLTextAreaElement, DynTextAreaProps>(
+  (
+    {
+      id,
+      name,
+      value,
+      defaultValue,
+      onChange,
+      disabled = false,
+      required = false,
+      readonly = false,
+      placeholder,
+      rows = 3,
+      cols,
+      resize = 'vertical',
+      size = 'md',
+      variant = 'outline',
+      onFocus,
+      onBlur,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledby,
+      'aria-describedby': ariaDescribedby,
+      'data-testid': dataTestId,
+      'data-state': dataState
+    },
+    ref
+  ) => {
+    const { value: currentValue, setValue } = useControlled({ value, defaultValue, onChange })
 
-  return (
-    <textarea
-      id={id}
-      value={value}
-      defaultValue={defaultValue}
-      disabled={disabled}
-      required={required}
-      placeholder={placeholder}
-      readOnly={readonly}
-      rows={rows}
-      cols={cols}
-      className={cls}
-      onChange={(e) => onChange?.(e.target.value)}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      aria-label={ariaLabel}
-      aria-labelledby={ariaLabelledby}
-      aria-describedby={ariaDescribedby}
-      data-testid={dataTestId}
-    />
-  )
-}
+    const textareaClasses = classNames(
+      'dyn-textarea',
+      `dyn-textarea--${size}`,
+      `dyn-textarea--${variant}`,
+      `dyn-textarea--resize-${resize}`,
+      disabled && 'dyn-textarea--disabled',
+      readonly && 'dyn-textarea--readonly',
+      required && 'dyn-textarea--required'
+    )
+
+    const wrapperClasses = classNames(
+      'dyn-textarea-wrapper',
+      dataState && `dyn-textarea-wrapper--${dataState}`
+    )
+
+    return (
+      <div className={wrapperClasses} data-testid={dataTestId}>
+        <textarea
+          ref={ref}
+          id={id}
+          name={name}
+          value={currentValue ?? ''}
+          placeholder={placeholder}
+          rows={rows}
+          cols={cols}
+          disabled={disabled}
+          required={required}
+          readOnly={readonly}
+          className={textareaClasses}
+          onChange={(e) => setValue(e.target.value)}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledby}
+          aria-describedby={ariaDescribedby}
+          aria-invalid={dataState === 'error' ? 'true' : undefined}
+        />
+      </div>
+    )
+  }
+)
+
+DynTextArea.displayName = 'DynTextArea'
