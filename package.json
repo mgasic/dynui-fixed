@@ -12,7 +12,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "test": "turbo test",
-    "test:a11y": "turbo test:a11y", 
+    "test:a11y": "turbo test:a11y",
     "typecheck": "turbo typecheck",
     "lint": "turbo lint",
     "format": "prettier --write .",
