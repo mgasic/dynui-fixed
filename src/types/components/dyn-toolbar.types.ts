@@ -1,14 +1,16 @@
+import type { ElementType, ReactNode } from 'react'
+
 export interface ToolbarItem {
   key: string
   value: string
   label: string
-  icon?: React.ReactNode
+  icon?: ReactNode
   disabled?: boolean
   type?: 'button' | 'separator' | 'group'
 }
 
 export interface DynToolbarProps {
-  as?: React.ElementType
+  as?: ElementType
   items?: ToolbarItem[]
   orientation?: 'horizontal' | 'vertical'
   size?: 'sm' | 'md' | 'lg'

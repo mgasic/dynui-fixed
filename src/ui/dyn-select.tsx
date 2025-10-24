@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import type { ChangeEvent } from 'react';
 import type { DynSelectProps, DynSelectOptionProps } from '../types/components/dyn-select.types';
 import { classNames } from '../utils';
 
@@ -16,7 +17,7 @@ export const DynSelect = forwardRef<HTMLSelectElement, DynSelectProps>(
     'data-testid': testId,
     ...props 
   }, ref) => {
-    const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
       onChange?.(event.target.value);
     };
 

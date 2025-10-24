@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import type { ChangeEvent, RefObject } from 'react';
 import type { DynRadioGroupProps, DynRadioProps } from '../types/components/dyn-radio.types';
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
@@ -20,7 +21,7 @@ export const DynRadio = forwardRef<HTMLInputElement, DynRadioProps>(
     size,
     ...props
   }, ref) => {
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       if (disabled) return;
       onChange?.(event.target.value, event);
     };
@@ -87,7 +88,7 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
       selector: 'input[type="radio"]:not(:disabled)'
     });
 
-    const handleChange = (selectedValue: string, event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (selectedValue: string, event: ChangeEvent<HTMLInputElement>) => {
       if (disabled) return;
       onChange?.(selectedValue, event);
     };
@@ -95,7 +96,7 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
     return (
       <div
         {...props}
-        ref={ref || (containerRef as React.RefObject<HTMLDivElement>)}
+        ref={ref || (containerRef as RefObject<HTMLDivElement>)}
         role="radiogroup"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}

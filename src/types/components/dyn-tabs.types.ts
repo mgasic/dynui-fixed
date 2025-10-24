@@ -1,10 +1,10 @@
-import type React from 'react';
+import type { ReactNode } from 'react';
 
 export interface DynTabsProps {
   value?: string;
   defaultValue?: string;
   orientation?: 'horizontal' | 'vertical';
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
   onChange?: (value: string) => void;
   'data-testid'?: string;
@@ -12,7 +12,7 @@ export interface DynTabsProps {
 
 export interface DynTabProps {
   value: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   isActive?: boolean;
   onSelect?: (value: string) => void;
   disabled?: boolean;
@@ -21,7 +21,7 @@ export interface DynTabProps {
 
 export interface DynTabPanelProps {
   value: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   isActive?: boolean;
   className?: string;
 }

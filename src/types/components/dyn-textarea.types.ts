@@ -1,7 +1,8 @@
+import type { ElementType } from 'react'
 import type { ControlProps, Size, Variant } from '../common.types'
 
 export interface DynTextAreaProps extends ControlProps<string> {
-  as?: React.ElementType
+  as?: ElementType
   size?: Size
   variant?: Variant
   placeholder?: string

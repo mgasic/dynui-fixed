@@ -1,5 +1,7 @@
+import type { ElementType } from 'react'
+
 export interface DynDividerProps {
-  as?: React.ElementType
+  as?: ElementType
   orientation?: 'horizontal' | 'vertical'
   variant?: 'solid' | 'dashed' | 'dotted'
   thickness?: 'thin' | 'medium' | 'thick'

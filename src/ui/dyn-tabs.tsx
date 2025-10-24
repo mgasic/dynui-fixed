@@ -1,4 +1,5 @@
 import React, { forwardRef, useState } from 'react';
+import type { RefObject } from 'react';
 import type { DynTabsProps, DynTabProps, DynTabPanelProps } from '../types/components/dyn-tabs.types';
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
@@ -38,7 +39,7 @@ export const DynTabs = forwardRef<HTMLDivElement, DynTabsProps>(
         data-testid={testId}
       >
         <div
-          ref={containerRef as React.RefObject<HTMLDivElement>}
+          ref={containerRef as RefObject<HTMLDivElement>}
           role="tablist"
           className="dyn-tabs__list"
         >
