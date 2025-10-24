@@ -1,8 +1,15 @@
-// DynUI Hooks - Advanced Keyboard Navigation & UI Logic
-// Migration from src/hooks/ to packages/core/src/hooks/
+/**
+ * DynUI Hooks - Advanced interaction utilities
+ * These hooks provide standardized patterns for keyboard navigation,
+ * focus management, controlled/uncontrolled state, and complex interactions
+ */
 
-export { useArrowNavigation } from './use-arrow-navigation'
-export { useFocusTrap } from './use-focus-trap'
-export { useKeyboard } from './use-keyboard'
-export { useDropdown } from './use-dropdown'
-export { useTooltip } from './use-tooltip'
+// Core interaction hooks
+export * from './use-controlled'
+export * from './use-keyboard'
+export * from './use-focus-trap'
+export * from './use-arrow-navigation'
+
+// Component-specific hooks
+export * from './use-dropdown'
+export * from './use-tooltip'
