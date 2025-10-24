@@ -39,7 +39,7 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
     });
 
     return (
-      <div ref={containerRef as React.RefObject<HTMLDivElement>} className={classNames('dyn-table-container', className)}>
+      <div ref={containerRef} className={classNames('dyn-table-container', className)}>
         <table
           {...props}
           ref={ref}

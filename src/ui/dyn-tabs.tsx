@@ -170,7 +170,7 @@ export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
         data-testid={testId}
       >
         <div
-          ref={containerRef as React.RefObject<HTMLDivElement>}
+          ref={containerRef}
           role="tablist"
           className="dyn-tabs__list"
           aria-orientation={orientation}
