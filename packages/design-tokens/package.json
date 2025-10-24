@@ -15,6 +15,7 @@
   "scripts": {
     "build": "tsup --config tsup.config.ts",
     "dev": "tsup --config tsup.config.ts --watch",
+    "build:css": "node ./build/generate-css-variables.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint --config ../../tools/eslint-config/react.cjs 'src/**/*.{ts,tsx}'"
   },
