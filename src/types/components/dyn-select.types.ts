@@ -17,6 +17,13 @@ export interface DynSelectProps {
   className?: string;
   size?: Size;
   onChange?: (value: string) => void;
+  searchable?: boolean;
+  searchValue?: string;
+  defaultSearchValue?: string;
+  onSearchChange?: (value: string) => void;
+  searchPlaceholder?: string;
+  searchAriaLabel?: string;
+  filterOptions?: (option: SelectOption, search: string) => boolean;
   'aria-label'?: string;
   'aria-labelledby'?: string;
   'aria-describedby'?: string;
