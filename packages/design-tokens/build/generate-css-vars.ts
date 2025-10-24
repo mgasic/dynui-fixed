@@ -2,9 +2,14 @@ import { tokens } from '../src/index'
 
 type TokenRecord = Record<string, string | number | TokenRecord>
 
+function sanitizeTokenKey(key: string): string {
+  return key.replace(/[^a-zA-Z0-9_-]/g, '-')
+}
+
 function toCSSVars(record: TokenRecord, prefix: string[] = []): string[] {
   return Object.entries(record).flatMap(([key, value]) => {
-    const nextPrefix = [...prefix, key]
+    const sanitizedKey = sanitizeTokenKey(key)
+    const nextPrefix = [...prefix, sanitizedKey]
     if (typeof value === 'object' && value !== null) {
       return toCSSVars(value as TokenRecord, nextPrefix)
     }
