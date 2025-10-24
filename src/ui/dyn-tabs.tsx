@@ -1,6 +1,19 @@
-import React, { forwardRef, useState } from 'react';
-import type { RefObject } from 'react';
-import type { DynTabsProps, DynTabProps, DynTabPanelProps } from '../types/components/dyn-tabs.types';
+import React, {
+  forwardRef,
+  useCallback,
+  useId,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import type {
+  DynTabsProps,
+  DynTabProps,
+  DynTabPanelProps,
+  DynTabsRef,
+  TabItem
+} from '../types/components/dyn-tabs.types';
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
 
@@ -26,7 +39,7 @@ export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
     ref
   ) => {
     const rootRef = useRef<HTMLDivElement>(null);
-    const { containerRef, setupNavigation } = useArrowNavigation({
+    const { containerRef, focusFirst, focusLast, focusAtIndex } = useArrowNavigation({
       orientation,
       selector: '[role="tab"]:not([aria-disabled="true"])'
     });
@@ -52,13 +65,6 @@ export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
     const [activeTab, setActiveTab] = useState<string>(
       () => value ?? defaultValue ?? firstAvailableValue
     );
-
-    useEffect(() => {
-      const cleanup = setupNavigation?.();
-      return () => {
-        cleanup?.();
-      };
-    }, [setupNavigation]);
 
     const handleTabChange = useCallback(
       (tabValue: string) => {
@@ -91,38 +97,37 @@ export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
     const focusTabByValue = useCallback(
       (tabValue: string) => {
         const tabs = focusableTabs();
-        const target = tabs.find(tab => tab.dataset.value === tabValue);
-        target?.focus();
+        const targetIndex = tabs.findIndex(tab => tab.dataset.value === tabValue);
+        if (targetIndex >= 0) {
+          focusAtIndex(targetIndex);
+        }
       },
-      [focusableTabs]
+      [focusAtIndex, focusableTabs]
     );
 
     const focusFirstTab = useCallback(() => {
-      const tabs = focusableTabs();
-      tabs[0]?.focus();
-    }, [focusableTabs]);
+      focusFirst();
+    }, [focusFirst]);
 
     const focusLastTab = useCallback(() => {
-      const tabs = focusableTabs();
-      tabs[tabs.length - 1]?.focus();
-    }, [focusableTabs]);
+      focusLast();
+    }, [focusLast]);
 
     const focusNextTab = useCallback(() => {
       const tabs = focusableTabs();
       const currentIndex = tabs.findIndex(tab => tab === document.activeElement);
       if (tabs.length === 0) return;
-      const nextIndex = currentIndex >= 0 ? (currentIndex + 1) % tabs.length : 0;
-      tabs[nextIndex]?.focus();
-    }, [focusableTabs]);
+      const nextIndex = currentIndex >= 0 ? currentIndex + 1 : 0;
+      focusAtIndex(nextIndex);
+    }, [focusAtIndex, focusableTabs]);
 
     const focusPreviousTab = useCallback(() => {
       const tabs = focusableTabs();
       const currentIndex = tabs.findIndex(tab => tab === document.activeElement);
       if (tabs.length === 0) return;
-      const previousIndex =
-        currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
-      tabs[previousIndex]?.focus();
-    }, [focusableTabs]);
+      const previousIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
+      focusAtIndex(previousIndex);
+    }, [focusAtIndex, focusableTabs]);
 
     useImperativeHandle(
       ref,
