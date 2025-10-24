@@ -1,4 +1,4 @@
-import type React from 'react';
+import type { ReactNode } from 'react';
 import type { Size } from '../common.types';
 
 export interface SelectOption {
@@ -13,10 +13,17 @@ export interface DynSelectProps {
   placeholder?: string;
   disabled?: boolean;
   options?: SelectOption[];
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
   size?: Size;
   onChange?: (value: string) => void;
+  searchable?: boolean;
+  searchValue?: string;
+  defaultSearchValue?: string;
+  onSearchChange?: (value: string) => void;
+  searchPlaceholder?: string;
+  searchAriaLabel?: string;
+  filterOptions?: (option: SelectOption, search: string) => boolean;
   'aria-label'?: string;
   'aria-labelledby'?: string;
   'aria-describedby'?: string;
@@ -24,7 +31,7 @@ export interface DynSelectProps {
 }
 
 export interface DynSelectOptionProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   value: string;
   disabled?: boolean;
 }

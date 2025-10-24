@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { Color } from '../common.types'
 
 export type ToastPosition = 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
@@ -22,7 +23,7 @@ export interface DynToastProps {
 }
 
 export interface DynToastProviderProps {
-  children: React.ReactNode
+  children: ReactNode
   position?: ToastPosition
   maxToasts?: number
 }

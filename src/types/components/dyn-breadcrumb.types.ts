@@ -1,4 +1,4 @@
-import type React from 'react';
+import type { ReactNode } from 'react';
 
 export interface BreadcrumbItem {
   label: string;
@@ -6,13 +6,13 @@ export interface BreadcrumbItem {
 }
 
 export interface DynBreadcrumbProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
   'data-testid'?: string;
 }
 
 export interface DynBreadcrumbItemProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   href?: string;
   isLast?: boolean;
   className?: string;

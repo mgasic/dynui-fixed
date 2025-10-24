@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 interface RenderPropArgs {
   id: string;
   'aria-describedby'?: string;
@@ -9,7 +11,7 @@ export interface DynFieldContainerProps {
   error?: string;
   helpText?: string;
   required?: boolean;
-  children?: React.ReactNode | ((args: RenderPropArgs) => React.ReactNode);
+  children?: ReactNode | ((args: RenderPropArgs) => ReactNode);
   className?: string;
   'data-testid'?: string;
 }

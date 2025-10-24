@@ -1,5 +1,6 @@
 export type Size = 'sm' | 'md' | 'lg';
-export type Variant = 'primary' | 'secondary' | 'danger' | 'warning' | 'success' | 'info';
+export type Variant = 'solid' | 'outline';
+export type Color = 'neutral' | 'info' | 'success' | 'warning' | 'danger';
 export type SpacingValue = number | string;
 
 export interface ControlProps<T> {

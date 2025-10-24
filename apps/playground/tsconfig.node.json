@@ -1,11 +1,9 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "@dynui/build-config/tsconfig.base",
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "types": ["node"]
+    "moduleResolution": "bundler"
   },
   "include": ["vite.config.ts"]
 }

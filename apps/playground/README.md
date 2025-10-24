@@ -1,8 +1,12 @@
 # DynUI Playground
 
-A lightweight Vite + React application for trying DynUI components in a
-sandboxed environment. Run `pnpm --filter @dynui/playground dev` from the
-repo root to start the development server.
+A minimal Vite + React host that consumes `@dynui/core` during Phase 1.  The app
+exists to validate packages in a realistic browser environment without the
+overhead of Storybook.  Tokens from `@dynui/design-tokens` are imported directly
+so contributors can confirm palette and spacing choices while iterating on
+components.
 
-As additional packages are introduced, import them inside `src/App.tsx`
-or create dedicated routes/modules to exercise complex scenarios.
+```bash
+pnpm install
+pnpm --filter playground dev
+```
