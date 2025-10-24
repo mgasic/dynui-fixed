@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/mgasic/dynui-fixed/workflows/CI/badge.svg)](https://github.com/mgasic/dynui-fixed/actions)
 [![Quality Gates](https://github.com/mgasic/dynui-fixed/workflows/Quality%20Gates%20(Extended)/badge.svg)](https://github.com/mgasic/dynui-fixed/actions)
-[![Components](https://img.shields.io/badge/Components-29-brightgreen)](#-components)
-[![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)](#-type-system)
-[![Accessibility](https://img.shields.io/badge/A11y-WAI--ARIA-green)](#-accessibility)
+[![Components](https://img.shields.io/badge/Components-29-brightgreen)](#complete-component-catalog)
+[![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)](#architecture-type-system)
+[![Accessibility](https://img.shields.io/badge/A11y-WAI--ARIA-green)](#accessibility-testing)
 
 🎯 **Production-ready React TypeScript component library implementing 100% of DynUI functional specifications (FS-01, FS-02, FS-03)**
 
@@ -221,7 +221,7 @@ test('DynTabs has no accessibility violations', async () => {
 
 | **Category** | **Original Issues** | **Resolution** | **Status** |
 |--------------|-------------------|----------------|------------|
-| **Missing API Props** | 45% (35+ props missing) | Complete ControlProps<T> implementation | ✅ **Fixed** |
+| **Missing API Props** | 45% (35+ props missing) | Complete `ControlProps<T>` implementation | ✅ **Fixed** |
 | **Type Inconsistencies** | 30% (scattered types) | Centralized type system in src/types/ | ✅ **Fixed** |
 | **Design Patterns** | 20% (Context, controlled/uncontrolled) | Proper React patterns implemented | ✅ **Fixed** |
 | **Test Infrastructure** | 5% (missing tests) | Complete Vitest + jest-axe setup | ✅ **Fixed** |
@@ -250,8 +250,7 @@ pnpm build
 
 ### Project Structure
 
-```
-src/
+```src/
 ├── components/          # Component barrel exports
 ├── ui/                 # Component implementations
 ├── types/              # Complete TypeScript definitions

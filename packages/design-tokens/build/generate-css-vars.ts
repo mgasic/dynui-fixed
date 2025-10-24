@@ -9,10 +9,14 @@ function sanitizeTokenKey(key: string): string {
   return key.replace(/[^a-zA-Z0-9_-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
 }
 
+function sanitizeTokenKey(key: string): string {
+  return key.replace(/[^a-zA-Z0-9_-]/g, '-')
+}
+
 function toCSSVars(record: TokenRecord, prefix: string[] = []): string[] {
   return Object.entries(record).flatMap(([key, value]) => {
     const sanitizedKey = sanitizeTokenKey(key)
-    const nextPrefix = sanitizedKey ? [...prefix, sanitizedKey] : prefix
+    const nextPrefix = [...prefix, sanitizedKey]
     if (typeof value === 'object' && value !== null) {
       return toCSSVars(value as TokenGroup, nextPrefix)
     }
