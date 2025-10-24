@@ -4,9 +4,17 @@
   "description": "Shared build configuration primitives for DynUI packages.",
   "type": "module",
   "private": true,
-  "files": ["src", "README.md"],
+  "files": [
+    "src",
+    "README.md",
+    "tsconfig.base.json",
+    "tsup.library.config.ts"
+  ],
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./tsconfig.base": "./tsconfig.base.json",
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./tsup.library.config": "./tsup.library.config.ts"
   },
   "scripts": {
     "build": "echo 'Configuration packages do not require build output'",

@@ -4,9 +4,10 @@
   "description": "Central ESLint configuration for DynUI packages and apps.",
   "type": "module",
   "private": true,
-  "files": ["src", "README.md"],
+  "files": ["src", "README.md", "index.cjs", "react.cjs"],
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./react": "./react.cjs"
   },
   "scripts": {
     "build": "echo 'Lint configuration ships as source-only'",
