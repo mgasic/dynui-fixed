@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@dynui/core": ["../../packages/core/src"]
+    }
+  },
+  "include": ["src", "vite.config.ts", "tsconfig.node.json"]
+}
