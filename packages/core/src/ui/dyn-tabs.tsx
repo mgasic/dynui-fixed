@@ -1,82 +1,130 @@
-import React, { forwardRef, useState } from 'react';
-import type { DynTabsProps, DynTabProps, DynTabPanelProps } from '../types/components/dyn-tabs.types';
-import { useArrowNavigation } from '../hooks/use-arrow-navigation';
-import { classNames } from '../utils';
+import React, { forwardRef, useRef, useState, useImperativeHandle } from 'react'
+import type { DynTabsProps, DynTabProps, DynTabPanelProps, DynTabsRef, TabItem } from '../types/components/dyn-tabs.types'
+import { useArrowNavigation } from '../hooks/use-arrow-navigation'
+import { classNames } from '../utils'
 
-export const DynTabs = forwardRef<HTMLDivElement, DynTabsProps>(
-  ({
-    value,
-    defaultValue,
-    orientation = 'horizontal',
-    children,
-    className,
-    onChange,
-    'data-testid': testId,
-    ...props
-  }, ref) => {
-    const [activeTab, setActiveTab] = useState(value || defaultValue || '');
-    
-    const { containerRef } = useArrowNavigation({
+/**
+ * DynTabs - WAI-ARIA compliant Tabs with activation modes and mini API
+ * - Activation: 'auto' (activate on focus) | 'manual' (activate on Enter/Space)
+ * - Orientation: 'horizontal' | 'vertical'
+ * - Keyboard: Arrow keys, Home/End, typeahead (provided by useArrowNavigation)
+ * - Mini API: focusFirst, focusLast, focus(value), getFocused, getSelected
+ */
+export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
+  (
+    {
+      value,
+      defaultValue,
+      onChange,
+      orientation = 'horizontal',
+      activation = 'auto',
+      children,
+      className,
+      'aria-label': ariaLabel,
+      'data-testid': testId,
+      ...props
+    },
+    ref
+  ) => {
+    const listRef = useRef<HTMLDivElement>(null)
+    const [internal, setInternal] = useState<string>(defaultValue ?? '')
+    const selected = value ?? internal
+
+    const setSelected = (next: string) => {
+      if (value === undefined) setInternal(next)
+      onChange?.(next)
+    }
+
+    const { containerRef, getFocusedIndex, focusFirst, focusLast, focusIndex } = useArrowNavigation({
       orientation,
-      selector: '[role="tab"]:not([aria-disabled="true"])'
-    });
+      selector: '[role="tab"]:not([aria-disabled="true"])',
+      typeahead: true,
+      loop: true
+    })
 
-    const handleTabChange = (tabValue: string) => {
-      if (value === undefined) {
-        setActiveTab(tabValue);
-      }
-      onChange?.(tabValue);
-    };
+    // Expose mini API
+    useImperativeHandle(ref, () => ({
+      focusFirst: () => focusFirst(),
+      focusLast: () => focusLast(),
+      focus: (v: string) => {
+        const items = getTabItems()
+        const idx = items.findIndex(i => i.value === v)
+        if (idx >= 0) focusIndex(idx)
+      },
+      getFocused: () => {
+        const idx = getFocusedIndex()
+        const items = getTabItems()
+        return idx >= 0 ? items[idx]?.value ?? null : null
+      },
+      getSelected: () => selected ?? null
+    }))
 
-    const currentTab = value ?? activeTab;
+    const getTabItems = (): TabItem[] => {
+      const items: TabItem[] = []
+      React.Children.forEach(children, (child) => {
+        if (React.isValidElement<DynTabProps>(child) && child.type === DynTab) {
+          const { item } = child.props as any
+          if (item) items.push(item)
+        }
+      })
+      return items
+    }
+
+    const handleTabActivate = (tabValue: string) => setSelected(tabValue)
 
     return (
       <div
         {...props}
-        ref={ref}
         className={classNames('dyn-tabs', `dyn-tabs--${orientation}`, className)}
         data-testid={testId}
+        aria-label={ariaLabel}
       >
         <div
-          ref={containerRef as React.RefObject<HTMLDivElement>}
+          ref={(node) => {
+            (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+            listRef.current = node as HTMLDivElement
+          }}
           role="tablist"
+          aria-orientation={orientation}
           className="dyn-tabs__list"
         >
           {React.Children.map(children, (child) => {
             if (React.isValidElement<DynTabProps>(child) && child.type === DynTab) {
+              const item = (child.props as any).item as TabItem
+              const isActive = item?.value === selected
               return React.cloneElement(child, {
-                ...child.props,
-                isActive: child.props.value === currentTab,
-                onSelect: handleTabChange
-              });
+                isActive,
+                onSelect: handleTabActivate,
+                activation
+              } as Partial<DynTabProps>)
             }
-            return null;
+            return null
           })}
         </div>
         <div className="dyn-tabs__content">
           {React.Children.map(children, (child) => {
             if (React.isValidElement<DynTabPanelProps>(child) && child.type === DynTabPanel) {
-              return React.cloneElement(child, {
-                ...child.props,
-                isActive: child.props.value === currentTab
-              });
+              const item = (child.props as any).item as TabItem
+              const isActive = item?.value === selected
+              return React.cloneElement(child, { isActive } as Partial<DynTabPanelProps>)
             }
-            return null;
+            return null
           })}
         </div>
       </div>
-    );
+    )
   }
-);
+)
 
-DynTabs.displayName = 'DynTabs';
+DynTabs.displayName = 'DynTabs'
 
 export const DynTab = forwardRef<HTMLButtonElement, DynTabProps>(
-  ({ value, children, isActive, onSelect, disabled, className, ...props }, ref) => (
+  ({ item, isActive, onSelect, activation = 'auto', disabled, className, ...props }, ref) => (
     <button
       {...props}
       ref={ref}
       role="tab"
+      type="button"
       aria-selected={isActive}
       aria-disabled={disabled}
       tabIndex={isActive ? 0 : -1}
@@ -86,27 +134,37 @@ export const DynTab = forwardRef<HTMLButtonElement, DynTabProps>(
         disabled && 'dyn-tab--disabled',
         className
       )}
-      onClick={() => !disabled && onSelect?.(value)}
+      onClick={() => !disabled && onSelect?.(item.value)}
+      onKeyDown={(e) => {
+        if (activation === 'manual' && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault()
+          onSelect?.(item.value)
+        } else if (activation === 'auto' && (e.key === 'Enter' || e.key === ' ')) {
+          // Already active via focus; prevent scroll
+          e.preventDefault()
+        }
+      }}
     >
-      {children}
+      {item?.label ?? props.children}
     </button>
   )
-);
+)
 
-DynTab.displayName = 'DynTab';
+DynTab.displayName = 'DynTab'
 
 export const DynTabPanel = forwardRef<HTMLDivElement, DynTabPanelProps>(
-  ({ value, children, isActive, className, ...props }, ref) => (
+  ({ item, isActive, className, ...props }, ref) => (
     <div
       {...props}
       ref={ref}
       role="tabpanel"
       hidden={!isActive}
       className={classNames('dyn-tab-panel', className)}
+      aria-labelledby={item?.value}
     >
-      {children}
+      {props.children}
     </div>
   )
-);
+)
 
-DynTabPanel.displayName = 'DynTabPanel';
+DynTabPanel.displayName = 'DynTabPanel'
