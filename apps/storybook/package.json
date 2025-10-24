@@ -1,0 +1,24 @@
+{
+  "name": "@dynui/storybook",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build:storybook": "storybook build",
+    "test:storybook": "test-storybook"
+  },
+  "dependencies": {
+    "@dynui/core": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "catalog:",
+    "@storybook/addon-essentials": "catalog:",
+    "@storybook/react-vite": "catalog:",
+    "@storybook/test": "catalog:",
+    "@storybook/test-runner": "catalog:",
+    "storybook": "catalog:",
+    "vite": "catalog:"
+  }
+}
