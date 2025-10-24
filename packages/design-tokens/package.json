@@ -1,0 +1,15 @@
+{
+  "name": "@dynui/design-tokens",
+  "version": "0.1.0",
+  "description": "DynUI design tokens and CSS variable outputs.",
+  "type": "module",
+  "private": true,
+  "files": ["src", "build", "README.md"],
+  "scripts": {
+    "build": "node ./build/generate-css-variables.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

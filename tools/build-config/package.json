@@ -1,0 +1,19 @@
+{
+  "name": "@dynui/build-config",
+  "version": "0.1.0",
+  "description": "Shared build configuration primitives for DynUI packages.",
+  "type": "module",
+  "private": true,
+  "files": ["src", "README.md"],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "echo 'Configuration packages do not require build output'",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  }
+}
