@@ -32,7 +32,10 @@ catalog:
   storybook: ^8.3.5
   '@storybook/addon-a11y': ^8.3.5
   '@storybook/addon-essentials': ^8.3.5
+  '@storybook/addon-docs': ^8.3.5
   '@storybook/react-vite': ^8.3.5
+  '@storybook/test': ^8.3.5
+  '@storybook/test-runner': ^8.3.5
   chromatic: ^11.12.6
 
   # Code Quality
@@ -40,6 +43,11 @@ catalog:
   prettier: ^3.3.3
   '@typescript-eslint/parser': ^8.15.0
   '@typescript-eslint/eslint-plugin': ^8.15.0
+  'eslint-config-prettier': ^9.1.0
+  'eslint-plugin-react': ^7.36.1
+
+  # Additional Tooling
+  tsd: ^0.30.7
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
