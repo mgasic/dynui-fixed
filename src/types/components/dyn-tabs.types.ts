@@ -32,14 +32,14 @@ export interface DynTabsProps {
   children?: React.ReactNode;
   className?: string;
   onChange?: (value: string) => void;
-  items?: TabItem[];
+  items?: DynTabItem[];
   'aria-label'?: string;
   'aria-labelledby'?: string;
   'data-testid'?: string;
 }
 
 export interface DynTabProps {
-  item: TabItem;
+  item: DynTabItem;
   children?: React.ReactNode;
   isActive?: boolean;
   onSelect?: (value: string) => void;
@@ -52,7 +52,7 @@ export interface DynTabProps {
 }
 
 export interface DynTabPanelProps {
-  item: TabItem;
+  item: DynTabItem;
   children?: React.ReactNode;
   isActive?: boolean;
   className?: string;
