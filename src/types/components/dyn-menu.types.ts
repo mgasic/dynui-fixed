@@ -1,7 +1,7 @@
-import type React from 'react';
+import type { ReactNode } from 'react';
 
 export interface DynMenuProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   orientation?: 'horizontal' | 'vertical';
   onAction?: (key: string) => void;
   className?: string;
@@ -9,7 +9,7 @@ export interface DynMenuProps {
 }
 
 export interface DynMenuItemProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   disabled?: boolean;
   action?: string;
   onAction?: (key: string) => void;

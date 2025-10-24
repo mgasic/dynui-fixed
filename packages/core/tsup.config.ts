@@ -1,11 +1,6 @@
-import { defineConfig } from 'tsup'
+import { createLibraryConfig } from '@dynui/build-config/tsup.library.config'
 
-export default defineConfig({
+export default createLibraryConfig({
   entry: ['src/index.ts'],
-  format: ['esm', 'cjs'],
-  dts: true,
-  clean: true,
-  sourcemap: false,
-  treeshake: true,
   external: ['react', 'react-dom']
 })

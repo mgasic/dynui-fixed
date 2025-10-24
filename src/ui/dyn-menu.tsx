@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import type { ReactElement } from 'react';
 import type { DynMenuProps, DynMenuItemProps } from '../types/components/dyn-menu.types';
 import { classNames } from '../utils';
 
@@ -25,7 +26,7 @@ export const DynMenu = forwardRef<HTMLDivElement, DynMenuProps>(
       >
         {React.Children.map(children, (child, index) => {
           if (React.isValidElement(child) && child.type === DynMenuItem) {
-            return React.cloneElement(child as React.ReactElement<DynMenuItemProps>, {
+            return React.cloneElement(child as ReactElement<DynMenuItemProps>, {
               onAction: handleAction,
               key: child.key || index
             });
