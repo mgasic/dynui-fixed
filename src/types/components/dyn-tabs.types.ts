@@ -1,4 +1,4 @@
-import type React from 'react';
+import type { ReactNode } from 'react';
 
 export interface TabItem {
   value: string;
@@ -28,8 +28,7 @@ export interface DynTabsProps {
   value?: string;
   defaultValue?: string;
   orientation?: 'horizontal' | 'vertical';
-  activation?: 'auto' | 'manual';
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
   onChange?: (value: string) => void;
   items?: DynTabItem[];

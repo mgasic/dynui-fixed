@@ -16,4 +16,12 @@ expectType<{ value: string; label: string; disabled?: boolean }>(null as any as 
 
 // Test accessibility and search
 expectType<boolean | undefined>({} as DynSelectProps['searchable'])
+expectType<string | undefined>({} as DynSelectProps['searchValue'])
+expectType<string | undefined>({} as DynSelectProps['defaultSearchValue'])
+expectType<((value: string) => void) | undefined>({} as DynSelectProps['onSearchChange'])
+expectType<string | undefined>({} as DynSelectProps['searchPlaceholder'])
+expectType<string | undefined>({} as DynSelectProps['searchAriaLabel'])
+expectType<((option: SelectOption, search: string) => boolean) | undefined>(
+  {} as DynSelectProps['filterOptions']
+)
 expectType<string | undefined>({} as DynSelectProps['aria-label'])
