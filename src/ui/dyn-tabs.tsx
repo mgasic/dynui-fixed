@@ -38,7 +38,7 @@ export const DynTabs = forwardRef<HTMLDivElement, DynTabsProps>(
         data-testid={testId}
       >
         <div
-          ref={containerRef as React.RefObject<HTMLDivElement>}
+          ref={containerRef}
           role="tablist"
           className="dyn-tabs__list"
         >
