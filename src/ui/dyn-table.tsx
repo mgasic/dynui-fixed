@@ -1,4 +1,5 @@
 import { forwardRef, useState } from 'react';
+import type { RefObject } from 'react';
 import type { DynTableProps, DynTableSort } from '../types/components/dyn-table.types';
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
@@ -8,29 +9,47 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
     columns,
     data,
     sortable = false,
+    sortState: controlledSortState,
     onSort,
     className,
     'data-testid': testId,
     ...props
   }, ref) => {
-    const [sortState, setSortState] = useState<DynTableSort | null>(null);
-    
+    const [internalSortState, setInternalSortState] = useState<DynTableSort | null>(null);
+
+    const mapToDynSort = (
+      sort: DynTableSort | DynTableProps['sortState'] | null
+    ): DynTableSort | null => {
+      if (!sort) return null;
+      if ('column' in sort) {
+        return sort;
+      }
+      return { column: sort.key, direction: sort.direction };
+    };
+
+    const isControlled = controlledSortState !== undefined;
+    const effectiveSortState = mapToDynSort(
+      isControlled ? controlledSortState : internalSortState
+    );
+
     const handleSort = (columnKey: string) => {
       if (!sortable || !onSort) return;
-      
-      const newDirection = 
-        sortState?.column === columnKey && sortState.direction === 'asc'
-          ? 'desc' as const
-          : 'asc' as const;
-      
-      const newSortState = { column: columnKey, direction: newDirection };
-      setSortState(newSortState);
+
+      const isSameColumn = effectiveSortState?.column === columnKey;
+      const newDirection = isSameColumn && effectiveSortState?.direction === 'asc'
+        ? 'desc'
+        : 'asc';
+
+      if (!isControlled) {
+        setInternalSortState({ column: columnKey, direction: newDirection });
+      }
+
       onSort(columnKey, newDirection);
     };
 
     const getAriaSort = (columnKey: string): 'none' | 'ascending' | 'descending' => {
-      if (sortState?.column !== columnKey) return 'none';
-      return sortState.direction === 'asc' ? 'ascending' : 'descending';
+      if (effectiveSortState?.column !== columnKey) return 'none';
+      return effectiveSortState.direction === 'asc' ? 'ascending' : 'descending';
     };
 
     const { containerRef } = useArrowNavigation({
@@ -39,7 +58,7 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
     });
 
     return (
-      <div ref={containerRef} className={classNames('dyn-table-container', className)}>
+      <div ref={containerRef as RefObject<HTMLDivElement>} className={classNames('dyn-table-container', className)}>
         <table
           {...props}
           ref={ref}
@@ -68,9 +87,9 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
                   }}
                 >
                   {column.label}
-                  {sortable && column.sortable && sortState?.column === column.key && (
+                  {sortable && column.sortable && effectiveSortState?.column === column.key && (
                     <span className="dyn-table__sort-indicator">
-                      {sortState.direction === 'asc' ? '↑' : '↓'}
+                      {effectiveSortState.direction === 'asc' ? '↑' : '↓'}
                     </span>
                   )}
                 </th>

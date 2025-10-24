@@ -1,5 +1,5 @@
-import { useState, forwardRef, useCallback } from 'react';
-import type { MutableRefObject } from 'react';
+import { useState, forwardRef } from 'react';
+import type { RefObject } from 'react';
 import type { DynListViewProps } from '../types/components/dyn-listview.types';
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
@@ -49,7 +49,7 @@ export const DynListView = forwardRef<HTMLDivElement, DynListViewProps>(
     return (
       <div
         {...props}
-        ref={setRefs}
+        ref={ref || (containerRef as RefObject<HTMLDivElement>)}
         role="listbox"
         aria-multiselectable={multiSelect}
         className={classNames('dyn-list-view', className)}
