@@ -13,6 +13,8 @@ export interface TabItem {
   ['aria-labelledby']?: string;
 }
 
+export type DynTabItem = TabItem;
+
 export interface DynTabsRef {
   root: HTMLDivElement | null;
   focusTab: (value: string) => void;
