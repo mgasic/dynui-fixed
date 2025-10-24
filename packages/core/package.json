@@ -41,7 +41,7 @@
     "jsdom": "catalog:",
     "prettier": "catalog:",
     "tsup": "catalog:",
-    "tsd": "^0.30.7",
+    "tsd": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:",
