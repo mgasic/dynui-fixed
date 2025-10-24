@@ -5,7 +5,8 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "apps/*"
+    "apps/*",
+    "tools/*"
   ],
   "scripts": {
     "build": "turbo build",
@@ -18,7 +19,11 @@
     "format:check": "prettier --check .",
     "clean": "turbo clean",
     "storybook": "cd apps/storybook && pnpm storybook",
-    "build:storybook": "cd apps/storybook && pnpm build:storybook"
+    "build:storybook": "cd apps/storybook && pnpm build:storybook",
+    "tokens:build": "pnpm --filter @dynui/design-tokens build",
+    "playground:dev": "pnpm --filter @dynui/playground dev",
+    "playground:build": "pnpm --filter @dynui/playground build",
+    "playground:preview": "pnpm --filter @dynui/playground preview"
   },
   "devDependencies": {
     "@axe-core/react": "catalog:",

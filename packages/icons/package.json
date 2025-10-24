@@ -1,0 +1,19 @@
+{
+  "name": "@dynui/icons",
+  "version": "0.1.0",
+  "description": "DynUI icon assets and React bindings.",
+  "type": "module",
+  "private": true,
+  "files": ["src", "README.md"],
+  "scripts": {
+    "build": "echo 'TODO: bundle icon assets'",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "typescript": "catalog:"
+  }
+}
