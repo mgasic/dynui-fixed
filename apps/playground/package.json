@@ -1,22 +1,28 @@
 {
-  "name": "@dynui/playground",
+  "name": "playground",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint --config ../../tools/eslint-config/react.cjs 'src/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "@dynui/core": "workspace:*",
+    "@dynui/design-tokens": "workspace:*",
+    "@dynui/icons": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
   },
   "devDependencies": {
+    "@dynui/build-config": "workspace:*",
+    "@dynui/eslint-config": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
+    "eslint": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:"
   }

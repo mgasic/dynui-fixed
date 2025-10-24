@@ -1,16 +1,12 @@
 # @dynui/build-config
 
-Exports shared configuration helpers (e.g. default `tsup` options) that
-packages can extend. This keeps build tooling consistent as new packages
-are introduced.
+This workspace centralises build tooling defaults that every DynUI package can
+share.  Exported helpers currently include:
 
-## Available exports
+- `tsconfig.base` – a thin wrapper around the repository root `tsconfig.json`
+  with sensible defaults for library output.
+- `tsup.library.config` – a factory that packages can call from their local
+  `tsup.config.ts` to ensure consistent bundling options.
 
-- `@dynui/build-config` – runtime helpers for programmatic usage.
-- `@dynui/build-config/tsconfig.base` – baseline `tsconfig` with compiler
-  defaults suitable for libraries and tooling packages.
-- `@dynui/build-config/tsup.library.config` – reusable `tsup`
-  configuration that emits both ESM and CJS builds.
-
-See `src/index.ts` for the currently supported helpers and extend the
-module with additional exports (Rollup, Vite, etc.) as needed.
+As Phase 1 progresses we can add additional helpers (for example Storybook or
+Rollup presets) without duplicating configuration across packages.

@@ -1,15 +1,28 @@
 {
   "name": "@dynui/design-tokens",
   "version": "0.1.0",
-  "description": "DynUI design tokens and CSS variable outputs.",
+  "description": "Design token primitives for the DynUI design system.",
   "type": "module",
-  "private": true,
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./build/*": "./build/*"
+  },
   "files": ["src", "build", "README.md"],
+  "sideEffects": false,
   "scripts": {
-    "build": "node ./build/generate-css-variables.mjs",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "build": "tsup --config tsup.config.ts",
+    "dev": "tsup --config tsup.config.ts --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint --config ../../tools/eslint-config/react.cjs 'src/**/*.{ts,tsx}'"
   },
   "devDependencies": {
+    "@dynui/build-config": "workspace:*",
+    "@dynui/eslint-config": "workspace:*",
+    "eslint": "catalog:",
+    "tsup": "catalog:",
     "typescript": "catalog:"
   }
 }

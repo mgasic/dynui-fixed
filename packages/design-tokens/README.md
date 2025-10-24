@@ -1,11 +1,11 @@
 # @dynui/design-tokens
 
-This package centralises the design token source of truth for DynUI. It
-currently exposes a TypeScript object for consumption during runtime or
-build steps and ships with a stubbed CSS variable generator under
-`build/`.
+Phase 1 introduces the design tokens package as the single source of truth for
+colour, spacing and typography primitives.  The current release exposes a small
+but representative token set through TypeScript exports so other workspaces can
+reference consistent values while the full generator pipeline is being defined.
 
-Future phases should expand the token structure (color, typography,
-spacing, motion, etc.) and replace the stub in
-`build/generate-css-variables.mjs` with a real generator that writes the
-compiled CSS to `dist/tokens.css`.
+The `build/` folder contains a minimal CSS variable helper that mirrors the
+approach described in the enhanced specification.  Future tasks will connect the
+helper to the publishing workflow so that consumers can import a generated CSS
+file alongside the typed tokens.

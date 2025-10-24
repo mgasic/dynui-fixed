@@ -1,19 +1,27 @@
 {
   "name": "@dynui/icons",
   "version": "0.1.0",
-  "description": "DynUI icon assets and React bindings.",
+  "description": "Icon primitives for DynUI components.",
   "type": "module",
-  "private": true,
-  "files": ["src", "README.md"],
-  "scripts": {
-    "build": "echo 'TODO: bundle icon assets'",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
   },
-  "peerDependencies": {
-    "react": ">=18.0.0"
+  "files": ["src", "README.md"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup --config tsup.config.ts",
+    "dev": "tsup --config tsup.config.ts --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint --config ../../tools/eslint-config/react.cjs 'src/**/*.{ts,tsx}'"
   },
   "devDependencies": {
-    "@types/react": "catalog:",
+    "@dynui/build-config": "workspace:*",
+    "@dynui/eslint-config": "workspace:*",
+    "eslint": "catalog:",
+    "tsup": "catalog:",
     "typescript": "catalog:"
   }
 }
