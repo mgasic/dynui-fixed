@@ -1,12 +1,12 @@
-import type React from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { SpacingValue } from '../common.types';
 
 export interface DynContainerProps {
   maxWidth?: number | string;
   p?: SpacingValue;
   m?: SpacingValue;
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   'data-testid'?: string;
 }
