@@ -1,4 +1,5 @@
 import { createContext, useState, useMemo } from 'react'
+import type { ReactNode } from 'react'
 import type { Theme, ThemeContextValue } from './theme.types'
 import { defaultTheme } from './default-theme'
 
@@ -6,7 +7,7 @@ export const ThemeContext = createContext<ThemeContextValue | null>(null)
 
 export interface ThemeProviderProps {
   theme?: Theme
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export function ThemeProvider({ theme = defaultTheme, children }: ThemeProviderProps) {

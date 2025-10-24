@@ -1,3 +1,4 @@
+import type { ChangeEvent } from 'react'
 import type { DynInputProps } from '../types/components/dyn-input.types'
 import { classNames } from '../utils'
 
@@ -51,7 +52,7 @@ export function DynInput({
         placeholder={placeholder}
         readOnly={readonly}
         className={cls}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange?.(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange?.(e.target.value)}
         onFocus={onFocus}
         onBlur={onBlur}
         aria-label={ariaLabel}
