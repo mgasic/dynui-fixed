@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState, useImperativeHandle } from 'react'
+import React, { forwardRef, useState, useImperativeHandle } from 'react'
 import type { DynTabsProps, DynTabProps, DynTabPanelProps, DynTabsRef, TabItem } from '../types/components/dyn-tabs.types'
 import { useArrowNavigation } from '../hooks/use-arrow-navigation'
 import { classNames } from '../utils'
@@ -26,7 +26,6 @@ export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
     },
     ref
   ) => {
-    const listRef = useRef<HTMLDivElement>(null)
     const [internal, setInternal] = useState<string>(defaultValue ?? '')
     const selected = value ?? internal
 
@@ -35,7 +34,7 @@ export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
       onChange?.(next)
     }
 
-    const { containerRef, getFocusedIndex, focusFirst, focusLast, focusIndex } = useArrowNavigation({
+    const { getFocusedIndex, focusFirst, focusLast, focusIndex, setContainerRef } = useArrowNavigation({
       orientation,
       selector: '[role="tab"]:not([aria-disabled="true"])',
       typeahead: true,
@@ -81,8 +80,7 @@ export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
       >
         <div
           ref={(node) => {
-            (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node
-            listRef.current = node as HTMLDivElement
+            setContainerRef(node)
           }}
           role="tablist"
           aria-orientation={orientation}
