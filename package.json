@@ -9,16 +9,16 @@
     "tools/*"
   ],
   "scripts": {
-    "build": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json build",
-    "dev": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json dev",
-    "test": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json test",
-    "test:a11y": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json test:a11y",
-    "typecheck": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json typecheck",
-    "lint": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json lint",
+    "build": "node ./tools/run-turbo-task.js build",
+    "dev": "node ./tools/run-turbo-task.js dev",
+    "test": "node ./tools/run-turbo-task.js test",
+    "test:a11y": "node ./tools/run-turbo-task.js test:a11y",
+    "typecheck": "node ./tools/run-turbo-task.js typecheck",
+    "lint": "node ./tools/run-turbo-task.js lint",
     "turbo": "turbo",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "clean": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json clean",
+    "clean": "node ./tools/run-turbo-task.js clean",
     "storybook": "cd apps/storybook && pnpm storybook",
     "build:storybook": "cd apps/storybook && pnpm build:storybook",
     "playground": "pnpm --filter playground dev"
