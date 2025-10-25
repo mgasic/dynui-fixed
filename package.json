@@ -9,15 +9,15 @@
     "tools/*"
   ],
   "scripts": {
-    "build": "turbo --root-turbo-json turbo.root.json build",
-    "dev": "turbo --root-turbo-json turbo.root.json dev",
-    "test": "turbo --root-turbo-json turbo.root.json test",
-    "test:a11y": "turbo --root-turbo-json turbo.root.json test:a11y",
-    "typecheck": "turbo --root-turbo-json turbo.root.json typecheck",
-    "lint": "turbo --root-turbo-json turbo.root.json lint",
+    "build": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json build",
+    "dev": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json dev",
+    "test": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json test",
+    "test:a11y": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json test:a11y",
+    "typecheck": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json typecheck",
+    "lint": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "clean": "turbo --root-turbo-json turbo.root.json clean",
+    "clean": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json clean",
     "storybook": "cd apps/storybook && pnpm storybook",
     "build:storybook": "cd apps/storybook && pnpm build:storybook",
     "playground": "pnpm --filter playground dev"
