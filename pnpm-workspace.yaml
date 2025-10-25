@@ -50,6 +50,9 @@ catalog:
   # Additional Tooling
   tsd: ^0.30.7
 
+  # Turborepo - PIN za parser kompatibilnost u hosting okruženju
+  turbo: 2.5.4
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - 'esbuild'
