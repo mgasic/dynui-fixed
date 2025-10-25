@@ -9,15 +9,15 @@
     "tools/*"
   ],
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "test": "turbo test",
-    "test:a11y": "turbo test:a11y",
-    "typecheck": "turbo typecheck",
-    "lint": "turbo lint",
+    "build": "turbo --root-turbo-json turbo.root.json build",
+    "dev": "turbo --root-turbo-json turbo.root.json dev",
+    "test": "turbo --root-turbo-json turbo.root.json test",
+    "test:a11y": "turbo --root-turbo-json turbo.root.json test:a11y",
+    "typecheck": "turbo --root-turbo-json turbo.root.json typecheck",
+    "lint": "turbo --root-turbo-json turbo.root.json lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "clean": "turbo clean",
+    "clean": "turbo --root-turbo-json turbo.root.json clean",
     "storybook": "cd apps/storybook && pnpm storybook",
     "build:storybook": "cd apps/storybook && pnpm build:storybook",
     "playground": "pnpm --filter playground dev"
