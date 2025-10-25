@@ -1,11 +1,20 @@
-import { useRef, useCallback, useEffect } from 'react';
+import { useRef, useCallback, useEffect, type MutableRefObject } from 'react';
 
 export interface ArrowNavigationOptions {
   orientation?: 'horizontal' | 'vertical' | 'both';
   selector?: string;
 }
 
-export function useArrowNavigation(options: ArrowNavigationOptions = {}) {
+export interface ArrowNavigationResult {
+  containerRef: MutableRefObject<HTMLDivElement | null>;
+  focusFirst: () => void;
+  focusLast: () => void;
+  focusAtIndex: (index: number) => void;
+}
+
+export function useArrowNavigation(
+  options: ArrowNavigationOptions = {}
+): ArrowNavigationResult {
   const {
     orientation = 'vertical',
     selector = '[tabindex="0"], button:not(:disabled), input:not(:disabled)'

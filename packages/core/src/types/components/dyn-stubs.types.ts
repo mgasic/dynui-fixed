@@ -1,4 +1,11 @@
-import type { ReactNode, ChangeEvent, FocusEvent, MouseEvent } from 'react'
+import type {
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  ReactNode,
+  ChangeEvent,
+  FocusEvent,
+  MouseEvent
+} from 'react'
 
 export interface DynCheckboxProps {
   id?: string
@@ -54,23 +61,24 @@ export interface DynRadioGroupProps {
 
 export type DynStepperProps = Record<string, unknown>
 
-export interface DynMenuProps {
+export interface DynMenuProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   orientation?: 'horizontal' | 'vertical'
   onAction?: (key: string) => void
   children?: ReactNode
   className?: string
   'data-testid'?: string
-  [key: string]: unknown
 }
 
-export interface DynMenuItemProps {
+export interface DynMenuItemProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'onClick'> {
   action?: string
   onAction?: (key: string) => void
   children?: ReactNode
   disabled?: boolean
   className?: string
   'data-testid'?: string
-  [key: string]: unknown
+  onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
 }
 
 export interface DynBreadcrumbProps {
@@ -100,7 +108,8 @@ export interface DynListViewItem {
   disabled?: boolean
 }
 
-export interface DynListViewProps {
+export interface DynListViewProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   items?: DynListViewItem[]
   selectedItem?: string
   onSelectionChange?: (selected: string[]) => void
@@ -109,7 +118,6 @@ export interface DynListViewProps {
   className?: string
   'aria-multiselectable'?: boolean
   'data-testid'?: string
-  [key: string]: unknown
 }
 
 export interface DynAvatarProps {
