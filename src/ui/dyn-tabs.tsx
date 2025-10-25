@@ -5,7 +5,8 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
-  useState
+  useState,
+  type RefObject
 } from 'react';
 import type {
   DynTabsProps,
@@ -17,9 +18,9 @@ import type {
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
 
-const getItemValue = (item?: TabItem) => item?.value ?? '';
+const getItemValue = (item?: TabItem): string => item?.value ?? '';
 
-const sanitizeValueForId = (value: string) => value.replace(/\s+/g, '-');
+const sanitizeValueForId = (value: string): string => value.replace(/\s+/g, '-');
 
 export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
   (
@@ -53,7 +54,8 @@ export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
           firstValue === '' &&
           React.isValidElement<DynTabProps>(child) &&
           child.type === DynTab &&
-          !child.props.item?.disabled
+          child.props.item &&
+          !child.props.item.disabled
         ) {
           firstValue = getItemValue(child.props.item);
         }

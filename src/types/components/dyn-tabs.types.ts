@@ -1,16 +1,16 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, RefObject } from 'react';
 
 export interface TabItem {
   value: string;
-  label?: React.ReactNode;
-  panel?: React.ReactNode;
+  label?: ReactNode;
+  panel?: ReactNode;
   disabled?: boolean;
   tabId?: string;
   panelId?: string;
   className?: string;
-  ['aria-controls']?: string;
-  ['aria-label']?: string;
-  ['aria-labelledby']?: string;
+  'aria-controls'?: string;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
 }
 
 export type DynTabItem = TabItem;
@@ -28,6 +28,7 @@ export interface DynTabsProps {
   value?: string;
   defaultValue?: string;
   orientation?: 'horizontal' | 'vertical';
+  activation?: 'auto' | 'manual';
   children?: ReactNode;
   className?: string;
   onChange?: (value: string) => void;
@@ -38,8 +39,8 @@ export interface DynTabsProps {
 }
 
 export interface DynTabProps {
-  item: DynTabItem;
-  children?: React.ReactNode;
+  item?: DynTabItem;
+  children?: ReactNode;
   isActive?: boolean;
   onSelect?: (value: string) => void;
   onFocusTab?: (value: string) => void;
@@ -51,8 +52,8 @@ export interface DynTabProps {
 }
 
 export interface DynTabPanelProps {
-  item: DynTabItem;
-  children?: React.ReactNode;
+  item?: DynTabItem;
+  children?: ReactNode;
   isActive?: boolean;
   className?: string;
   panelId?: string;
