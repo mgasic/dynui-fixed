@@ -1,4 +1,4 @@
 {
-  "extends": ["//"],
-  "tasks": {}
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["./turbo.root.json"]
 }
