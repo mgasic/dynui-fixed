@@ -1,3 +1,9 @@
 {
-  "extends": "./tools/build-config/tsconfig.base.json"
+  "extends": "./tools/build-config/tsconfig.base.json",
+  "exclude": [
+    "./dist",
+    "./build",
+    "./node_modules",
+    "./storybook-static"
+  ]
 }
