@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode } from 'react'
-import type { SpacingValue } from './dyn-box.types'
+import type { DynBoxProps } from './dyn-box.types'
 
 export interface DynPageProps {
   as?: ElementType
@@ -11,8 +11,8 @@ export interface DynPageProps {
   sidebar?: ReactNode
   header?: ReactNode
   footer?: ReactNode
-  p?: SpacingValue
-  m?: SpacingValue
+  p?: DynBoxProps['p']
+  m?: DynBoxProps['m']
   fullHeight?: boolean
   'data-testid'?: string
 }

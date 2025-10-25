@@ -175,12 +175,15 @@ export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
               const item = child.props.item;
               if (!item) return null;
               const { tabId, panelId } = getItemIdentifiers(item);
+              const disabledProps =
+                item.disabled !== undefined ? { disabled: item.disabled } : {};
+
               return React.cloneElement(child, {
                 ...child.props,
+                ...disabledProps,
                 tabId,
                 panelId,
                 isActive: item.value === currentTab,
-                disabled: item.disabled,
                 activation,
                 onSelect: handleTabChange,
                 onFocusTab: handleTabFocus
@@ -223,20 +226,29 @@ export const DynTab = forwardRef<HTMLButtonElement, DynTabProps>(
       isActive,
       onSelect,
       onFocusTab,
+      activation: _activation,
       disabled = item?.disabled,
       className,
       tabId,
       panelId,
+      onClick: userOnClick,
+      onKeyDown: userOnKeyDown,
+      onFocus: userOnFocus,
       ...props
     },
     ref
   ) => {
+    void _activation;
     const content = children ?? item?.label;
 
-    const handleClick = useCallback(() => {
-      if (disabled || !item) return;
-      onSelect?.(item.value);
-    }, [disabled, item, onSelect]);
+    const handleClick = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (disabled || !item) return;
+        onSelect?.(item.value);
+        userOnClick?.(event);
+      },
+      [disabled, item, onSelect, userOnClick]
+    );
 
     const handleKeyDown = useCallback(
       (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -246,14 +258,20 @@ export const DynTab = forwardRef<HTMLButtonElement, DynTabProps>(
           event.preventDefault();
           onSelect?.(item.value);
         }
+        userOnKeyDown?.(event);
       },
-      [disabled, item, onSelect]
+      [disabled, item, onSelect, userOnKeyDown]
     );
 
-    const handleFocus = useCallback(() => {
-      if (disabled || !item) return;
-      onFocusTab?.(item.value);
-    }, [disabled, item, onFocusTab]);
+    const handleFocus = useCallback(
+      (event: React.FocusEvent<HTMLButtonElement>) => {
+        if (!disabled && item) {
+          onFocusTab?.(item.value);
+        }
+        userOnFocus?.(event);
+      },
+      [disabled, item, onFocusTab, userOnFocus]
+    );
 
     if (!item) {
       return null;

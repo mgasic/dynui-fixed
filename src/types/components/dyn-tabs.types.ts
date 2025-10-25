@@ -24,7 +24,8 @@ export interface DynTabsRef {
   focusPreviousTab: () => void;
 }
 
-export interface DynTabsProps {
+export interface DynTabsProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onChange'> {
   value?: string;
   defaultValue?: string;
   orientation?: 'horizontal' | 'vertical';
@@ -33,12 +34,19 @@ export interface DynTabsProps {
   className?: string;
   onChange?: (value: string) => void;
   items?: DynTabItem[];
-  'aria-label'?: string;
-  'aria-labelledby'?: string;
   'data-testid'?: string;
 }
 
-export interface DynTabProps {
+export interface DynTabProps
+  extends Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    | 'children'
+    | 'onSelect'
+    | 'onFocus'
+    | 'onKeyDown'
+    | 'disabled'
+    | 'type'
+  > {
   item?: DynTabItem;
   children?: ReactNode;
   isActive?: boolean;
@@ -49,9 +57,13 @@ export interface DynTabProps {
   className?: string;
   tabId?: string;
   panelId?: string;
+  onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
+  onKeyDown?: ButtonHTMLAttributes<HTMLButtonElement>['onKeyDown'];
+  onFocus?: ButtonHTMLAttributes<HTMLButtonElement>['onFocus'];
 }
 
-export interface DynTabPanelProps {
+export interface DynTabPanelProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   item?: DynTabItem;
   children?: ReactNode;
   isActive?: boolean;

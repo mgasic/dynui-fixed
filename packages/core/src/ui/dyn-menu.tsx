@@ -40,19 +40,21 @@ export const DynMenu = forwardRef<HTMLDivElement, DynMenuProps>(
 DynMenu.displayName = 'DynMenu';
 
 export const DynMenuItem = forwardRef<HTMLButtonElement, DynMenuItemProps>(
-  ({ 
+  ({
     children,
     disabled = false,
     action,
     onAction,
     className,
     'data-testid': testId,
-    ...props 
+    onClick: userOnClick,
+    ...props
   }, ref) => {
-    const handleClick = () => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       if (!disabled && action) {
         onAction?.(action);
       }
+      userOnClick?.(event);
     };
 
     return (
