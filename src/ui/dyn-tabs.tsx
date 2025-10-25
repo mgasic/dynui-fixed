@@ -175,12 +175,15 @@ export const DynTabs = forwardRef<DynTabsRef, DynTabsProps>(
               const item = child.props.item;
               if (!item) return null;
               const { tabId, panelId } = getItemIdentifiers(item);
+              const disabledProps =
+                item.disabled !== undefined ? { disabled: item.disabled } : {};
+
               return React.cloneElement(child, {
                 ...child.props,
+                ...disabledProps,
                 tabId,
                 panelId,
                 isActive: item.value === currentTab,
-                disabled: item.disabled,
                 activation,
                 onSelect: handleTabChange,
                 onFocusTab: handleTabFocus
