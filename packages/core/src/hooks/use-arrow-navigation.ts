@@ -1,10 +1,23 @@
 import { useCallback, useEffect, useRef } from 'react'
+import type { MutableRefObject } from 'react'
 
 export interface UseArrowNavigationOptions {
   orientation?: 'horizontal' | 'vertical' | 'both'
   loop?: boolean
   selector?: string
   onNavigate?: (index: number, element: HTMLElement) => void
+  typeahead?: boolean
+}
+
+interface UseArrowNavigationResult {
+  containerRef: MutableRefObject<HTMLElement | null>
+  focusElement: (index: number) => void
+  getFocusableElements: () => HTMLElement[]
+  getFocusedIndex: () => number
+  focusFirst: () => void
+  focusLast: () => void
+  focusIndex: (index: number) => void
+  setContainerRef: (node: HTMLElement | null) => void
 }
 
 /**
@@ -16,8 +29,8 @@ export function useArrowNavigation({
   loop = true,
   selector = '[role="tab"], [role="menuitem"], [role="option"]',
   onNavigate
-}: UseArrowNavigationOptions = {}) {
-  const containerRef = useRef<HTMLElement>(null)
+}: UseArrowNavigationOptions = {}): UseArrowNavigationResult {
+  const containerRef = useRef<HTMLElement | null>(null)
   const focusedIndexRef = useRef(-1)
 
   const getFocusableElements = useCallback(() => {
@@ -28,7 +41,7 @@ export function useArrowNavigation({
   const focusElement = useCallback((index: number) => {
     const elements = getFocusableElements()
     if (index < 0 || index >= elements.length) return
-    
+
     const element = elements[index]
     if (element) {
       element.focus()
@@ -103,9 +116,38 @@ export function useArrowNavigation({
     return () => container.removeEventListener('keydown', handleKeyDown)
   }, [handleKeyDown])
 
+  const getFocusedIndex = useCallback(() => focusedIndexRef.current, [])
+
+  const focusFirst = useCallback(() => {
+    focusElement(0)
+  }, [focusElement])
+
+  const focusLast = useCallback(() => {
+    const elements = getFocusableElements()
+    if (elements.length > 0) {
+      focusElement(elements.length - 1)
+    }
+  }, [focusElement, getFocusableElements])
+
+  const focusIndex = useCallback(
+    (index: number) => {
+      focusElement(index)
+    },
+    [focusElement]
+  )
+
+  const setContainerRef = useCallback((node: HTMLElement | null) => {
+    containerRef.current = node
+  }, [])
+
   return {
     containerRef,
     focusElement,
-    getFocusableElements
+    getFocusableElements,
+    getFocusedIndex,
+    focusFirst,
+    focusLast,
+    focusIndex,
+    setContainerRef
   }
 }
