@@ -35,6 +35,8 @@ export interface DynTabsProps {
   'data-testid'?: string
   /** Additional CSS class */
   className?: string
+  /** Accessible name for the tabs container */
+  'aria-label'?: string
   /** Arbitrary props passthrough */
   [key: string]: unknown
 }
