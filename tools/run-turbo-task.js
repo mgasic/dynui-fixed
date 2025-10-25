@@ -2,12 +2,13 @@
 import { spawnSync } from 'node:child_process'
 import process from 'node:process'
 
-const isRunningInsideTurbo = Boolean(
-  process.env.TURBO_HASH ||
-    process.env.TURBO_TEAM ||
-    process.env.TURBO_TOKEN ||
-    process.env.TURBO_API ||
-    process.env.TURBO_INVOCATION_ID
+const invocationScopedVars = [
+  'TURBO_HASH',
+  'TURBO_INVOCATION_ID'
+]
+
+const isRunningInsideTurbo = invocationScopedVars.some(
+  (key) => Boolean(process.env[key])
 )
 
 if (isRunningInsideTurbo) {
