@@ -31,10 +31,12 @@ export interface DynTabsProps {
   activation?: 'auto' | 'manual'
   /** Tab and panel children */
   children?: ReactNode
-  /** Accessible label for the tablist */
-  'aria-label'?: string
   /** Test identifier */
   'data-testid'?: string
+  /** Additional CSS class */
+  className?: string
+  /** Arbitrary props passthrough */
+  [key: string]: unknown
 }
 
 /**
@@ -45,6 +47,18 @@ export interface DynTabProps {
   item: TabItem
   /** Whether tab is disabled */
   disabled?: boolean
+  /** Whether the tab is currently active */
+  isActive?: boolean
+  /** Called when tab should become active */
+  onSelect?: (value: string) => void
+  /** Activation behavior override */
+  activation?: 'auto' | 'manual'
+  /** Additional CSS class */
+  className?: string
+  /** Tab contents */
+  children?: ReactNode
+  /** Arbitrary props passthrough */
+  [key: string]: unknown
 }
 
 /**
@@ -55,6 +69,12 @@ export interface DynTabPanelProps {
   item: TabItem
   /** Panel content */
   children?: ReactNode
+  /** Whether the panel is active */
+  isActive?: boolean
+  /** Additional CSS class */
+  className?: string
+  /** Arbitrary props passthrough */
+  [key: string]: unknown
 }
 
 /**
