@@ -1,6 +1,11 @@
-import { defineConfig, Options } from 'tsup'
+import { defineConfig } from 'tsup'
 
-const baseOptions: Options = {
+/**
+ * @typedef {import('tsup').Options} Options
+ */
+
+/** @type {Options} */
+const baseOptions = {
   format: ['esm', 'cjs'],
   dts: true,
   sourcemap: true,
@@ -9,7 +14,10 @@ const baseOptions: Options = {
   minify: false
 }
 
-export function createLibraryConfig(overrides: Options = {}) {
+/**
+ * @param {Options} [overrides]
+ */
+export function createLibraryConfig(overrides = {}) {
   return defineConfig({
     ...baseOptions,
     ...overrides,
