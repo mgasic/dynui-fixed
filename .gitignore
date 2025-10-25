@@ -1,2 +1,8 @@
 node_modules
 debug-build.ps1
+.turbo/cookies
+packages/core/.turbo/turbo-build.log
+packages/design-tokens/.turbo/turbo-build.log
+.turbo/cache/
+.turbo/turbo-build.log
+packages/icons/.turbo/turbo-build.log
