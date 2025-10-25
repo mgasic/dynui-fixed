@@ -6,7 +6,7 @@ packages/design-tokens/.turbo/turbo-build.log
 .turbo/cache
 ./turbo-build.log
 packages/icons/.turbo/turbo-build.log
-packages/core/dist/
+packages/core/dist
 .turbo/turbo-build.log
 .turbo/daemon
-packages/core/dist/
+packages/core/dist/index.cjs
