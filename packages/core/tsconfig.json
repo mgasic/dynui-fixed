@@ -6,8 +6,8 @@
     "baseUrl": ".",
     "composite": true,
     "paths": {
-      "@dynui/design-tokens": ["../design-tokens/src/index.ts"],
-      "@dynui/icons": ["../icons/src/index.ts"]
+      "@dynui/design-tokens": ["../design-tokens/src"],
+      "@dynui/icons": ["../icons/src"]
     }
   },
   "references": [
