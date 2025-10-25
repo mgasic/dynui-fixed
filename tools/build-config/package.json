@@ -12,6 +12,7 @@
   },
   "files": [
     "tsconfig.base.json",
+    "tsconfig.shared.json",
     "tsup.library.config.js",
     "tsup.library.config.d.ts",
     "README.md"
