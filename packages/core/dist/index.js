@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState, useImperativeHandle, createContext, useCallback, useEffect, useContext } from 'react';
+import React, { forwardRef, useState, useImperativeHandle, useRef, createContext, useCallback, useEffect, useContext } from 'react';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 
 // src/ui/dyn-tabs.tsx
@@ -81,10 +81,34 @@ function useArrowNavigation({
     container.addEventListener("keydown", handleKeyDown);
     return () => container.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
+  const getFocusedIndex = useCallback(() => focusedIndexRef.current, []);
+  const focusFirst = useCallback(() => {
+    focusElement(0);
+  }, [focusElement]);
+  const focusLast = useCallback(() => {
+    const elements = getFocusableElements();
+    if (elements.length > 0) {
+      focusElement(elements.length - 1);
+    }
+  }, [focusElement, getFocusableElements]);
+  const focusIndex = useCallback(
+    (index) => {
+      focusElement(index);
+    },
+    [focusElement]
+  );
+  const setContainerRef = useCallback((node) => {
+    containerRef.current = node;
+  }, []);
   return {
     containerRef,
     focusElement,
-    getFocusableElements
+    getFocusableElements,
+    getFocusedIndex,
+    focusFirst,
+    focusLast,
+    focusIndex,
+    setContainerRef
   };
 }
 
@@ -122,14 +146,13 @@ var DynTabs = forwardRef(
     "data-testid": testId,
     ...props
   }, ref) => {
-    const listRef = useRef(null);
     const [internal, setInternal] = useState(defaultValue ?? "");
     const selected = value ?? internal;
     const setSelected = (next) => {
       if (value === void 0) setInternal(next);
       onChange?.(next);
     };
-    const { containerRef, getFocusedIndex, focusFirst, focusLast, focusIndex } = useArrowNavigation({
+    const { getFocusedIndex, focusFirst, focusLast, focusIndex, setContainerRef } = useArrowNavigation({
       orientation,
       selector: '[role="tab"]:not([aria-disabled="true"])',
       loop: true
@@ -172,8 +195,7 @@ var DynTabs = forwardRef(
             "div",
             {
               ref: (node) => {
-                containerRef.current = node;
-                listRef.current = node;
+                setContainerRef(node);
               },
               role: "tablist",
               "aria-orientation": orientation,
@@ -1348,8 +1370,8 @@ function useTooltip({
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0, placement });
   const triggerRef = useRef(null);
-  const timeoutRef = useRef();
-  const hideTimeoutRef = useRef();
+  const timeoutRef = useRef(null);
+  const hideTimeoutRef = useRef(null);
   const calculatePosition = useCallback(() => {
     if (!triggerRef.current) return;
     const rect = triggerRef.current.getBoundingClientRect();
@@ -1389,10 +1411,12 @@ function useTooltip({
   const hide = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
     if (hideDelay > 0) {
       hideTimeoutRef.current = setTimeout(() => {
         setIsVisible(false);
+        hideTimeoutRef.current = null;
       }, hideDelay);
     } else {
       setIsVisible(false);
@@ -1400,8 +1424,14 @@ function useTooltip({
   }, [hideDelay]);
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+        hideTimeoutRef.current = null;
+      }
     };
   }, []);
   return {

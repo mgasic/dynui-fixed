@@ -3,6 +3,10 @@ debug-build.ps1
 .turbo/cookies
 packages/core/.turbo/turbo-build.log
 packages/design-tokens/.turbo/turbo-build.log
-.turbo/cache/
-.turbo/turbo-build.log
+.turbo/cache
+./turbo-build.log
 packages/icons/.turbo/turbo-build.log
+packages/core/dist/
+.turbo/turbo-build.log
+.turbo/daemon
+packages/core/dist/

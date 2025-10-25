@@ -87,10 +87,34 @@ function useArrowNavigation({
     container.addEventListener("keydown", handleKeyDown);
     return () => container.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
+  const getFocusedIndex = React.useCallback(() => focusedIndexRef.current, []);
+  const focusFirst = React.useCallback(() => {
+    focusElement(0);
+  }, [focusElement]);
+  const focusLast = React.useCallback(() => {
+    const elements = getFocusableElements();
+    if (elements.length > 0) {
+      focusElement(elements.length - 1);
+    }
+  }, [focusElement, getFocusableElements]);
+  const focusIndex = React.useCallback(
+    (index) => {
+      focusElement(index);
+    },
+    [focusElement]
+  );
+  const setContainerRef = React.useCallback((node) => {
+    containerRef.current = node;
+  }, []);
   return {
     containerRef,
     focusElement,
-    getFocusableElements
+    getFocusableElements,
+    getFocusedIndex,
+    focusFirst,
+    focusLast,
+    focusIndex,
+    setContainerRef
   };
 }
 
@@ -128,14 +152,13 @@ var DynTabs = React.forwardRef(
     "data-testid": testId,
     ...props
   }, ref) => {
-    const listRef = React.useRef(null);
     const [internal, setInternal] = React.useState(defaultValue ?? "");
     const selected = value ?? internal;
     const setSelected = (next) => {
       if (value === void 0) setInternal(next);
       onChange?.(next);
     };
-    const { containerRef, getFocusedIndex, focusFirst, focusLast, focusIndex } = useArrowNavigation({
+    const { getFocusedIndex, focusFirst, focusLast, focusIndex, setContainerRef } = useArrowNavigation({
       orientation,
       selector: '[role="tab"]:not([aria-disabled="true"])',
       loop: true
@@ -178,8 +201,7 @@ var DynTabs = React.forwardRef(
             "div",
             {
               ref: (node) => {
-                containerRef.current = node;
-                listRef.current = node;
+                setContainerRef(node);
               },
               role: "tablist",
               "aria-orientation": orientation,
@@ -1354,8 +1376,8 @@ function useTooltip({
   const [isVisible, setIsVisible] = React.useState(false);
   const [position, setPosition] = React.useState({ x: 0, y: 0, placement });
   const triggerRef = React.useRef(null);
-  const timeoutRef = React.useRef();
-  const hideTimeoutRef = React.useRef();
+  const timeoutRef = React.useRef(null);
+  const hideTimeoutRef = React.useRef(null);
   const calculatePosition = React.useCallback(() => {
     if (!triggerRef.current) return;
     const rect = triggerRef.current.getBoundingClientRect();
@@ -1395,10 +1417,12 @@ function useTooltip({
   const hide = React.useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
     if (hideDelay > 0) {
       hideTimeoutRef.current = setTimeout(() => {
         setIsVisible(false);
+        hideTimeoutRef.current = null;
       }, hideDelay);
     } else {
       setIsVisible(false);
@@ -1406,8 +1430,14 @@ function useTooltip({
   }, [hideDelay]);
   React.useEffect(() => {
     return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+        hideTimeoutRef.current = null;
+      }
     };
   }, []);
   return {
