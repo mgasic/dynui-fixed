@@ -395,19 +395,39 @@ frozen-lockfile=true
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**"],
+      "outputs": ["dist/**", "build/**", "storybook-static/**"],
       "inputs": ["src/**/*.ts", "src/**/*.tsx", "package.json", "tsconfig*.json"]
     },
     "test": {
       "dependsOn": ["build"],
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"]
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"],
+      "outputs": ["coverage/**"]
     },
     "lint": {
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "*.json"]
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "*.json", "*.js", "*.ts"]
     },
     "typecheck": {
       "dependsOn": ["^build"],
       "inputs": ["src/**/*.ts", "src/**/*.tsx", "tsconfig*.json"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "test:a11y": {
+      "dependsOn": ["build"],
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "storybook": {
+      "cache": false,
+      "persistent": true
+    },
+    "build:storybook": {
+      "dependsOn": ["^build"],
+      "outputs": ["storybook-static/**"]
     }
   }
 }

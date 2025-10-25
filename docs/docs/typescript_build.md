@@ -26,22 +26,44 @@ The project uses **Turborepo** to orchestrate builds and tasks across packages. 
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**"],
+      "outputs": ["dist/**", "build/**", "storybook-static/**"],
       "inputs": ["src/**/*.ts", "src/**/*.tsx", "package.json", "tsconfig*.json"]
     },
     "test": {
       "dependsOn": ["build"],
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"]
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"],
+      "outputs": ["coverage/**"]
     },
     "lint": {
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "*.json"]
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "*.json", "*.js", "*.ts"]
     },
     "typecheck": {
       "dependsOn": ["^build"],
       "inputs": ["src/**/*.ts", "src/**/*.tsx", "tsconfig*.json"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "test:a11y": {
+      "dependsOn": ["build"],
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "storybook": {
+      "cache": false,
+      "persistent": true
+    },
+    "build:storybook": {
+      "dependsOn": ["^build"],
+      "outputs": ["storybook-static/**"]
     }
   }
 }
 ```
+
+In addition to the core build, test, lint and typecheck targets, the pipeline keeps bespoke workflows for local development (`dev`), accessibility testing (`test:a11y`), cleaning generated artefacts (`clean`), and Storybook (`storybook`/`build:storybook`).  Each custom task retains its required caching or persistence settings so the behaviour matches the previous configuration.
 
 Turborepo runs tasks in parallel when possible and caches outputs, speeding up local development and CI.  Use `pnpm build`, `pnpm test`, `pnpm lint` and `pnpm typecheck` to run tasks across all packages.  To run tasks for a single package, navigate to the package directory and run the corresponding script.
