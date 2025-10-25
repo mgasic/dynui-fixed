@@ -1,8 +1,4 @@
-import type {
-  ButtonHTMLAttributes,
-  HTMLAttributes,
-  ReactNode
-} from 'react';
+import type { ReactNode } from 'react';
 
 export interface TabItem {
   value: string;
