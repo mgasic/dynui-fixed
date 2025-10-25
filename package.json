@@ -9,15 +9,15 @@
     "tools/*"
   ],
   "scripts": {
-    "build": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json build",
-    "dev": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json dev",
-    "test": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json test",
-    "test:a11y": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json test:a11y",
-    "typecheck": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json typecheck",
-    "lint": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json lint",
+    "build": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json build",
+    "dev": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json dev",
+    "test": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json test",
+    "test:a11y": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json test:a11y",
+    "typecheck": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json typecheck",
+    "lint": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "clean": "./tools/run-turbo-task.js --root-turbo-json turbo.root.json clean",
+    "clean": "node ./tools/run-turbo-task.js --root-turbo-json turbo.root.json clean",
     "storybook": "cd apps/storybook && pnpm storybook",
     "build:storybook": "cd apps/storybook && pnpm build:storybook",
     "playground": "pnpm --filter playground dev"
