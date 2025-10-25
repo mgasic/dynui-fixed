@@ -44,7 +44,7 @@
     "storybook": "catalog:",
     "tsd": "catalog:",
     "tsup": "catalog:",
-    "turbo": "^2.5.8",
+    "turbo": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",
     "vitest-axe": "catalog:"
