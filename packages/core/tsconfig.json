@@ -5,6 +5,8 @@
     "rootDir": "src",
     "baseUrl": ".",
     "composite": true,
+    "declaration": true,
+    "declarationMap": true,
     "paths": {
       "@dynui/design-tokens": ["../design-tokens/src"],
       "@dynui/icons": ["../icons/src"]
@@ -14,5 +16,17 @@
     { "path": "../design-tokens" },
     { "path": "../icons" }
   ],
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": [
+    "src/**/*.ts", 
+    "src/**/*.tsx",
+    "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.stories.ts",
+    "**/*.stories.tsx"
+  ]
 }
