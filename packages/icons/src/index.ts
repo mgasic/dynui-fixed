@@ -1,5 +1,5 @@
 /**
- * Minimal icon registry placeholder for Phase 1 validation.  The goal is to
+ * Minimal icon registry placeholder for Phase 1 validation.  The goal is to
  * ensure consuming packages have a typed surface while the final asset pipeline
  * is being designed.
  */
