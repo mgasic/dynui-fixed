@@ -7,6 +7,25 @@ import type {
 } from '../types/components/dyn-menu.types';
 import { classNames } from '../utils';
 
+interface MenuSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
+  'data-testid'?: string;
+}
+
+const MenuSeparator = React.forwardRef<HTMLDivElement, MenuSeparatorProps>(
+  ({ className, 'data-testid': testId, ...props }, ref) => (
+    <div
+      {...props}
+      ref={ref}
+      role="separator"
+      className={className}
+      data-testid={testId}
+      aria-hidden="true"
+    />
+  )
+);
+
+MenuSeparator.displayName = 'MenuSeparator';
+
 export const DynMenu = forwardRef<HTMLDivElement, DynMenuProps>(
   ({
     children,
@@ -68,17 +87,21 @@ export const DynMenuItem = forwardRef<HTMLElement, DynMenuItemProps>(
     'data-testid': testId,
     value: valueProp,
     onClick: userOnClick,
-    ...props
+    ...restProps
   }, ref) => {
     if (item?.type === 'divider') {
+      const menuSeparatorProps: MenuSeparatorProps = {
+        className: classNames('dyn-menu-divider', className)
+      };
+
+      if (typeof testId === 'string') {
+        menuSeparatorProps['data-testid'] = testId;
+      }
+
       return (
-        <div
-          {...props}
+        <MenuSeparator
           ref={ref as React.ForwardedRef<HTMLDivElement>}
-          role="separator"
-          className={classNames('dyn-menu-divider', className)}
-          data-testid={testId}
-          aria-hidden="true"
+          {...menuSeparatorProps}
         />
       );
     }
@@ -99,7 +122,7 @@ export const DynMenuItem = forwardRef<HTMLElement, DynMenuItemProps>(
 
     return (
       <button
-        {...props}
+        {...restProps}
         ref={ref as React.ForwardedRef<HTMLButtonElement>}
         role="menuitem"
         type="button"
@@ -107,7 +130,7 @@ export const DynMenuItem = forwardRef<HTMLElement, DynMenuItemProps>(
         disabled={disabled}
         className={classNames('dyn-menu-item', disabled && 'dyn-menu-item--disabled', className)}
         onClick={handleClick}
-        data-testid={testId}
+        {...(typeof testId === 'string' ? { 'data-testid': testId } : {})}
       >
         {label}
         {shortcut ? <span className="dyn-menu-item__shortcut">{shortcut}</span> : null}

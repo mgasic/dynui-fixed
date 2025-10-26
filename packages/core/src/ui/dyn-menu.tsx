@@ -70,11 +70,22 @@ export const DynMenuItem = forwardRef<HTMLElement, DynMenuItemProps>(
     onClick: userOnClick,
     ...props
   }, ref) => {
+    const dataTestIdProps =
+      typeof testId === 'string' ? { 'data-testid': testId } : undefined;
+
     if (item?.type === 'divider') {
+      const separatorProps: React.ComponentProps<typeof Separator> = {
+        className: classNames('dyn-menu-divider', className)
+      };
+
+      if (dataTestIdProps) {
+        separatorProps['data-testid'] = dataTestIdProps['data-testid'];
+      }
+
       return (
         <Separator
-          className={classNames('dyn-menu-divider', className)}
-          data-testid={testId}
+          {...separatorProps}
+          ref={ref as React.ForwardedRef<HTMLDivElement>}
         />
       );
     }
@@ -103,7 +114,7 @@ export const DynMenuItem = forwardRef<HTMLElement, DynMenuItemProps>(
         disabled={disabled}
         className={classNames('dyn-menu-item', disabled && 'dyn-menu-item--disabled', className)}
         onClick={handleClick}
-        data-testid={testId}
+        {...(dataTestIdProps ?? {})}
       >
         {label}
         {shortcut ? <span className="dyn-menu-item__shortcut">{shortcut}</span> : null}
