@@ -22,17 +22,90 @@ if (args.length === 0) {
   process.exit(1)
 }
 
+const TURBO_FLAG_PREFIXES = new Set([
+  '--cache',
+  '--version',
+  '--force',
+  '--skip-infer',
+  '--no-update-notifier',
+  '--remote-only',
+  '--api',
+  '--remote-cache-read-only',
+  '--color',
+  '--no-cache',
+  '--cache-workers',
+  '--cwd',
+  '--dry-run',
+  '--heap',
+  '--graph',
+  '--ui',
+  '--daemon',
+  '--login',
+  '--no-color',
+  '--no-daemon',
+  '--preflight',
+  '--profile',
+  '--anon-profile',
+  '--remote-cache-timeout',
+  '--summarize',
+  '--team',
+  '--parallel',
+  '--token',
+  '--cache-dir',
+  '--trace',
+  '--concurrency',
+  '--verbosity',
+  '--continue',
+  '--single-package',
+  '--framework-inference',
+  '--dangerously-disable-package-manager-check',
+  '--global-deps',
+  '--env-mode',
+  '--filter',
+  '--scope',
+  '--since',
+  '--root-turbo-json',
+  '--affected',
+  '--output-logs',
+  '--log-order',
+  '--only',
+  '--log-prefix',
+  '--help'
+])
+
+const TURBO_SHORT_FLAGS = new Set(['-F', '-h'])
+
 const [task, ...rest] = args
 
 const turboArgs = [task]
 
+const isTurboOption = (arg) => {
+  if (!arg || arg === '--turbo' || arg === '--') {
+    return false
+  }
+
+  if (TURBO_SHORT_FLAGS.has(arg)) {
+    return true
+  }
+
+  if (!arg.startsWith('--')) {
+    return false
+  }
+
+  const [flag] = arg.split('=', 1)
+
+  return TURBO_FLAG_PREFIXES.has(flag)
+}
+
 if (rest.length > 0) {
-  if (rest[0] === '--turbo') {
-    turboArgs.push(...rest.slice(1))
-  } else if (rest.includes('--')) {
-    turboArgs.push(...rest)
+  const forwardedArgs = rest[0] === '--turbo' ? rest.slice(1) : rest
+  const hasExplicitSeparator = forwardedArgs.includes('--')
+  const containsTurboFlags = forwardedArgs.some((arg) => isTurboOption(arg))
+
+  if (rest[0] === '--turbo' || hasExplicitSeparator || containsTurboFlags) {
+    turboArgs.push(...forwardedArgs)
   } else {
-    turboArgs.push('--', ...rest)
+    turboArgs.push('--', ...forwardedArgs)
   }
 }
 
