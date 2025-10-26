@@ -1,18 +1,31 @@
-import type { ReactNode } from 'react';
+import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from 'react';
 
-export interface DynMenuProps {
+export interface DynMenuItemConfig {
+  type: 'item' | 'divider';
+  value?: string;
+  label?: ReactNode;
+  disabled?: boolean;
+  shortcut?: ReactNode;
+}
+
+export interface DynMenuProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   children?: ReactNode;
+  items?: DynMenuItemConfig[];
   orientation?: 'horizontal' | 'vertical';
-  onAction?: (key: string) => void;
+  onAction?: (value: string | undefined) => void;
   className?: string;
   'data-testid'?: string;
 }
 
-export interface DynMenuItemProps {
+export interface DynMenuItemProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'onClick'> {
+  item?: DynMenuItemConfig;
   children?: ReactNode;
   disabled?: boolean;
   action?: string;
-  onAction?: (key: string) => void;
+  onAction?: (value: string | undefined) => void;
+  shortcut?: ReactNode;
   className?: string;
   'data-testid'?: string;
+  onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
 }
