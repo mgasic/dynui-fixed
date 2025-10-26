@@ -98,14 +98,20 @@ const isTurboOption = (arg) => {
 }
 
 if (rest.length > 0) {
-  const forwardedArgs = rest[0] === '--turbo' ? rest.slice(1) : rest
-  const hasExplicitSeparator = forwardedArgs.includes('--')
-  const containsTurboFlags = forwardedArgs.some((arg) => isTurboOption(arg))
-
-  if (rest[0] === '--turbo' || hasExplicitSeparator || containsTurboFlags) {
-    turboArgs.push(...forwardedArgs)
+  if (rest[0] === '--turbo') {
+    turboArgs.push(...rest.slice(1))
   } else {
-    turboArgs.push('--', ...forwardedArgs)
+    const separatorIndex = rest.indexOf('--')
+
+    if (separatorIndex === -1) {
+      turboArgs.push(...rest)
+    } else {
+      turboArgs.push(
+        ...rest.slice(0, separatorIndex),
+        '--',
+        ...rest.slice(separatorIndex + 1)
+      )
+    }
   }
 }
 

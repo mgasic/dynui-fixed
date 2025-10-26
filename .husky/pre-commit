@@ -13,7 +13,7 @@ pnpm lint || (echo "❌ ESLint errors found" && exit 1)
 pnpm format:check || (echo "❌ Prettier formatting issues found" && exit 1)
 
 # Unit tests for changed files
-pnpm test -- -- --run --changed || (echo "❌ Tests failing" && exit 1)
+pnpm test -- -- --changed || (echo "❌ Tests failing" && exit 1)
 
 echo "✅ Pre-commit checks passed!"
 
