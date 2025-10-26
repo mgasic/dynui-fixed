@@ -10,7 +10,11 @@ const meta: Meta = {
         <>
           <Title />
           <Subtitle>API Reference</Subtitle>
-          <Description>DynMenu i DynMenuItem (item/divider) union tipovi, tastatura i a11y.</Description>
+          <Description>
+            DynMenu now accepts <code>items</code> arrays of <code>DynMenuItemConfig</code> objects or
+            custom <code>DynMenuItem</code> children for full control over layout, including dividers and
+            keyboard interactions.
+          </Description>
           <Primary />
           <ArgsTable of={Types} />
           <Stories />

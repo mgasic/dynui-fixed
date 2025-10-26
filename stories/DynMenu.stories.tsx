@@ -11,11 +11,32 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
+    <DynMenu
+      orientation="vertical"
+      items={[
+        {
+          type: 'item',
+          value: 'new',
+          label: 'New File',
+          shortcut: '⌘N',
+        },
+        { type: 'item', value: 'open', label: 'Open…', shortcut: '⌘O' },
+        { type: 'divider' },
+        { type: 'item', value: 'save', label: 'Save', shortcut: '⌘S' },
+      ]}
+      onAction={(value) => console.log('Action', value)}
+    />
+  )
+}
+
+export const WithCustomItems: Story = {
+  render: () => (
     <DynMenu orientation="vertical">
-      <DynMenuItem item={{ type: 'item', value: 'new', label: 'New' }} />
-      <DynMenuItem item={{ type: 'item', value: 'open', label: 'Open' }} />
+      <DynMenuItem item={{ type: 'item', value: 'profile', label: 'Profile' }} />
       <DynMenuItem item={{ type: 'divider' }} />
-      <DynMenuItem item={{ type: 'item', value: 'save', label: 'Save' }} />
+      <DynMenuItem value="logout" shortcut="⇧⌘Q">
+        Logout
+      </DynMenuItem>
     </DynMenu>
   )
 }

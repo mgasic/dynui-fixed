@@ -13,3 +13,4 @@ packages/core/dist/index.cjs
 apps/playground/.turbo/turbo-build.log
 apps/playground/dist
 packages/core/.turbo
+packages/design-tokens/tsconfig.tsbuildinfo
