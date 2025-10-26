@@ -48,6 +48,7 @@ function createParserOptions(options = {}, filePath) {
     ecmaVersion,
     sourceType,
     ecmaFeatures,
+    filePath: resolvedFilePath,
     allowHashBang: options.allowHashBang ?? true,
     loc: true,
     range: true,
@@ -56,16 +57,18 @@ function createParserOptions(options = {}, filePath) {
   }
 }
 
-export function parse(code, options = {}) {
-  return parseForESLint(code, options).ast
+export function parse(code, options = {}, context) {
+  return parseForESLint(code, options, context).ast
 }
 
-export function parseForESLint(code, options = {}) {
-  const baseParserOptions = createParserOptions(options)
+export function parseForESLint(code, options = {}, context) {
+  const filePath = extractFilePath(context)
+  const baseParserOptions = createParserOptions(options, filePath)
   const parserOptions = {
     ...options,
     ...baseParserOptions,
     ecmaFeatures: baseParserOptions.ecmaFeatures,
+    filePath: baseParserOptions.filePath,
     loc: true,
     range: true,
     tokens: true,
