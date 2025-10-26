@@ -6,10 +6,15 @@
 export function generateInitials(name: string): string {
   if (!name?.trim()) return '??'
   
-  const words = name.trim().split(/\s+/)
-  if (words.length === 1) {
-    return words[0].charAt(0).toUpperCase()
+  const words = name.trim().split(/\s+/).filter(Boolean)
+  if (words.length === 0) {
+    return '??'
   }
-  
-  return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase()
+
+  if (words.length === 1) {
+    return words[0]!.charAt(0).toUpperCase()
+  }
+
+  const [firstWord, secondWord] = words
+  return (firstWord!.charAt(0) + secondWord!.charAt(0)).toUpperCase()
 }

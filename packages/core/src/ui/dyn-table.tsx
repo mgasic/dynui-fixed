@@ -1,7 +1,7 @@
-import { forwardRef, useState } from 'react';
-import type { DynTableProps, DynTableSort } from '../types/components/dyn-table.types';
-import { useArrowNavigation } from '../hooks/use-arrow-navigation';
-import { classNames } from '../utils';
+import { forwardRef, useCallback, useState } from 'react'
+import type { DynTableProps, DynTableSort } from '../types/components/dyn-table.types'
+import { useArrowNavigation } from '../hooks/use-arrow-navigation'
+import { classNames } from '../utils'
 
 export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
   ({
@@ -16,16 +16,16 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
     const [sortState, setSortState] = useState<DynTableSort | null>(null);
     
     const handleSort = (columnKey: string) => {
-      if (!sortable || !onSort) return;
-      
-      const newDirection = 
+      if (!sortable || typeof onSort !== 'function') return
+
+      const newDirection =
         sortState?.column === columnKey && sortState.direction === 'asc'
           ? 'desc' as const
           : 'asc' as const;
-      
+
       const newSortState = { column: columnKey, direction: newDirection };
-      setSortState(newSortState);
-      onSort(columnKey, newDirection);
+      setSortState(newSortState)
+      onSort(columnKey, newDirection)
     };
 
     const getAriaSort = (columnKey: string): 'none' | 'ascending' | 'descending' => {
@@ -33,13 +33,26 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
       return sortState.direction === 'asc' ? 'ascending' : 'descending';
     };
 
-    const { containerRef } = useArrowNavigation({
+    const { setContainerRef } = useArrowNavigation({
       orientation: 'vertical',
       selector: 'tbody tr[tabindex="0"]'
-    });
+    })
+
+    const handleContainerRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        setContainerRef(node)
+      },
+      [setContainerRef]
+    )
 
     return (
-      <div ref={containerRef as React.RefObject<HTMLDivElement>} className={classNames('dyn-table-container', className)}>
+      <div
+        ref={handleContainerRef}
+        className={classNames(
+          'dyn-table-container',
+          typeof className === 'string' ? className : undefined
+        )}
+      >
         <table
           {...props}
           ref={ref}

@@ -15,12 +15,12 @@ const FOCUSABLE_SELECTOR = [
   '[tabindex]:not([tabindex="-1"])'
 ].join(', ')
 
-export function useFocusTrap({
+export function useFocusTrap<T extends HTMLElement = HTMLElement>({
   enabled = true,
   initialFocus = true,
   returnFocus = true
 }: UseFocusTrapOptions = {}) {
-  const containerRef = useRef<HTMLElement>(null)
+  const containerRef = useRef<T>(null)
   const previousFocusRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {

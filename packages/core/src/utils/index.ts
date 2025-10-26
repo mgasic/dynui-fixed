@@ -6,7 +6,7 @@ export * from './generate-initials'
 export * from './style-props'
 
 // Back-compat helpers used by components
-export function classNames(...classes: Array<string | false | null | undefined>) {
+export function classNames(...classes: Array<string | number | false | null | undefined>) {
   return classes.filter(Boolean).join(' ')
 }
 

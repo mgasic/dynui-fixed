@@ -12,14 +12,18 @@ export function DynBox({
   ...props
 }: DynBoxProps) {
   const cls = classNames('dyn-box', className)
-  const styles = getSpacingStyles({ p, m, gap })
+  const spacingStyles = getSpacingStyles({
+    ...(p !== undefined ? { p } : {}),
+    ...(m !== undefined ? { m } : {}),
+    ...(gap !== undefined ? { gap } : {})
+  })
 
   return (
     <As
       className={cls}
-      style={styles}
+      style={spacingStyles}
       data-testid={dataTestId}
-      {...props}
+      {...(props as Record<string, unknown>)}
     >
       {children}
     </As>

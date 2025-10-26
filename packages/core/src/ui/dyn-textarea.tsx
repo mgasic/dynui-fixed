@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 import type { DynTextAreaProps } from '../types/components/dyn-textarea.types'
 import { useControlled } from '../hooks/use-controlled'
+import type { UseControlledOptions } from '../hooks/use-controlled'
 import { classNames } from '../utils'
 
 /**
@@ -33,7 +34,13 @@ export const DynTextArea = forwardRef<HTMLTextAreaElement, DynTextAreaProps>(
     },
     ref
   ) => {
-    const { value: currentValue, setValue } = useControlled({ value, defaultValue, onChange })
+    const controlledOptions: UseControlledOptions<string> = {
+      ...(typeof value === 'string' ? { value } : {}),
+      defaultValue: typeof defaultValue === 'string' ? defaultValue : '',
+      ...(onChange ? { onChange: (newValue) => onChange(newValue) } : {})
+    }
+
+    const { value: currentValue, setValue } = useControlled(controlledOptions)
 
     const textareaClasses = classNames(
       'dyn-textarea',

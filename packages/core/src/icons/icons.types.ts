@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react'
+import type { ComponentType } from 'react'
 
 /**
  * Icon component type - can be any React component that renders an icon
  */
-export type IconComponent = React.ComponentType<{ className?: string; size?: number | string }>
+export type IconComponent = ComponentType<{ className?: string; size?: number | string }>
 
 /**
  * Icon dictionary mapping icon names to their components

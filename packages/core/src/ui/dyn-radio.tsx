@@ -1,7 +1,17 @@
-import React, { forwardRef } from 'react';
-import type { DynRadioGroupProps, DynRadioProps } from '../types/components/dyn-radio.types';
-import { useArrowNavigation } from '../hooks/use-arrow-navigation';
-import { classNames } from '../utils';
+import {
+  Children,
+  ChangeEvent,
+  cloneElement,
+  forwardRef,
+  isValidElement,
+  MutableRefObject,
+  useCallback,
+  useRef
+} from 'react'
+import type { InputHTMLAttributes } from 'react'
+import type { DynRadioGroupProps, DynRadioProps } from '../types/components/dyn-radio.types'
+import { useArrowNavigation } from '../hooks/use-arrow-navigation'
+import { classNames } from '../utils'
 
 export const DynRadio = forwardRef<HTMLInputElement, DynRadioProps>(
   ({
@@ -20,21 +30,23 @@ export const DynRadio = forwardRef<HTMLInputElement, DynRadioProps>(
     size,
     ...props
   }, ref) => {
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (disabled) return;
-      onChange?.(event.target.value, event);
-    };
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+      if (disabled) return
+      if (typeof onChange === 'function') {
+        onChange(event.target.value, event)
+      }
+    }
 
-    // Omit size to avoid HTML input size conflict
-    const { size: _, ...inputProps } = props as any;
+    // Remaining props are forwarded to the underlying input element
+    const inputProps = props as InputHTMLAttributes<HTMLInputElement>
 
     return (
-      <label 
+      <label
         className={classNames(
           'dyn-radio',
-          size && `dyn-radio--${size}`,
-          disabled && 'dyn-radio--disabled',
-          className
+          size ? `dyn-radio--${size}` : undefined,
+          disabled ? 'dyn-radio--disabled' : undefined,
+          typeof className === 'string' ? className : undefined
         )}
       >
         <input
@@ -60,11 +72,11 @@ export const DynRadio = forwardRef<HTMLInputElement, DynRadioProps>(
           </span>
         )}
       </label>
-    );
+    )
   }
-);
+)
 
-DynRadio.displayName = 'DynRadio';
+DynRadio.displayName = 'DynRadio'
 
 export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
   ({
@@ -83,19 +95,39 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
     ...props
   }, ref) => {
     const { containerRef } = useArrowNavigation({
-      orientation,
+      orientation: orientation ?? 'vertical',
       selector: 'input[type="radio"]:not(:disabled)'
-    });
+    })
 
-    const handleChange = (selectedValue: string, event: React.ChangeEvent<HTMLInputElement>) => {
-      if (disabled) return;
-      onChange?.(selectedValue, event);
-    };
+    const fallbackNameRef = useRef(
+      name ?? `radio-group-${Math.random().toString(36).slice(2, 11)}`
+    )
+    const groupName = name ?? fallbackNameRef.current
+
+    const setGroupRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        containerRef.current = node
+
+        if (typeof ref === 'function') {
+          ref(node)
+        } else if (ref) {
+          (ref as MutableRefObject<HTMLDivElement | null>).current = node
+        }
+      },
+      [containerRef, ref]
+    )
+
+    const handleChange = (selectedValue: string, event: ChangeEvent<HTMLInputElement>) => {
+      if (disabled) return
+      if (typeof onChange === 'function') {
+        onChange(selectedValue, event)
+      }
+    }
 
     return (
       <div
         {...props}
-        ref={ref || (containerRef as React.RefObject<HTMLDivElement>)}
+        ref={setGroupRef}
         role="radiogroup"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
@@ -103,29 +135,29 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
         data-testid={testId}
         className={classNames(
           'dyn-radio-group',
-          `dyn-radio-group--${orientation}`,
-          disabled && 'dyn-radio-group--disabled',
-          className
+          orientation ? `dyn-radio-group--${orientation}` : undefined,
+          disabled ? 'dyn-radio-group--disabled' : undefined,
+          typeof className === 'string' ? className : undefined
         )}
       >
-        {React.Children.map(children, (child, index) => {
-          if (React.isValidElement<DynRadioProps>(child) && child.type === DynRadio) {
+        {Children.map(children, (child) => {
+          if (isValidElement<DynRadioProps>(child) && child.type === DynRadio) {
             const childProps: Partial<DynRadioProps> = {
               ...child.props,
-              name: name || `radio-group-${Math.random().toString(36).substr(2, 9)}`,
+              name: groupName,
               checked: value !== undefined ? child.props.value === value : undefined,
-              defaultChecked: defaultValue !== undefined ? child.props.value === defaultValue : undefined,
+              defaultChecked:
+                defaultValue !== undefined ? child.props.value === defaultValue : undefined,
               disabled: disabled || child.props.disabled || undefined,
-              onChange: handleChange,
-              key: child.props.value || index
-            };
-            return React.cloneElement(child, childProps);
+              onChange: handleChange
+            }
+            return cloneElement(child, childProps)
           }
-          return child;
+          return child
         })}
       </div>
-    );
+    )
   }
-);
+)
 
-DynRadioGroup.displayName = 'DynRadioGroup';
+DynRadioGroup.displayName = 'DynRadioGroup'
