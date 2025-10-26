@@ -1,4 +1,5 @@
 import { forwardRef, useState } from 'react';
+import type { RefObject } from 'react';
 import type { DynTableProps, DynTableSort } from '../types/components/dyn-table.types';
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
@@ -39,7 +40,7 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
     });
 
     return (
-      <div ref={containerRef as React.RefObject<HTMLDivElement>} className={classNames('dyn-table-container', className)}>
+      <div ref={containerRef as RefObject<HTMLDivElement>} className={classNames('dyn-table-container', className)}>
         <table
           {...props}
           ref={ref}
@@ -56,7 +57,7 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
                   aria-sort={getAriaSort(column.key)}
                   className={classNames(
                     'dyn-table__header',
-                    sortable && column.sortable && 'dyn-table__header--sortable'
+                    sortable && column.sortable ? 'dyn-table__header--sortable' : undefined
                   )}
                   onClick={sortable && column.sortable ? () => handleSort(column.key) : undefined}
                   tabIndex={sortable && column.sortable ? 0 : -1}

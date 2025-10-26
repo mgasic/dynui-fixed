@@ -1,3 +1,4 @@
+import type { ElementType } from 'react'
 import type { DynBreadcrumbProps, DynBreadcrumbItemProps } from '../types/components/dyn-breadcrumb.types'
 import { classNames } from '../utils'
 
@@ -54,17 +55,24 @@ export function DynBreadcrumbItem({
     disabled && 'dyn-breadcrumb-item--disabled'
   )
 
-  const Component = href ? 'a' : As
+  const Component = (href ? 'a' : As) as ElementType
+
+  const componentProps: Record<string, unknown> = {
+    className: cls,
+    'aria-current': current ? (ariaCurrent || 'page') : undefined,
+    'data-testid': dataTestId,
+    children
+  }
+
+  if (href) {
+    componentProps.href = href
+  }
+
+  if (onClick) {
+    componentProps.onClick = onClick
+  }
 
   return (
-    <Component
-      className={cls}
-      href={href}
-      onClick={onClick}
-      aria-current={current ? (ariaCurrent || 'page') : undefined}
-      data-testid={dataTestId}
-    >
-      {children}
-    </Component>
+    <Component {...componentProps} />
   )
 }

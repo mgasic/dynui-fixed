@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import type { CSSProperties } from 'react';
 import type { DynGridProps, DynGridItemProps } from '../types/components/dyn-grid.types';
 import { getSpacingStyles, classNames } from '../utils';
 
@@ -14,18 +15,23 @@ export const DynGrid = forwardRef<HTMLDivElement, DynGridProps>(
     ...props 
   }, ref) => {
     // Filter out undefined values for exactOptionalPropertyTypes
-    const spacingArgs: { gap?: number | string } = {};
-    if (gap !== undefined) spacingArgs.gap = gap;
-    
-    const spacingStyles = getSpacingStyles(spacingArgs);
+    const spacingStyles = getSpacingStyles(gap !== undefined ? { gap } : {});
 
-    const combinedStyle = {
+    const combinedStyle: CSSProperties = {
       ...spacingStyles,
-      gridTemplateColumns: columns ? 
-        (typeof columns === 'number' ? `repeat(${columns}, 1fr)` : columns) : undefined,
-      gridTemplateRows: rows && Number(rows) > 0 ? 
-        (typeof rows === 'number' ? `repeat(${rows}, 1fr)` : rows) : undefined,
-      ...style
+      ...(columns !== undefined
+        ? {
+            gridTemplateColumns:
+              typeof columns === 'number' ? `repeat(${columns}, 1fr)` : columns
+          }
+        : {}),
+      ...(rows !== undefined
+        ? {
+            gridTemplateRows:
+              typeof rows === 'number' ? `repeat(${rows}, 1fr)` : rows
+          }
+        : {}),
+      ...(style ?? {})
     };
 
     return (
@@ -34,8 +40,12 @@ export const DynGrid = forwardRef<HTMLDivElement, DynGridProps>(
         ref={ref}
         className={classNames(
           'dyn-grid',
-          columns && Number(columns) > 0 && `dyn-grid--columns-${columns}`,
-          rows && Number(rows) > 0 && `dyn-grid--rows-${rows}`,
+          columns !== undefined && columns !== null && Number(columns) > 0
+            ? `dyn-grid--columns-${columns}`
+            : undefined,
+          rows !== undefined && rows !== null && Number(rows) > 0
+            ? `dyn-grid--rows-${rows}`
+            : undefined,
           className
         )}
         style={combinedStyle}
@@ -64,13 +74,22 @@ export const DynGridItem = forwardRef<HTMLDivElement, DynGridItemProps>(
         ref={ref}
         className={classNames(
           'dyn-grid-item',
-          colSpan && Number(colSpan) > 0 && `dyn-grid-item--col-span-${colSpan}`,
-          rowSpan && Number(rowSpan) > 0 && `dyn-grid-item--row-span-${rowSpan}`,
+          colSpan !== undefined && colSpan !== null && Number(colSpan) > 0
+            ? `dyn-grid-item--col-span-${colSpan}`
+            : undefined,
+          rowSpan !== undefined && rowSpan !== null && Number(rowSpan) > 0
+            ? `dyn-grid-item--row-span-${rowSpan}`
+            : undefined,
           className
         )}
         style={{
-          gridColumn: colSpan && Number(colSpan) > 0 ? `span ${colSpan}` : undefined,
-          gridRow: rowSpan && Number(rowSpan) > 0 ? `span ${rowSpan}` : undefined
+          ...(colSpan !== undefined && colSpan !== null && Number(colSpan) > 0
+            ? { gridColumn: `span ${colSpan}` }
+            : {}),
+          ...(rowSpan !== undefined && rowSpan !== null && Number(rowSpan) > 0
+            ? { gridRow: `span ${rowSpan}` }
+            : {}),
+          ...(props.style as CSSProperties | undefined)
         }}
         data-testid={testId}
       >

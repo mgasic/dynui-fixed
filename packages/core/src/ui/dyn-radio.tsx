@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import type { DynRadioGroupProps, DynRadioProps } from '../types/components/dyn-radio.types';
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
@@ -29,11 +29,11 @@ export const DynRadio = forwardRef<HTMLInputElement, DynRadioProps>(
     const { size: _, ...inputProps } = props as any;
 
     return (
-      <label 
+      <label
         className={classNames(
           'dyn-radio',
-          size && `dyn-radio--${size}`,
-          disabled && 'dyn-radio--disabled',
+          size ? `dyn-radio--${size}` : undefined,
+          disabled ? 'dyn-radio--disabled' : undefined,
           className
         )}
       >
@@ -82,8 +82,9 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
     'data-testid': testId,
     ...props
   }, ref) => {
+    const orientationValue = orientation ?? 'vertical';
     const { containerRef } = useArrowNavigation({
-      orientation,
+      orientation: orientationValue,
       selector: 'input[type="radio"]:not(:disabled)'
     });
 
@@ -91,6 +92,11 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
       if (disabled) return;
       onChange?.(selectedValue, event);
     };
+
+    const groupName = useMemo(
+      () => name ?? `radio-group-${Math.random().toString(36).slice(2, 11)}`,
+      [name]
+    );
 
     return (
       <div
@@ -103,8 +109,8 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
         data-testid={testId}
         className={classNames(
           'dyn-radio-group',
-          `dyn-radio-group--${orientation}`,
-          disabled && 'dyn-radio-group--disabled',
+          `dyn-radio-group--${orientationValue}`,
+          disabled ? 'dyn-radio-group--disabled' : undefined,
           className
         )}
       >
@@ -112,14 +118,23 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
           if (React.isValidElement<DynRadioProps>(child) && child.type === DynRadio) {
             const childProps: Partial<DynRadioProps> = {
               ...child.props,
-              name: name || `radio-group-${Math.random().toString(36).substr(2, 9)}`,
-              checked: value !== undefined ? child.props.value === value : undefined,
-              defaultChecked: defaultValue !== undefined ? child.props.value === defaultValue : undefined,
-              disabled: disabled || child.props.disabled || undefined,
-              onChange: handleChange,
-              key: child.props.value || index
+              name: groupName,
+              disabled: Boolean(disabled || child.props.disabled),
+              onChange: handleChange
             };
-            return React.cloneElement(child, childProps);
+
+            if (value !== undefined) {
+              childProps.checked = child.props.value === value;
+            }
+
+            if (defaultValue !== undefined) {
+              childProps.defaultChecked = child.props.value === defaultValue;
+            }
+            const radioKey = child.key ?? child.props.value ?? index;
+            return React.cloneElement(child, {
+              ...childProps,
+              key: radioKey
+            } as Partial<DynRadioProps> & { key: React.Key });
           }
           return child;
         })}

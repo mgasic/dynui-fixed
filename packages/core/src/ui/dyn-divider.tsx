@@ -14,7 +14,7 @@ export function DynDivider({
     `dyn-divider--${orientation}`,
     `dyn-divider--${variant}`,
     `dyn-divider--${size}`,
-    label && 'dyn-divider--with-label'
+    label ? 'dyn-divider--with-label' : undefined
   )
 
   return (
