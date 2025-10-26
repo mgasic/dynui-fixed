@@ -39,6 +39,8 @@
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-react": "catalog:",
+    "@typescript-eslint/parser": "workspace:*",
+    "@stylistic/eslint-plugin": "workspace:*",
     "jsdom": "catalog:",
     "prettier": "catalog:",
     "rimraf": "^6.0.1",

@@ -1,10 +1,22 @@
 import js from '@eslint/js'
 import react from 'eslint-plugin-react'
 import stylistic from '@stylistic/eslint-plugin'
+import tsParser from '@typescript-eslint/parser'
 import prettier from 'eslint-config-prettier'
 
 export default [
   js.configs.recommended,
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2023,
+        sourceType: 'module',
+        ecmaFeatures: { jsx: true }
+      }
+    }
+  },
   {
     plugins: { react },
     rules: {
