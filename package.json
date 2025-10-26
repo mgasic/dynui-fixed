@@ -19,6 +19,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "clean": "node ./tools/run-turbo-task.js clean",
+    "prepare": "husky install",
     "storybook": "cd apps/storybook && pnpm storybook",
     "build:storybook": "cd apps/storybook && pnpm build:storybook",
     "playground": "pnpm --filter playground dev"
@@ -44,6 +45,7 @@
     "eslint-plugin-react": "catalog:",
     "@typescript-eslint/parser": "workspace:*",
     "@stylistic/eslint-plugin": "workspace:*",
+    "husky": "workspace:*",
     "jsdom": "catalog:",
     "prettier": "catalog:",
     "rimraf": "^6.0.1",
