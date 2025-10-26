@@ -15,12 +15,19 @@ describe('DynContainer', () => {
 
   it('applies max width style when provided as a number', () => {
     render(
-      <DynContainer maxWidth={640} data-testid="container">
+      <DynContainer
+        className="custom-class"
+        style={{ backgroundColor: 'rebeccapurple' }}
+        maxWidth={960}
+        data-testid="container"
+      >
         Content
       </DynContainer>
     )
 
-    expect(screen.getByTestId('container')).toHaveStyle({ maxWidth: '640px' })
+    const container = screen.getByTestId('container')
+    expect(container).toHaveClass('dyn-container', 'custom-class')
+    expect(container).toHaveStyle('background-color: rebeccapurple; max-width: 960px;')
   })
 
   it('merges custom class names and inline styles', () => {
