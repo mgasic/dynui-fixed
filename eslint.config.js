@@ -1,7 +1,6 @@
 import js from '@eslint/js'
 import react from 'eslint-plugin-react'
-import stylistic from '@stylistic/eslint-plugin'
-import tsParser from '@typescript-eslint/parser'
+import tsParser from './tools/eslint-ts-parser.js'
 import prettier from 'eslint-config-prettier'
 
 export default [
@@ -25,7 +24,6 @@ export default [
     },
     settings: { react: { version: 'detect' } }
   },
-  stylistic.configs['recommended-flat'],
   prettier,
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
