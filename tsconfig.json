@@ -1,5 +1,11 @@
 {
   "extends": "./tools/build-config/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@dynui/design-tokens": ["packages/design-tokens/src"]
+    }
+  },
   "exclude": [
     "./dist",
     "./build",
