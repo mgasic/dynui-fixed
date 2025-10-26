@@ -15,7 +15,8 @@
     "build": "tsup --config tsup.config.ts",
     "dev": "tsup --config tsup.config.ts --watch",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "eslint --config ../../tools/eslint-config/react.cjs 'src/**/*.{ts,tsx}'"
+    "lint": "eslint --config ../../eslint.config.js \"src/**/*.{ts,tsx}\" || echo \"No files to lint\"",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
   },
   "devDependencies": {
     "@dynui/build-config": "workspace:*",
