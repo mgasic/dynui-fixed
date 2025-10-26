@@ -49,7 +49,7 @@ function buildResult(code, options) {
         outputText: transpiled
       }
     },
-    text: transpiled
+    text: code
   }
 }
 
