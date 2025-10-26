@@ -12,13 +12,17 @@ const meta: Meta<typeof DynContainer> = {
     }
   },
   argTypes: {
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg', 'xl', 'full']
-    },
     maxWidth: {
-      control: { type: 'select' },
-      options: ['xs', 'sm', 'md', 'lg', 'xl']
+      control: { type: 'text' },
+      description: 'Sets a maximum width for the container (number will be treated as pixels).'
+    },
+    p: {
+      control: { type: 'text' },
+      description: 'Padding applied to the container. Numbers are treated as pixels.'
+    },
+    m: {
+      control: { type: 'text' },
+      description: 'Margin applied to the container. Numbers are treated as pixels.'
     }
   }
 }
@@ -39,42 +43,29 @@ export const Default: Story = {
   }
 }
 
-export const Sizes: Story = {
+export const MaxWidthExamples: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <DynContainer size="sm">
-        <div style={{ background: '#e3f2fd', padding: '1rem' }}>Small Container</div>
+      <DynContainer maxWidth={360}>
+        <div style={{ background: '#e3f2fd', padding: '1rem' }}>360px max width</div>
       </DynContainer>
-      <DynContainer size="md">
-        <div style={{ background: '#f3e5f5', padding: '1rem' }}>Medium Container</div>
+      <DynContainer maxWidth="48rem">
+        <div style={{ background: '#f3e5f5', padding: '1rem' }}>48rem max width</div>
       </DynContainer>
-      <DynContainer size="lg">
-        <div style={{ background: '#e8f5e8', padding: '1rem' }}>Large Container</div>
-      </DynContainer>
-      <DynContainer size="xl">
-        <div style={{ background: '#fff3e0', padding: '1rem' }}>Extra Large Container</div>
+      <DynContainer>
+        <div style={{ background: '#e8f5e8', padding: '1rem' }}>No max width</div>
       </DynContainer>
     </div>
   )
 }
 
-export const WithPadding: Story = {
+export const WithSpacing: Story = {
   args: {
-    p: 'lg',
+    p: 32,
+    m: '2rem',
     children: (
       <div style={{ background: '#f5f5f5', minHeight: '200px' }}>
-        Container with large padding
-      </div>
-    )
-  }
-}
-
-export const Fluid: Story = {
-  args: {
-    fluid: true,
-    children: (
-      <div style={{ background: '#e1f5fe', padding: '1rem' }}>
-        Fluid container takes full width
+        Container with padding and margin applied via inline styles
       </div>
     )
   }
