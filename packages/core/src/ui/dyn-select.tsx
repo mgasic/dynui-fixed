@@ -91,16 +91,18 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
     
     const [searchQuery, setSearchQuery] = useState('')
     const [focusedIndex, setFocusedIndex] = useState(-1)
-    
+
     // Process options from props or children
     const processedOptions: SelectOption[] = useMemo(() => options || [], [options])
     
     // Filter options if searchable
-    const filteredOptions = searchable 
-      ? processedOptions.filter(opt => 
-          opt.label.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : processedOptions
+    const filteredOptions = useMemo(() => {
+      if (!searchable) return processedOptions
+      const query = searchQuery.toLowerCase()
+      return processedOptions.filter(opt =>
+        opt.label.toLowerCase().includes(query)
+      )
+    }, [processedOptions, searchable, searchQuery])
     
     // Mini API implementation
     useImperativeHandle(ref, () => ({
@@ -183,20 +185,20 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
     
     const wrapperClasses = classNames(
       'dyn-select-wrapper',
-      dataState && `dyn-select-wrapper--${dataState}`
+      dataState ? `dyn-select-wrapper--${dataState}` : undefined
     )
-    
+
     const triggerClasses = classNames(
       'dyn-select-trigger',
       `dyn-select-trigger--${size}`,
       `dyn-select-trigger--${variant}`,
-      disabled && 'dyn-select-trigger--disabled',
-      isOpen && 'dyn-select-trigger--open'
+      disabled ? 'dyn-select-trigger--disabled' : undefined,
+      isOpen ? 'dyn-select-trigger--open' : undefined
     )
-    
+
     const listboxClasses = classNames(
       'dyn-select-listbox',
-      isOpen && 'dyn-select-listbox--open'
+      isOpen ? 'dyn-select-listbox--open' : undefined
     )
     
     return (
@@ -214,6 +216,7 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-invalid={dataState === 'error' ? 'true' : undefined}
+          aria-required={required ? 'true' : undefined}
         >
           {getDisplayValue()}
           <span className="dyn-select-trigger__icon" aria-hidden="true">

@@ -7,7 +7,7 @@ import type {
   TableHTMLAttributes,
   ChangeEvent,
   FocusEvent,
-  MouseEvent
+  MouseEventHandler
 } from 'react'
 
 export interface DynCheckboxProps {
@@ -87,7 +87,7 @@ export interface DynBreadcrumbItemProps {
   href?: string
   current?: boolean
   disabled?: boolean
-  onClick?: (event: MouseEvent<HTMLElement>) => void
+  onClick?: MouseEventHandler<HTMLElement>
   'aria-current'?: 'page' | 'step' | 'location' | 'date' | 'time' | 'true' | 'false'
   'data-testid'?: string
   [key: string]: unknown

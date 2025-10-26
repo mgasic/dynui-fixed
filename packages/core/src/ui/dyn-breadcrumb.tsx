@@ -55,7 +55,22 @@ export function DynBreadcrumbItem({
     disabled ? 'dyn-breadcrumb-item--disabled' : undefined
   )
 
-  const Component = href ? 'a' : As
+  const Component = (href ? 'a' : As) as ElementType
+
+  const componentProps: Record<string, unknown> = {
+    className: cls,
+    'aria-current': current ? (ariaCurrent || 'page') : undefined,
+    'data-testid': dataTestId,
+    children
+  }
+
+  if (href) {
+    componentProps.href = href
+  }
+
+  if (onClick) {
+    componentProps.onClick = onClick
+  }
 
   const handleClick = (event: ReactMouseEvent<HTMLElement>) => {
     if (disabled) {

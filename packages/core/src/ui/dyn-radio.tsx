@@ -94,6 +94,7 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
     'data-testid': testId,
     ...props
   }, ref) => {
+    const orientationValue = orientation ?? 'vertical';
     const { containerRef } = useArrowNavigation({
       orientation: orientation ?? 'vertical',
       selector: 'input[type="radio"]:not(:disabled)'
@@ -123,6 +124,11 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
         onChange(selectedValue, event)
       }
     }
+
+    const groupName = useMemo(
+      () => name ?? `radio-group-${Math.random().toString(36).slice(2, 11)}`,
+      [name]
+    );
 
     return (
       <div

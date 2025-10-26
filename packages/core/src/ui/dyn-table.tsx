@@ -69,7 +69,7 @@ export const DynTable = forwardRef<HTMLTableElement, DynTableProps>(
                   aria-sort={getAriaSort(column.key)}
                   className={classNames(
                     'dyn-table__header',
-                    sortable && column.sortable && 'dyn-table__header--sortable'
+                    sortable && column.sortable ? 'dyn-table__header--sortable' : undefined
                   )}
                   onClick={sortable && column.sortable ? () => handleSort(column.key) : undefined}
                   tabIndex={sortable && column.sortable ? 0 : -1}

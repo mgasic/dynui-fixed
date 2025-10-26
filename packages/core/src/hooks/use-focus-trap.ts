@@ -26,7 +26,7 @@ export function useFocusTrap<T extends HTMLElement = HTMLElement>({
   useEffect(() => {
     if (!enabled || !containerRef.current) return
 
-    const container = containerRef.current
+    const container = containerRef.current as HTMLElement
     previousFocusRef.current = document.activeElement as HTMLElement
 
     const focusableElements = container.querySelectorAll(FOCUSABLE_SELECTOR) as NodeListOf<HTMLElement>

@@ -5,11 +5,11 @@ import { useState, useCallback } from 'react'
  */
 export interface UseControlledOptions<T> {
   /** Controlled value */
-  value?: T
+  value?: T | undefined
   /** Default value for uncontrolled mode */
-  defaultValue?: T
+  defaultValue?: T | undefined
   /** Change handler */
-  onChange?: (value: T) => void
+  onChange?: ((value: T) => void) | undefined
 }
 
 /**
