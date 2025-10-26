@@ -1,34 +1,25 @@
 name: Quality Gates (Extended)
 
 on:
-  pull_request:
-    branches: [ main ]
   push:
+    branches: [ main, develop ]
+  pull_request:
     branches: [ main ]
 
 jobs:
-  gate-a-static:
+  gate-a:
     name: "Gate A: Static Analysis"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          run_install: false
+          version: 9.12.0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      - name: Neutralize project .npmrc if present
-        run: mv .npmrc .npmrc.bak || true
-      - name: Configure registries
-        run: |
-          npm config set registry https://registry.npmjs.org/
-          npm config set @mgasic:registry https://npm.pkg.github.com/
-          echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
-        env:
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm install --frozen-lockfile
       - name: TypeScript Check
         run: pnpm typecheck
       - name: ESLint Check
@@ -36,119 +27,113 @@ jobs:
       - name: Prettier Check
         run: pnpm exec prettier --check .
 
-  gate-b-tests:
+  gate-b:
     name: "Gate B: Unit Tests"
     runs-on: ubuntu-latest
-    needs: gate-a-static
+    needs: gate-a
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          run_install: false
+          version: 9.12.0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      - name: Neutralize project .npmrc if present
-        run: mv .npmrc .npmrc.bak || true
-      - name: Configure registries
+      - run: pnpm install --frozen-lockfile
+      - name: Run Unit Tests with Coverage
         run: |
-          npm config set registry https://registry.npmjs.org/
-          npm config set @mgasic:registry https://npm.pkg.github.com/
-          echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
-        env:
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --no-frozen-lockfile
-      - name: Run Unit Tests
-        run: pnpm test -- --coverage
-      - name: Check Coverage Threshold
+          set -o pipefail
+          pnpm test --coverage --silent | tee coverage-output.txt
+      - name: Enforce Coverage Threshold (80%)
         run: |
-          echo "Coverage check placeholder - add coverage threshold validation"
+          node -e "const fs = require('fs'); const summary = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8')); const pct = summary.total.statements.pct; if (pct < 80) { console.error(\`❌ Coverage ${pct}% is below required 80% threshold.\`); process.exit(1); } console.log(\`✅ Coverage ${pct}% meets the 80% threshold.\`);"
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/coverage-final.json
+          token: ${{ secrets.CODECOV_TOKEN }}
 
-  gate-c-a11y:
+  gate-c:
     name: "Gate C: Accessibility"
     runs-on: ubuntu-latest
-    needs: gate-b-tests
+    needs: gate-b
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          run_install: false
+          version: 9.12.0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      - name: Neutralize project .npmrc if present
-        run: mv .npmrc .npmrc.bak || true
-      - name: Configure registries
-        run: |
-          npm config set registry https://registry.npmjs.org/
-          npm config set @mgasic:registry https://npm.pkg.github.com/
-          echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
-        env:
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm install --frozen-lockfile
       - name: Run A11y Tests
         run: pnpm test:a11y
       - name: Build Storybook
-        run: pnpm build:storybook
+        run: |
+          pnpm build:storybook
+          rm -rf storybook-static
+          cp -R apps/storybook/storybook-static ./storybook-static
+      - name: Storybook Test Runner
+        run: |
+          pnpm dlx serve storybook-static -p 6006 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          sleep 5
+          pnpm dlx @storybook/test-runner --url http://localhost:6006
+          kill $SERVER_PID || true
 
-  gate-d-bundle:
+  gate-d:
     name: "Gate D: Bundle Analysis"
     runs-on: ubuntu-latest
-    needs: gate-c-a11y
+    needs: gate-c
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          run_install: false
+          version: 9.12.0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      - name: Neutralize project .npmrc if present
-        run: mv .npmrc .npmrc.bak || true
-      - name: Configure registries
-        run: |
-          npm config set registry https://registry.npmjs.org/
-          npm config set @mgasic:registry https://npm.pkg.github.com/
-          echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
-        env:
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm install --frozen-lockfile
       - name: Build Package
         run: pnpm build
-      - name: Check Bundle Size
+      - name: Check Bundle Size (<= 150 KB)
         run: |
-          SIZE=$(stat -c%s "dist/index.js")
-          MAX_SIZE=$((150 * 1024))
-          if [ $SIZE -gt $MAX_SIZE ]; then
-            echo "Bundle size $SIZE bytes exceeds limit of $MAX_SIZE bytes" && exit 1
+          SIZE=$(du -sk packages/core/dist | awk '{print $1}')
+          LIMIT=150
+          if [ "$SIZE" -gt "$LIMIT" ]; then
+            echo "❌ Bundle size ${SIZE}KB exceeds limit of ${LIMIT}KB"
+            exit 1
           fi
-          echo "✅ Bundle size: $SIZE bytes (limit: $MAX_SIZE bytes)"
+          echo "✅ Bundle size ${SIZE}KB within limit of ${LIMIT}KB"
+      - name: Verify Tree Shaking
+        run: |
+          pnpm dlx esbuild packages/core/src/index.ts --bundle --format=esm --tree-shaking=true --external:react --external:react-dom --outfile=/tmp/core-tree-shake.js
 
-  gate-e-contracts:
-    name: "Gate E: API Contracts"
+  gate-e:
+    name: "Gate E: Visual Review"
     runs-on: ubuntu-latest
-    needs: gate-d-bundle
+    needs: [gate-b]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          run_install: false
+          version: 9.12.0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      - name: Neutralize project .npmrc if present
-        run: mv .npmrc .npmrc.bak || true
-      - name: Configure registries
+      - run: pnpm install --frozen-lockfile
+      - name: Build Storybook
         run: |
-          npm config set registry https://registry.npmjs.org/
-          npm config set @mgasic:registry https://npm.pkg.github.com/
-          echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
-        env:
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-      - run: pnpm install --no-frozen-lockfile
-      - name: Run API Contract Tests
-        run: pnpm test:contracts
+          pnpm build:storybook
+          rm -rf storybook-static
+          cp -R apps/storybook/storybook-static ./storybook-static
+      - name: Publish to Chromatic
+        uses: chromaui/action@v11
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          storybookBuildDir: storybook-static

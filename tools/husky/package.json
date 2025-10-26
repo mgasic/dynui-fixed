@@ -1,0 +1,8 @@
+{
+  "name": "husky",
+  "version": "9.1.6",
+  "type": "module",
+  "bin": {
+    "husky": "./bin/husky.js"
+  }
+}

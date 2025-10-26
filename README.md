@@ -37,6 +37,17 @@ pnpm test
 pnpm typecheck
 ```
 
+### 🪝 Git Hooks
+
+After installing dependencies, set up Husky hooks by running:
+
+```bash
+pnpm install
+pnpm prepare
+```
+
+This installs the pre-commit checks that enforce type safety, linting, formatting, and targeted tests before every commit.
+
 ## 📦 Complete Component Catalog
 
 ### 🧭 Navigation & Structure
