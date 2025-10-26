@@ -24,10 +24,11 @@ export { DynIcon } from '../ui/dyn-icon'
 // Layout
 export { DynBox } from '../ui/dyn-box'
 export { DynContainer } from '../ui/dyn-container'
-export { DynGrid, DynGridItem } from '../ui/dyn-grid'
-export { DynFieldContainer } from '../ui/dyn-field-container'
 export { DynDivider } from '../ui/dyn-divider'
+export { DynFieldContainer } from '../ui/dyn-field-container'
+export { DynGrid, DynGridItem } from '../ui/dyn-grid'
 export { DynModal } from '../ui/dyn-modal'
+export { Separator } from '../ui/separator'
 
 // Navigation
 export { DynBreadcrumb, DynBreadcrumbItem } from '../ui/dyn-breadcrumb'
