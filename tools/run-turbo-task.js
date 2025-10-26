@@ -92,7 +92,7 @@ const isTurboOption = (arg) => {
     return false
   }
 
-  const flag = arg.split('=')[0]
+  const flag = arg.includes('=') ? arg.slice(0, arg.indexOf('=')) : arg
 
   return TURBO_FLAG_PREFIXES.has(flag)
 }
