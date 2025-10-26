@@ -46,10 +46,11 @@ function buildResult(code, options) {
     services: {
       tsTranspile: {
         filePath,
-        outputText: transpiled
+        outputText: transpiled,
+        originalText: code
       }
     },
-    text: code
+    text: transpiled
   }
 }
 
