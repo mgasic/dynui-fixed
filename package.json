@@ -23,6 +23,9 @@
     "build:storybook": "cd apps/storybook && pnpm build:storybook",
     "playground": "pnpm --filter playground dev"
   },
+  "dependencies": {
+    "@dynui/design-tokens": "workspace:*"
+  },
   "devDependencies": {
     "@axe-core/react": "catalog:",
     "@storybook/addon-a11y": "catalog:",
