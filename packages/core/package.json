@@ -23,8 +23,8 @@
     "test:a11y": "vitest run -t a11y --config vitest.config.ts",
     "test:contracts": "tsd",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "eslint src/**/*.{ts,tsx}",
-    "clean": "rm -rf dist"
+    "lint": "eslint --config ../../eslint.config.js \"src/**/*.{ts,tsx}\"",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
   },
   "dependencies": {
     "@dynui/design-tokens": "workspace:*",
