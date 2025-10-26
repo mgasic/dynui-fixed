@@ -8,40 +8,38 @@ describe('DynContainer', () => {
         <div>Content</div>
       </DynContainer>
     )
-    
-    expect(screen.getByTestId('container')).toBeInTheDocument()
+
+    const container = screen.getByTestId('container')
+    expect(container).toBeInTheDocument()
+    expect(container).toHaveClass('dyn-container')
     expect(screen.getByText('Content')).toBeInTheDocument()
   })
 
-  it('applies size classes', () => {
+  it('merges custom class names and styles', () => {
     render(
-      <DynContainer size="sm" data-testid="container">
+      <DynContainer
+        className="custom-class"
+        style={{ backgroundColor: 'rebeccapurple' }}
+        maxWidth={960}
+        data-testid="container"
+      >
         Content
       </DynContainer>
     )
-    
-    expect(screen.getByTestId('container')).toHaveClass('dyn-container--sm')
-  })
 
-  it('handles fluid layout', () => {
-    render(
-      <DynContainer fluid data-testid="container">
-        Content
-      </DynContainer>
-    )
-    
-    expect(screen.getByTestId('container')).toHaveClass('dyn-container--fluid')
-  })
-
-  it('applies spacing', () => {
-    render(
-      <DynContainer p="lg" m="md" data-testid="container">
-        Content
-      </DynContainer>
-    )
-    
     const container = screen.getByTestId('container')
-    expect(container).toHaveClass('dyn-container--p-lg')
-    expect(container).toHaveClass('dyn-container--m-md')
+    expect(container).toHaveClass('dyn-container', 'custom-class')
+    expect(container).toHaveStyle('background-color: rebeccapurple; max-width: 960px;')
+  })
+
+  it('applies spacing props as inline styles', () => {
+    render(
+      <DynContainer p={24} m="1rem" data-testid="container">
+        Content
+      </DynContainer>
+    )
+
+    const container = screen.getByTestId('container')
+    expect(container).toHaveStyle('padding: 24px; margin: 1rem;')
   })
 })
