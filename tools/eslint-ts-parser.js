@@ -10,12 +10,20 @@ const espree = require(espreePath)
 
 const DEFAULT_ECMA_VERSION = 2023
 
+function isTSXFile(filePath) {
+  if (!filePath) return false
+
+  const normalizedPath = filePath.toLowerCase()
+  return normalizedPath.endsWith('.tsx')
+}
+
 function createParserOptions(options = {}) {
   const ecmaVersion = options.ecmaVersion ?? DEFAULT_ECMA_VERSION
   const sourceType = options.sourceType ?? 'module'
+  const jsxEnabled = options.ecmaFeatures?.jsx ?? isTSXFile(options.filePath)
   const ecmaFeatures = {
-    jsx: true,
-    ...(options.ecmaFeatures ?? {})
+    ...(options.ecmaFeatures ?? {}),
+    jsx: jsxEnabled
   }
 
   return {
