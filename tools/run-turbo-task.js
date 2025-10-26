@@ -16,7 +16,27 @@ if (isRunningInsideTurbo) {
 }
 
 const args = process.argv.slice(2)
-const result = spawnSync('turbo', args, {
+
+if (args.length === 0) {
+  console.error('No turbo task specified.')
+  process.exit(1)
+}
+
+const [task, ...rest] = args
+
+const turboArgs = [task]
+
+if (rest.length > 0) {
+  if (rest[0] === '--turbo') {
+    turboArgs.push(...rest.slice(1))
+  } else if (rest.includes('--')) {
+    turboArgs.push(...rest)
+  } else {
+    turboArgs.push('--', ...rest)
+  }
+}
+
+const result = spawnSync('turbo', turboArgs, {
   stdio: 'inherit',
   env: process.env
 })
