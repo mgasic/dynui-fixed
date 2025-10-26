@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { spawnSync } from 'node:child_process'
 import { chmodSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
@@ -37,6 +38,19 @@ function installHooks() {
   }
 
   chmodSync(bootstrapScript, 0o755)
+
+  const result = spawnSync('git', ['config', 'core.hooksPath', '.husky'])
+
+  if (result.status !== 0) {
+    const errorOutput = result.stderr?.toString().trim()
+
+    if (errorOutput) {
+      console.warn(`husky - failed to set Git hooks path: ${errorOutput}`)
+    } else {
+      console.warn('husky - failed to set Git hooks path')
+    }
+  }
+
   console.log('husky - hooks installed')
 }
 
