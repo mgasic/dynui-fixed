@@ -55,10 +55,19 @@ export interface DynRadioGroupProps
 
 export type DynStepperProps = Record<string, unknown>
 
+export interface DynMenuItemConfig {
+  type: 'item' | 'divider'
+  value?: string
+  label?: ReactNode
+  disabled?: boolean
+  shortcut?: ReactNode
+}
+
 export interface DynMenuProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   orientation?: 'horizontal' | 'vertical'
-  onAction?: (key: string) => void
+  onAction?: (value: string | undefined) => void
+  items?: DynMenuItemConfig[]
   children?: ReactNode
   className?: string
   'data-testid'?: string
@@ -66,10 +75,12 @@ export interface DynMenuProps
 
 export interface DynMenuItemProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'onClick'> {
+  item?: DynMenuItemConfig
   action?: string
-  onAction?: (key: string) => void
+  onAction?: (value: string | undefined) => void
   children?: ReactNode
   disabled?: boolean
+  shortcut?: ReactNode
   className?: string
   'data-testid'?: string
   onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
