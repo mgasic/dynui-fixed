@@ -71,10 +71,17 @@ export const DynMenuItem = forwardRef<HTMLElement, DynMenuItemProps>(
     ...props
   }, ref) => {
     if (item?.type === 'divider') {
+      const separatorTestIdProps: { 'data-testid'?: string } = {};
+
+      if (typeof testId === 'string') {
+        separatorTestIdProps['data-testid'] = testId;
+      }
+
       return (
         <Separator
+          {...separatorTestIdProps}
+          ref={ref as React.ForwardedRef<HTMLDivElement>}
           className={classNames('dyn-menu-divider', className)}
-          data-testid={testId}
         />
       );
     }
