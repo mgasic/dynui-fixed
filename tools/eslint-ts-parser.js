@@ -17,7 +17,25 @@ function isTSXFile(filePath) {
   return normalizedPath.endsWith('.tsx')
 }
 
-function createParserOptions(options = {}) {
+function extractFilePath(context) {
+  if (!context) return undefined
+
+  if (typeof context === 'string') return context
+
+  if (typeof context === 'object') {
+    if ('filePath' in context && typeof context.filePath === 'string') {
+      return context.filePath
+    }
+
+    if ('filename' in context && typeof context.filename === 'string') {
+      return context.filename
+    }
+  }
+
+  return undefined
+}
+
+function createParserOptions(options = {}, filePath) {
   const ecmaVersion = options.ecmaVersion ?? DEFAULT_ECMA_VERSION
   const sourceType = options.sourceType ?? 'module'
   const jsxEnabled =
@@ -39,8 +57,8 @@ function createParserOptions(options = {}) {
   }
 }
 
-function transpileTypeScript(code, options = {}) {
-  const fileName = options.filePath ?? (options.ecmaFeatures?.jsx ? 'inline.tsx' : 'inline.ts')
+function transpileTypeScript(code, options = {}, filePath) {
+  const fileName = filePath ?? options.filePath ?? (options.ecmaFeatures?.jsx ? 'inline.tsx' : 'inline.ts')
   const compilerOptions = {
     target: ts.ScriptTarget.ES2022,
     module: ts.ModuleKind.ESNext,
