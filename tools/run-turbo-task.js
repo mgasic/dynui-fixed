@@ -29,10 +29,18 @@ const turboArgs = [task]
 if (rest.length > 0) {
   if (rest[0] === '--turbo') {
     turboArgs.push(...rest.slice(1))
-  } else if (rest.includes('--')) {
-    turboArgs.push(...rest)
   } else {
-    turboArgs.push('--', ...rest)
+    const separatorIndex = rest.indexOf('--')
+
+    if (separatorIndex === -1) {
+      turboArgs.push(...rest)
+    } else {
+      turboArgs.push(
+        ...rest.slice(0, separatorIndex),
+        '--',
+        ...rest.slice(separatorIndex + 1)
+      )
+    }
   }
 }
 
