@@ -13,35 +13,25 @@ describe('DynContainer', () => {
     expect(screen.getByText('Content')).toBeInTheDocument()
   })
 
-  it('applies size classes', () => {
+  it('applies max width style when provided', () => {
     render(
-      <DynContainer size="sm" data-testid="container">
+      <DynContainer maxWidth={640} data-testid="container">
         Content
       </DynContainer>
     )
-    
-    expect(screen.getByTestId('container')).toHaveClass('dyn-container--sm')
+
+    expect(screen.getByTestId('container')).toHaveStyle({ maxWidth: '640px' })
   })
 
-  it('handles fluid layout', () => {
+  it('applies spacing styles for padding and margin', () => {
     render(
-      <DynContainer fluid data-testid="container">
+      <DynContainer p={24} m="3rem" data-testid="container">
         Content
       </DynContainer>
     )
-    
-    expect(screen.getByTestId('container')).toHaveClass('dyn-container--fluid')
-  })
 
-  it('applies spacing', () => {
-    render(
-      <DynContainer p="lg" m="md" data-testid="container">
-        Content
-      </DynContainer>
-    )
-    
     const container = screen.getByTestId('container')
-    expect(container).toHaveClass('dyn-container--p-lg')
-    expect(container).toHaveClass('dyn-container--m-md')
+    expect(container).toHaveStyle({ padding: '24px' })
+    expect(container).toHaveStyle({ margin: '3rem' })
   })
 })
