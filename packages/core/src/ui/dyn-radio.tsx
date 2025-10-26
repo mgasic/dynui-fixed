@@ -6,6 +6,7 @@ import {
   isValidElement,
   MutableRefObject,
   useCallback,
+  useEffect,
   useRef
 } from 'react'
 import type { InputHTMLAttributes } from 'react'
@@ -94,15 +95,20 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
     'data-testid': testId,
     ...props
   }, ref) => {
-    const orientationValue = orientation ?? 'vertical';
+    const orientationValue = orientation ?? 'vertical'
     const { containerRef } = useArrowNavigation({
-      orientation: orientation ?? 'vertical',
+      orientation: orientationValue,
       selector: 'input[type="radio"]:not(:disabled)'
     })
 
     const fallbackNameRef = useRef(
       name ?? `radio-group-${Math.random().toString(36).slice(2, 11)}`
     )
+    useEffect(() => {
+      if (name) {
+        fallbackNameRef.current = name
+      }
+    }, [name])
     const groupName = name ?? fallbackNameRef.current
 
     const setGroupRef = useCallback(
@@ -125,11 +131,6 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
       }
     }
 
-    const groupName = useMemo(
-      () => name ?? `radio-group-${Math.random().toString(36).slice(2, 11)}`,
-      [name]
-    );
-
     return (
       <div
         {...props}
@@ -141,7 +142,7 @@ export const DynRadioGroup = forwardRef<HTMLDivElement, DynRadioGroupProps>(
         data-testid={testId}
         className={classNames(
           'dyn-radio-group',
-          orientation ? `dyn-radio-group--${orientation}` : undefined,
+          orientationValue ? `dyn-radio-group--${orientationValue}` : undefined,
           disabled ? 'dyn-radio-group--disabled' : undefined,
           typeof className === 'string' ? className : undefined
         )}
