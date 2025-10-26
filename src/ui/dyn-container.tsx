@@ -61,7 +61,9 @@ export const DynContainer = forwardRef<HTMLDivElement, DynContainerProps>(
         className={classNames(
           'dyn-container',
           size && SIZE_CLASS_VALUES.has(size) ? `dyn-container--${size}` : undefined,
-          typeof maxWidth === 'string' && MAX_WIDTH_CLASS_VALUES.has(maxWidth)
+          !fluid &&
+          typeof maxWidth === 'string' &&
+          MAX_WIDTH_CLASS_VALUES.has(maxWidth)
             ? `dyn-container--max-${maxWidth}`
             : undefined,
           fluid && 'dyn-container--fluid',
