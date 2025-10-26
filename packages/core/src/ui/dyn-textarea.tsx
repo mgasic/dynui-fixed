@@ -34,16 +34,13 @@ export const DynTextArea = forwardRef<HTMLTextAreaElement, DynTextAreaProps>(
     },
     ref
   ) => {
-    const controlOptions: UseControlledOptions<string> = {
-      onChange,
-      defaultValue: defaultValue ?? ''
+    const controlledOptions: UseControlledOptions<string> = {
+      ...(typeof value === 'string' ? { value } : {}),
+      defaultValue: typeof defaultValue === 'string' ? defaultValue : '',
+      ...(onChange ? { onChange: (newValue) => onChange(newValue) } : {})
     }
 
-    if (value !== undefined) {
-      controlOptions.value = value
-    }
-
-    const { value: currentValue, setValue } = useControlled<string>(controlOptions)
+    const { value: currentValue, setValue } = useControlled(controlledOptions)
 
     const textareaClasses = classNames(
       'dyn-textarea',

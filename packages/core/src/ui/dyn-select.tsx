@@ -52,55 +52,49 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
     const listboxRef = useRef<HTMLUListElement>(null)
     
     // Controlled/uncontrolled patterns
-    type SelectValue = string | string[]
-    const selectControlOptions: UseControlledOptions<SelectValue> = {
-      onChange: onChange as ((val: SelectValue) => void) | undefined
+    const controlOptions: UseControlledOptions<string | string[]> = {
+      defaultValue: multiple
+        ? (Array.isArray(defaultValue) ? defaultValue : [])
+        : (typeof defaultValue === 'string' ? defaultValue : '')
     }
 
-    if (multiple) {
-      if (Array.isArray(value)) {
-        selectControlOptions.value = value
-      }
-      if (Array.isArray(defaultValue)) {
-        selectControlOptions.defaultValue = defaultValue
-      }
-      if (selectControlOptions.defaultValue === undefined) {
-        selectControlOptions.defaultValue = []
-      }
-    } else {
-      if (typeof value === 'string') {
-        selectControlOptions.value = value
-      }
-      if (typeof defaultValue === 'string') {
-        selectControlOptions.defaultValue = defaultValue
-      }
-      if (selectControlOptions.defaultValue === undefined) {
-        selectControlOptions.defaultValue = ''
-      }
+    if (onChange) {
+      controlOptions.onChange = (newValue) => onChange(newValue)
     }
 
-    const { value: currentValue, setValue } = useControlled<SelectValue>(selectControlOptions)
+    if (value !== undefined) {
+      controlOptions.value = multiple
+        ? (Array.isArray(value) ? value : [])
+        : (typeof value === 'string' ? value : '')
+    }
+
+    const { value: rawValue, setValue: setRawValue } = useControlled(controlOptions)
+
+    const currentValue = multiple
+      ? (Array.isArray(rawValue) ? rawValue : [])
+      : (typeof rawValue === 'string' ? rawValue : '')
+
+    const setValue = (next: string | string[]) => {
+      setRawValue(next)
+    }
 
     const openControlOptions: UseControlledOptions<boolean> = {
-      defaultValue: false,
-      onChange: onOpenChange
+      defaultValue: false
     }
-
     if (typeof controlledOpen === 'boolean') {
       openControlOptions.value = controlledOpen
     }
-
+    if (typeof onOpenChange === 'function') {
+      openControlOptions.onChange = onOpenChange
+    }
     const { value: isOpen, setValue: setIsOpen } = useControlled<boolean>(openControlOptions)
     
     const [searchQuery, setSearchQuery] = useState('')
     const [focusedIndex, setFocusedIndex] = useState(-1)
 
     // Process options from props or children
-    const processedOptions: SelectOption[] = useMemo(
-      () => options || [],
-      [options]
-    )
-
+    const processedOptions: SelectOption[] = useMemo(() => options || [], [options])
+    
     // Filter options if searchable
     const filteredOptions = useMemo(() => {
       if (!searchable) return processedOptions
@@ -295,6 +289,7 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
           value={multiple
             ? JSON.stringify(Array.isArray(currentValue) ? currentValue : [])
             : (typeof currentValue === 'string' ? currentValue : '')}
+          required={required}
         />
       </div>
     )
@@ -306,12 +301,7 @@ DynSelect.displayName = 'DynSelect'
 /**
  * DynSelectOption - Individual option component for children pattern
  */
-export function DynSelectOption({
-  value: _value,
-  disabled: _disabled = false,
-  children: _children,
-  description: _description
-}: DynSelectOptionProps) {
+export function DynSelectOption(_props: DynSelectOptionProps) {
   // This is used when DynSelect receives children instead of options prop
   // The parent DynSelect will process these children to build the options array
   return null // This component is used for type checking and API consistency

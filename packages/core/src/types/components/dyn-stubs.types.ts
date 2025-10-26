@@ -1,11 +1,10 @@
 import type {
   ButtonHTMLAttributes,
-  ComponentPropsWithoutRef,
-  ElementType,
+  CSSProperties,
   HTMLAttributes,
   InputHTMLAttributes,
-  TableHTMLAttributes,
   ReactNode,
+  TableHTMLAttributes,
   ChangeEvent,
   FocusEvent,
   MouseEventHandler
@@ -30,21 +29,16 @@ export interface DynCheckboxProps {
 }
 
 export interface DynRadioProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size' | 'children'> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
   value: string
-  name?: string
-  checked?: boolean
-  defaultChecked?: boolean
-  disabled?: boolean
   size?: 'sm' | 'md' | 'lg'
-  className?: string
   children?: ReactNode
   onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void
   'data-testid'?: string
 }
 
 export interface DynRadioGroupProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'children'> {
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value?: string
   defaultValue?: string
   name?: string
@@ -147,7 +141,7 @@ export interface DynTableColumn {
   sortable?: boolean
 }
 
-export interface DynTableProps extends Omit<TableHTMLAttributes<HTMLTableElement>, 'onSort'> {
+export interface DynTableProps extends TableHTMLAttributes<HTMLTableElement> {
   columns: DynTableColumn[]
   data: Array<Record<string, ReactNode>>
   sortable?: boolean
@@ -168,7 +162,7 @@ export interface TreeNode {
   children?: TreeNode[]
 }
 
-export interface DynTreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onSelect'> {
+export interface DynTreeViewProps extends HTMLAttributes<HTMLDivElement> {
   data?: TreeNode[]
   selectedNode?: string
   expandedNodes?: string[]
@@ -178,7 +172,7 @@ export interface DynTreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, '
   'data-testid'?: string
 }
 
-export interface DynTreeNodeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onToggle'> {
+export interface DynTreeNodeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   node: TreeNode
   level?: number
   expanded?: boolean
@@ -186,15 +180,17 @@ export interface DynTreeNodeProps extends Omit<HTMLAttributes<HTMLDivElement>, '
   hasChildren?: boolean
   onToggle?: () => void
   onSelect?: () => void
+  'data-testid'?: string
 }
 
-export type DynBoxProps<T extends ElementType = 'div'> = {
-  as?: T
+export interface DynBoxProps extends HTMLAttributes<HTMLElement> {
+  as?: keyof JSX.IntrinsicElements
   p?: number | string
   m?: number | string
   gap?: number | string
+  style?: CSSProperties
   'data-testid'?: string
-} & Omit<ComponentPropsWithoutRef<T>, 'as' | 'p' | 'm' | 'gap'>
+}
 
 export interface DynContainerProps {
   as?: keyof JSX.IntrinsicElements
@@ -211,12 +207,14 @@ export interface DynGridProps extends HTMLAttributes<HTMLDivElement> {
   columns?: number | string
   rows?: number | string
   gap?: number | string
+  style?: CSSProperties
   'data-testid'?: string
 }
 
 export interface DynGridItemProps extends HTMLAttributes<HTMLDivElement> {
   colSpan?: number | string
   rowSpan?: number | string
+  style?: CSSProperties
   'data-testid'?: string
 }
 

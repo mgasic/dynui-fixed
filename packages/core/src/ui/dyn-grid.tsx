@@ -1,10 +1,25 @@
-import { forwardRef } from 'react';
-import type { CSSProperties } from 'react';
-import type { DynGridProps, DynGridItemProps } from '../types/components/dyn-grid.types';
-import { getSpacingStyles, classNames } from '../utils';
+import type { CSSProperties, HTMLAttributes } from 'react'
+import { forwardRef } from 'react'
+import type { DynGridProps, DynGridItemProps } from '../types/components/dyn-grid.types'
+import { getSpacingStyles, classNames } from '../utils'
+
+function isPositiveNumber(value: number | string | undefined): value is number | string {
+  if (value === undefined) return false
+  if (typeof value === 'number') {
+    return Number.isFinite(value) && value > 0
+  }
+
+  const numeric = Number(value)
+  return Number.isFinite(numeric) && numeric > 0
+}
+
+function resolveStyle(style: DynGridProps['style']): CSSProperties | undefined {
+  if (!style) return undefined
+  return style as CSSProperties
+}
 
 export const DynGrid = forwardRef<HTMLDivElement, DynGridProps>(
-  ({ 
+  ({
     columns,
     rows,
     gap,
@@ -12,12 +27,13 @@ export const DynGrid = forwardRef<HTMLDivElement, DynGridProps>(
     className,
     style,
     'data-testid': testId,
-    ...props 
+    ...props
   }, ref) => {
-    // Filter out undefined values for exactOptionalPropertyTypes
-    const spacingStyles = getSpacingStyles(gap !== undefined ? { gap } : {});
+    const spacingStyles = getSpacingStyles({
+      ...(gap !== undefined ? { gap } : {})
+    })
 
-    const combinedStyle: CSSProperties = {
+    const gridStyles: CSSProperties = {
       ...spacingStyles,
       ...(columns !== undefined
         ? {
@@ -31,72 +47,77 @@ export const DynGrid = forwardRef<HTMLDivElement, DynGridProps>(
               typeof rows === 'number' ? `repeat(${rows}, 1fr)` : rows
           }
         : {}),
-      ...(style ?? {})
-    };
+      ...resolveStyle(style)
+    }
+
+    const columnModifier = isPositiveNumber(columns)
+      ? `dyn-grid--columns-${columns}`
+      : undefined
+    const rowModifier = isPositiveNumber(rows)
+      ? `dyn-grid--rows-${rows}`
+      : undefined
 
     return (
       <div
-        {...props}
+        {...props as HTMLAttributes<HTMLDivElement>}
         ref={ref}
         className={classNames(
           'dyn-grid',
-          columns !== undefined && columns !== null && Number(columns) > 0
-            ? `dyn-grid--columns-${columns}`
-            : undefined,
-          rows !== undefined && rows !== null && Number(rows) > 0
-            ? `dyn-grid--rows-${rows}`
-            : undefined,
-          className
+          columnModifier,
+          rowModifier,
+          typeof className === 'string' ? className : undefined
         )}
-        style={combinedStyle}
+        style={gridStyles}
         data-testid={testId}
       >
         {children}
       </div>
-    );
+    )
   }
-);
+)
 
-DynGrid.displayName = 'DynGrid';
+DynGrid.displayName = 'DynGrid'
 
 export const DynGridItem = forwardRef<HTMLDivElement, DynGridItemProps>(
-  ({ 
+  ({
     colSpan,
     rowSpan,
     children,
     className,
     'data-testid': testId,
-    ...props 
+    style,
+    ...props
   }, ref) => {
+    const gridColumn = isPositiveNumber(colSpan)
+      ? `span ${colSpan}`
+      : undefined
+    const gridRow = isPositiveNumber(rowSpan)
+      ? `span ${rowSpan}`
+      : undefined
+
+    const itemStyle: CSSProperties = {
+      ...(gridColumn ? { gridColumn } : {}),
+      ...(gridRow ? { gridRow } : {}),
+      ...resolveStyle(style as DynGridItemProps['style'])
+    }
+
     return (
       <div
-        {...props}
+        {...props as HTMLAttributes<HTMLDivElement>}
         ref={ref}
         className={classNames(
           'dyn-grid-item',
-          colSpan !== undefined && colSpan !== null && Number(colSpan) > 0
-            ? `dyn-grid-item--col-span-${colSpan}`
-            : undefined,
-          rowSpan !== undefined && rowSpan !== null && Number(rowSpan) > 0
-            ? `dyn-grid-item--row-span-${rowSpan}`
-            : undefined,
-          className
+          isPositiveNumber(colSpan) ? `dyn-grid-item--col-span-${colSpan}` : undefined,
+          isPositiveNumber(rowSpan) ? `dyn-grid-item--row-span-${rowSpan}` : undefined,
+          typeof className === 'string' ? className : undefined
         )}
-        style={{
-          ...(colSpan !== undefined && colSpan !== null && Number(colSpan) > 0
-            ? { gridColumn: `span ${colSpan}` }
-            : {}),
-          ...(rowSpan !== undefined && rowSpan !== null && Number(rowSpan) > 0
-            ? { gridRow: `span ${rowSpan}` }
-            : {}),
-          ...(props.style as CSSProperties | undefined)
-        }}
+        style={itemStyle}
         data-testid={testId}
       >
         {children}
       </div>
-    );
+    )
   }
-);
+)
 
-DynGridItem.displayName = 'DynGridItem';
+DynGridItem.displayName = 'DynGridItem'

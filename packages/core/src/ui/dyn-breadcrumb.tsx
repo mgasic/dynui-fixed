@@ -1,4 +1,4 @@
-import type { ElementType } from 'react'
+import type { MouseEvent as ReactMouseEvent, MouseEventHandler } from 'react'
 import type { DynBreadcrumbProps, DynBreadcrumbItemProps } from '../types/components/dyn-breadcrumb.types'
 import { classNames } from '../utils'
 
@@ -51,8 +51,8 @@ export function DynBreadcrumbItem({
 }: DynBreadcrumbItemProps) {
   const cls = classNames(
     'dyn-breadcrumb-item',
-    current && 'dyn-breadcrumb-item--current',
-    disabled && 'dyn-breadcrumb-item--disabled'
+    current ? 'dyn-breadcrumb-item--current' : undefined,
+    disabled ? 'dyn-breadcrumb-item--disabled' : undefined
   )
 
   const Component = (href ? 'a' : As) as ElementType
@@ -72,7 +72,27 @@ export function DynBreadcrumbItem({
     componentProps.onClick = onClick
   }
 
+  const handleClick = (event: ReactMouseEvent<HTMLElement>) => {
+    if (disabled) {
+      event.preventDefault()
+      event.stopPropagation()
+      return
+    }
+
+    if (typeof onClick === 'function') {
+      onClick(event)
+    }
+  }
+
   return (
-    <Component {...componentProps} />
+    <Component
+      className={cls}
+      href={href}
+      onClick={handleClick as MouseEventHandler}
+      aria-current={current ? (ariaCurrent || 'page') : undefined}
+      data-testid={dataTestId}
+    >
+      {children}
+    </Component>
   )
 }

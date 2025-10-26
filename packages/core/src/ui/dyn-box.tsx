@@ -15,23 +15,18 @@ export function DynBox<T extends ElementType = 'div'>({
 }: DynBoxProps<T>) {
   const As = (as ?? 'div') as ElementType
   const cls = classNames('dyn-box', className)
-  const spacing = {
+  const spacingStyles = getSpacingStyles({
     ...(p !== undefined ? { p } : {}),
     ...(m !== undefined ? { m } : {}),
     ...(gap !== undefined ? { gap } : {})
-  }
-  const spacingStyles = getSpacingStyles(spacing)
-  const mergedStyle = {
-    ...spacingStyles,
-    ...(style as Record<string, unknown> | undefined)
-  }
+  })
 
   return (
     <As
       className={cls}
-      style={mergedStyle as typeof spacingStyles}
+      style={spacingStyles}
       data-testid={dataTestId}
-      {...props}
+      {...(props as Record<string, unknown>)}
     >
       {children}
     </As>
