@@ -7,33 +7,34 @@ const meta: Meta<typeof DynContainer> = {
   parameters: {
     docs: {
       description: {
-        component: 'A responsive container component that provides consistent spacing and max-width constraints.'
+        component: 'A responsive container component that provides consistent max-width constraints.'
       }
     }
   },
   argTypes: {
     maxWidth: {
       control: { type: 'text' },
-      description: 'Maximum width of the container. Accepts numbers (pixels) or CSS length values.'
+      description: 'Sets a maximum width for the container (numbers are treated as pixels).'
     },
-    p: {
+    className: {
       control: { type: 'text' },
-      description: 'Padding applied to the container. Accepts numbers (pixels) or CSS length values.'
+      description: 'Additional class names appended to the container.'
     },
-    m: {
-      control: { type: 'text' },
-      description: 'Margin applied to the container. Accepts numbers (pixels) or CSS length values.'
+    style: {
+      control: { type: 'object' },
+      description: 'Inline styles merged onto the container element.'
     }
   }
 }
 
 export default meta
+
 type Story = StoryObj<typeof meta>
 
 const SampleContent = () => (
   <div style={{ background: '#f0f0f0', padding: '2rem', borderRadius: '0.5rem' }}>
     <h2>Container Content</h2>
-    <p>This content is wrapped in a DynContainer component that provides responsive width constraints and spacing.</p>
+    <p>This content is wrapped in a DynContainer component that provides responsive width constraints.</p>
   </div>
 )
 
@@ -54,12 +55,12 @@ export const WithPadding: Story = {
   }
 }
 
-export const WithMargin: Story = {
+export const WithCustomStyles: Story = {
   args: {
-    m: '1.5rem',
+    style: { padding: '2rem', margin: '2rem auto', background: '#f5f5f5' },
     children: (
-      <div style={{ background: '#e1f5fe', padding: '1rem' }}>
-        Container with outer margin applied via props
+      <div style={{ minHeight: '200px' }}>
+        Container with inline spacing applied via the style prop.
       </div>
     )
   }
