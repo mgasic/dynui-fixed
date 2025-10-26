@@ -41,6 +41,7 @@
     "eslint-plugin-react": "catalog:",
     "jsdom": "catalog:",
     "prettier": "catalog:",
+    "rimraf": "^6.0.1",
     "storybook": "catalog:",
     "tsd": "catalog:",
     "tsup": "catalog:",
