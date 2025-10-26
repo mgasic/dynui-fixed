@@ -46,6 +46,13 @@ export const DynContainer = forwardRef<HTMLDivElement, DynContainerProps>(
       maxWidth !== undefined &&
       !(typeof maxWidth === 'string' && MAX_WIDTH_CLASS_VALUES.has(maxWidth));
 
+    const maxWidthClass =
+      !fluid &&
+      typeof maxWidth === 'string' &&
+      MAX_WIDTH_CLASS_VALUES.has(maxWidth)
+        ? `dyn-container--max-${maxWidth}`
+        : undefined;
+
     if (shouldInlineMaxWidth) {
       inlineStyles.maxWidth =
         typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth;
@@ -62,11 +69,7 @@ export const DynContainer = forwardRef<HTMLDivElement, DynContainerProps>(
         className={classNames(
           'dyn-container',
           size && SIZE_CLASS_VALUES.has(size) ? `dyn-container--${size}` : undefined,
-          !fluid &&
-          typeof maxWidth === 'string' &&
-          MAX_WIDTH_CLASS_VALUES.has(maxWidth)
-            ? `dyn-container--max-${maxWidth}`
-            : undefined,
+          maxWidthClass,
           fluid && 'dyn-container--fluid',
           ...spacingClasses,
           className
