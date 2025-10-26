@@ -1,12 +1,23 @@
 # @dynui/design-tokens
 
-Phase 1 introduces the design tokens package as the single source of truth for
-colour, spacing and typography primitives.  The current release exposes a small
-but representative token set through TypeScript exports so other workspaces can
-reference consistent values while the full generator pipeline is being defined.
+Phase 3 formalises the design tokens workspace as the canonical source of
+spacing, colour, typography, radius and shadow primitives. Packages within the
+monorepo (and eventual external consumers) import these tokens to ensure a
+consistent visual language.
 
-The `build/` folder contains a minimal CSS variable helper that mirrors the
-approach described in the enhanced specification.  Run `pnpm build:css` inside
-this workspace to execute the stub generator.  Future tasks will connect the
-helper to the publishing workflow so that consumers can import a generated CSS
-file alongside the typed tokens.
+- **Typed exports** – Each token group lives in its own module so TypeScript can
+  infer literal values and downstream packages can compose the groups they need.
+- **CSS variables build** – `pnpm build:css` now uses the same token definitions
+  to emit a `dist/tokens.css` file with normalised custom properties prefixed by
+  `--dyn-`.
+- **Testing** – A lightweight Vitest suite verifies the presence of key tokens
+  and the structure of the generated CSS output.
+
+Run the following commands while developing:
+
+```bash
+pnpm install
+pnpm build # emits library bundles via tsup
+pnpm build:css # writes dist/tokens.css from the shared token map
+pnpm test # validates token integrity and CSS variable generation
+```
