@@ -22,7 +22,7 @@
     "build:css": "pnpm run build && node ./build/generate-css-variables.mjs",
     "test": "cd ../.. && vitest run --config packages/design-tokens/vitest.config.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "eslint --config ../../tools/eslint-config/react.cjs 'src/**/*.{ts,tsx}'"
+    "lint": "eslint --config ../../tools/eslint-config/react.cjs --ext .ts,.tsx src"
   },
   "devDependencies": {
     "@dynui/build-config": "workspace:*",

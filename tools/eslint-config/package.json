@@ -10,13 +10,14 @@
   },
   "files": ["index.cjs", "react.cjs", "README.md"],
   "peerDependencies": {
-    "eslint": ">=9",
-    "eslint-config-prettier": ">=9",
-    "eslint-plugin-react": ">=7"
+    "eslint": ">=9"
   },
-  "devDependencies": {
-    "eslint": "catalog:",
+  "dependencies": {
+    "@eslint/js": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-react": "catalog:"
+  },
+  "devDependencies": {
+    "eslint": "catalog:"
   }
 }
