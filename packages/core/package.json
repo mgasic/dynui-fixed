@@ -24,7 +24,7 @@
     "test:contracts": "tsd",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint --config ../../eslint.config.js \"src/**/*.{ts,tsx}\"",
-    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
+    "clean": "rimraf dist"
   },
   "dependencies": {
     "@dynui/design-tokens": "workspace:*",
@@ -49,11 +49,13 @@
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:",
-    "vitest-axe": "catalog:"
+    "vitest-axe": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "peerDependenciesMeta": {
     "react": {
