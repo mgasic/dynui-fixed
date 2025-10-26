@@ -5,6 +5,7 @@ import type {
   DynMenuItemConfig
 } from '../types/components/dyn-menu.types';
 import { classNames } from '../utils';
+import { Separator } from './separator';
 
 export const DynMenu = forwardRef<HTMLDivElement, DynMenuProps>(
   ({
@@ -71,13 +72,9 @@ export const DynMenuItem = forwardRef<HTMLElement, DynMenuItemProps>(
   }, ref) => {
     if (item?.type === 'divider') {
       return (
-        <div
-          {...props}
-          ref={ref as React.ForwardedRef<HTMLDivElement>}
-          role="separator"
+        <Separator
           className={classNames('dyn-menu-divider', className)}
           data-testid={testId}
-          aria-hidden="true"
         />
       );
     }
