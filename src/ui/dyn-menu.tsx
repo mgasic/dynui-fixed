@@ -37,7 +37,7 @@ export const DynMenu = forwardRef<HTMLDivElement, DynMenuProps>(
         ref={ref}
         role="menu"
         className={classNames('dyn-menu', `dyn-menu--${orientation}`, className)}
-        data-testid={testId}
+        {...(testId !== undefined ? { 'data-testid': testId } : {})}
       >
         {mappedItems}
         {React.Children.map(children, (child, index) => {
@@ -77,7 +77,7 @@ export const DynMenuItem = forwardRef<HTMLElement, DynMenuItemProps>(
           ref={ref as React.ForwardedRef<HTMLDivElement>}
           role="separator"
           className={classNames('dyn-menu-divider', className)}
-          data-testid={testId}
+          {...(testId !== undefined ? { 'data-testid': testId } : {})}
           aria-hidden="true"
         />
       );
@@ -107,7 +107,7 @@ export const DynMenuItem = forwardRef<HTMLElement, DynMenuItemProps>(
         disabled={disabled}
         className={classNames('dyn-menu-item', disabled && 'dyn-menu-item--disabled', className)}
         onClick={handleClick}
-        data-testid={testId}
+        {...(testId !== undefined ? { 'data-testid': testId } : {})}
       >
         {label}
         {shortcut ? <span className="dyn-menu-item__shortcut">{shortcut}</span> : null}
