@@ -42,6 +42,7 @@ export const DynContainer = forwardRef<HTMLDivElement, DynContainerProps>(
       : {};
 
     const shouldInlineMaxWidth =
+      !fluid &&
       maxWidth !== undefined &&
       !(typeof maxWidth === 'string' && MAX_WIDTH_CLASS_VALUES.has(maxWidth));
 
