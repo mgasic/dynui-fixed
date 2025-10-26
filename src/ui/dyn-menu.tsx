@@ -56,7 +56,7 @@ export const DynMenu = forwardRef<HTMLDivElement, DynMenuProps>(
         ref={ref}
         role="menu"
         className={classNames('dyn-menu', `dyn-menu--${orientation}`, className)}
-        data-testid={testId}
+        {...(testId !== undefined ? { 'data-testid': testId } : {})}
       >
         {mappedItems}
         {React.Children.map(children, (child, index) => {
