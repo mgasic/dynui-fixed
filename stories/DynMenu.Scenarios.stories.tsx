@@ -11,10 +11,13 @@ type Story = StoryObj<typeof meta>
 
 export const Horizontal: Story = {
   render: () => (
-    <DynMenu orientation="horizontal">
-      <DynMenuItem item={{ type: 'item', value: 'home', label: 'Home' }} />
-      <DynMenuItem item={{ type: 'item', value: 'about', label: 'About' }} />
-      <DynMenuItem item={{ type: 'item', value: 'contact', label: 'Contact' }} />
-    </DynMenu>
+    <DynMenu
+      orientation="horizontal"
+      items={[
+        { type: 'item', value: 'home', label: 'Home' },
+        { type: 'item', value: 'about', label: 'About' },
+        { type: 'item', value: 'contact', label: 'Contact' },
+      ]}
+    />
   )
 }

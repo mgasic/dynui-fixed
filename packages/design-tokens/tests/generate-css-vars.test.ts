@@ -7,6 +7,10 @@ describe('design tokens package', () => {
   it('exposes semantic design tokens for downstream consumers', () => {
     expect(colors.semantic.info[500]).toBe('#3B82F6')
     expect(spacing.md).toBe('1rem')
+    expect(spacing['2']).toBe(spacing.sm)
+    expect(spacing['6']).toBe(spacing.lg)
+    expect(spacing['0.5']).toBe(spacing.xxs)
+    expect(spacing['1.5']).toBe('0.375rem')
     expect(typography.fonts.sans).toContain('Inter')
   })
 

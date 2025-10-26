@@ -1,12 +1,10 @@
 import { createRequire } from 'node:module'
 import path from 'node:path'
-import ts from 'typescript'
-
 const require = createRequire(import.meta.url)
 const eslintPackagePath = require.resolve('eslint/package.json')
 const eslintDir = path.dirname(eslintPackagePath)
-const espreePath = require.resolve('espree', { paths: [eslintDir] })
-const espree = require(espreePath)
+const tsParserPath = require.resolve('@typescript-eslint/parser', { paths: [eslintDir] })
+const tsParser = require(tsParserPath)
 
 const DEFAULT_ECMA_VERSION = 2023
 
@@ -17,10 +15,30 @@ function isTSXFile(filePath) {
   return normalizedPath.endsWith('.tsx')
 }
 
-function createParserOptions(options = {}) {
+function extractFilePath(context) {
+  if (!context) return undefined
+
+  if (typeof context === 'string') return context
+
+  if (typeof context === 'object') {
+    if ('filePath' in context && typeof context.filePath === 'string') {
+      return context.filePath
+    }
+
+    if ('filename' in context && typeof context.filename === 'string') {
+      return context.filename
+    }
+  }
+
+  return undefined
+}
+
+function createParserOptions(options = {}, filePath) {
   const ecmaVersion = options.ecmaVersion ?? DEFAULT_ECMA_VERSION
   const sourceType = options.sourceType ?? 'module'
-  const jsxEnabled = options.ecmaFeatures?.jsx ?? isTSXFile(options.filePath)
+  const resolvedFilePath = filePath ?? options.filePath
+  const jsxEnabled =
+    options.ecmaFeatures?.jsx ?? (resolvedFilePath ? isTSXFile(resolvedFilePath) : false)
   const ecmaFeatures = {
     ...(options.ecmaFeatures ?? {}),
     jsx: jsxEnabled
@@ -38,43 +56,23 @@ function createParserOptions(options = {}) {
   }
 }
 
-function transpileTypeScript(code, options = {}) {
-  const fileName = options.filePath ?? (options.ecmaFeatures?.jsx ? 'inline.tsx' : 'inline.ts')
-  const compilerOptions = {
-    target: ts.ScriptTarget.ES2022,
-    module: ts.ModuleKind.ESNext,
-    jsx: options.ecmaFeatures?.jsx ? ts.JsxEmit.Preserve : ts.JsxEmit.None,
-    useDefineForClassFields: true,
-    importsNotUsedAsValues: ts.ImportsNotUsedAsValues.Remove,
-    preserveValueImports: true
-  }
-
-  return ts.transpileModule(code, {
-    fileName,
-    compilerOptions,
-    reportDiagnostics: false
-  }).outputText
-}
-
 export function parse(code, options = {}) {
   return parseForESLint(code, options).ast
 }
 
 export function parseForESLint(code, options = {}) {
-  const parserOptions = createParserOptions(options)
-  const transpiled = transpileTypeScript(code, parserOptions)
-  const ast = espree.parse(transpiled, parserOptions)
-
-  return {
-    ast,
-    services: {
-      transpiledText: transpiled
-    },
-    scopeManager: null,
-    visitorKeys: null,
-    tokens: ast.tokens,
-    comments: ast.comments
+  const baseParserOptions = createParserOptions(options)
+  const parserOptions = {
+    ...options,
+    ...baseParserOptions,
+    ecmaFeatures: baseParserOptions.ecmaFeatures,
+    loc: true,
+    range: true,
+    tokens: true,
+    comment: true
   }
+
+  return tsParser.parseForESLint(code, parserOptions)
 }
 
 export default {
