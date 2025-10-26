@@ -10,3 +10,6 @@ packages/core/dist
 .turbo/turbo-build.log
 .turbo/daemon
 packages/core/dist/index.cjs
+apps/playground/.turbo/turbo-build.log
+apps/playground/dist
+packages/core/.turbo
