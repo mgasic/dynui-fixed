@@ -10,12 +10,40 @@ const espree = require(espreePath)
 
 const DEFAULT_ECMA_VERSION = 2023
 
-function createParserOptions(options = {}) {
+function isTSXFile(filePath) {
+  if (!filePath) return false
+
+  const normalizedPath = filePath.toLowerCase()
+  return normalizedPath.endsWith('.tsx')
+}
+
+function extractFilePath(context) {
+  if (!context) return undefined
+
+  if (typeof context === 'string') return context
+
+  if (typeof context === 'object') {
+    if ('filePath' in context && typeof context.filePath === 'string') {
+      return context.filePath
+    }
+
+    if ('filename' in context && typeof context.filename === 'string') {
+      return context.filename
+    }
+  }
+
+  return undefined
+}
+
+function createParserOptions(options = {}, filePath) {
   const ecmaVersion = options.ecmaVersion ?? DEFAULT_ECMA_VERSION
   const sourceType = options.sourceType ?? 'module'
+  const resolvedFilePath = filePath ?? options.filePath
+  const jsxEnabled =
+    options.ecmaFeatures?.jsx ?? (resolvedFilePath ? isTSXFile(resolvedFilePath) : false)
   const ecmaFeatures = {
-    jsx: true,
-    ...(options.ecmaFeatures ?? {})
+    ...(options.ecmaFeatures ?? {}),
+    jsx: jsxEnabled
   }
 
   return {
@@ -53,8 +81,9 @@ export function parse(code, options = {}) {
 }
 
 export function parseForESLint(code, options = {}) {
-  const parserOptions = createParserOptions(options)
-  const transpiled = transpileTypeScript(code, parserOptions)
+  const filePath = extractFilePath(options)
+  const parserOptions = createParserOptions(options, filePath)
+  const transpiled = transpileTypeScript(code, { ...parserOptions, filePath })
   const ast = espree.parse(transpiled, parserOptions)
 
   return {
