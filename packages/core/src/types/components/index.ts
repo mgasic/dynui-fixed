@@ -22,6 +22,7 @@ export type {
   DynStepperProps,
   DynMenuProps,
   DynMenuItemProps,
+  DynMenuItemConfig,
   DynBreadcrumbProps,
   DynBreadcrumbItemProps,
   DynListViewProps,

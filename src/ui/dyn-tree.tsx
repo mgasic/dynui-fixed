@@ -108,7 +108,11 @@ export const DynTreeNode = forwardRef<HTMLDivElement, DynTreeNodeProps>(
           hasChildren && 'dyn-tree-node--expandable',
           className
         )}
-        style={{ paddingLeft: `${level * 20}px` }}
+        style={{
+          paddingLeft: level
+            ? `calc(${level} * var(--dyn-spacing-4, var(--dyn-spacing-md, 1rem)))`
+            : undefined
+        }}
         onClick={onSelect}
       >
         {hasChildren && (

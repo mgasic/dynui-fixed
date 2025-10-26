@@ -2,26 +2,18 @@ import { forwardRef } from 'react';
 import type { DynContainerProps } from '../types/components/dyn-container.types';
 import { getSpacingStyles, classNames } from '../utils';
 
-const SIZE_CLASS_VALUES = new Set(['sm', 'md', 'lg', 'xl', 'full']);
-const MAX_WIDTH_CLASS_VALUES = new Set(['xs', 'sm', 'md', 'lg', 'xl', 'full']);
-const SPACING_CLASS_VALUES = new Set(['none', 'xs', 'sm', 'md', 'lg', 'xl']);
-
 export const DynContainer = forwardRef<HTMLDivElement, DynContainerProps>(
-  (
-    {
-      maxWidth,
-      size,
-      fluid,
-      p,
-      m,
-      children,
-      className,
-      style,
-      'data-testid': testId,
-      ...props
-    },
-    ref
-  ) => {
+  ({ 
+    maxWidth,
+    p, 
+    m,
+    children,
+    className,
+    style,
+    'data-testid': testId,
+    ...props 
+  }, ref) => {
+    // Filter out undefined values for exactOptionalPropertyTypes
     const spacingArgs: { p?: number | string; m?: number | string } = {};
     const spacingClasses: Array<string | undefined> = [];
 
