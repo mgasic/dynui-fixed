@@ -16,6 +16,11 @@
     { "path": "../design-tokens" },
     { "path": "../icons" }
   ],
+  "files": [
+    "src/index.ts",
+    "src/components/index.ts",
+    "src/theme/index.ts"
+  ],
   "include": [
     "src/**/*.ts", 
     "src/**/*.tsx",
