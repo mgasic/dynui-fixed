@@ -50,7 +50,7 @@ function buildResult(code, options) {
         originalText: code
       }
     },
-    text: transpiled
+    text: code
   }
 }
 
