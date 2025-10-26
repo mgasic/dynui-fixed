@@ -80,8 +80,8 @@ export function parse(code, options = {}) {
   return parseForESLint(code, options).ast
 }
 
-export function parseForESLint(code, options = {}) {
-  const filePath = extractFilePath(options)
+export function parseForESLint(code, options = {}, context) {
+  const filePath = extractFilePath(options) ?? extractFilePath(context)
   const parserOptions = createParserOptions(options, filePath)
   const transpiled = transpileTypeScript(code, { ...parserOptions, filePath })
   const ast = espree.parse(transpiled, parserOptions)
