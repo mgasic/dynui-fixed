@@ -6,7 +6,7 @@
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
     "test:storybook": "test-storybook",
-    "lint": "eslint --config ../../eslint.config.js \"src/**/*.{ts,tsx}\" || echo \"No files to lint\"",
+    "lint": "node ../../tools/run-eslint-if-files.cjs --config ../../eslint.config.js \"src/**/*.{ts,tsx}\"",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
   },
   "dependencies": {
