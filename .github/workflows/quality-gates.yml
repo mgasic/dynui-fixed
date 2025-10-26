@@ -44,10 +44,36 @@ jobs:
       - name: Run Unit Tests with Coverage
         run: |
           set -o pipefail
-          pnpm test --coverage --silent | tee coverage-output.txt
+          pnpm test -- --coverage --silent | tee coverage-output.txt
       - name: Enforce Coverage Threshold (80%)
         run: |
-          node -e "const fs = require('fs'); const summary = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8')); const pct = summary.total.statements.pct; if (pct < 80) { console.error(\`❌ Coverage ${pct}% is below required 80% threshold.\`); process.exit(1); } console.log(\`✅ Coverage ${pct}% meets the 80% threshold.\`);"
+          node <<'NODE'
+          const fs = require('fs');
+          const path = 'coverage/coverage-final.json';
+          const coverage = JSON.parse(fs.readFileSync(path, 'utf8'));
+
+          let totalStatements = 0;
+          let coveredStatements = 0;
+
+          for (const file of Object.values(coverage)) {
+            const hits = file?.s ?? {};
+            for (const key of Object.keys(hits)) {
+              totalStatements += 1;
+              if ((hits[key] ?? 0) > 0) {
+                coveredStatements += 1;
+              }
+            }
+          }
+
+          const percentage = totalStatements === 0 ? 0 : (coveredStatements / totalStatements) * 100;
+
+          if (percentage < 80) {
+            console.error(`❌ Coverage ${percentage.toFixed(2)}% is below required 80% threshold.`);
+            process.exit(1);
+          }
+
+          console.log(`✅ Coverage ${percentage.toFixed(2)}% meets the 80% threshold.`);
+          NODE
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
