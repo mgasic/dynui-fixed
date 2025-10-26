@@ -22,9 +22,11 @@ if (result.stderr) {
   process.stderr.write(result.stderr);
 }
 
+const noFilesPattern = /No files matching the pattern/;
+
 if (
   result.status === 2 &&
-  /No files matching the pattern/.test(result.stderr || '')
+  [result.stdout, result.stderr].some((stream) => noFilesPattern.test(stream || ''))
 ) {
   console.log('No files to lint');
   process.exit(0);
