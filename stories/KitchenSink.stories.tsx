@@ -5,7 +5,7 @@ import { DynTable } from '../src/ui/dyn-table'
 import { DynInput } from '../src/ui/dyn-input'
 import { DynButton } from '../src/ui/dyn-button'
 import { DynTabs, DynTab, DynTabPanel } from '../src/ui/dyn-tabs'
-import { DynMenu, DynMenuItem } from '../src/ui/dyn-menu'
+import { DynMenu } from '../src/ui/dyn-menu'
 import { DynModal } from '../src/ui/dyn-modal'
 
 const meta: Meta = {
@@ -26,10 +26,12 @@ export const All: Story = {
           <DynTabPanel item={{ key: 'tab1', value: 'tab1', label: 'Tab 1' }}>Content 1</DynTabPanel>
           <DynTabPanel item={{ key: 'tab2', value: 'tab2', label: 'Tab 2' }}>Content 2</DynTabPanel>
         </DynTabs>
-        <DynMenu>
-          <DynMenuItem item={{ type: 'item', value: 'new', label: 'New' }} />
-          <DynMenuItem item={{ type: 'item', value: 'open', label: 'Open' }} />
-        </DynMenu>
+        <DynMenu
+          items={[
+            { type: 'item', value: 'new', label: 'New' },
+            { type: 'item', value: 'open', label: 'Open' },
+          ]}
+        />
       </section>
 
       <section>
