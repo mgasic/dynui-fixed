@@ -39,7 +39,8 @@ function createParserOptions(options = {}, filePath) {
   const ecmaVersion = options.ecmaVersion ?? DEFAULT_ECMA_VERSION
   const sourceType = options.sourceType ?? 'module'
   const resolvedFilePath = filePath ?? options.filePath
-  const jsxEnabled = options.ecmaFeatures?.jsx ?? (resolvedFilePath ? isTSXFile(resolvedFilePath) : true)
+  const jsxEnabled =
+    options.ecmaFeatures?.jsx ?? (resolvedFilePath ? isTSXFile(resolvedFilePath) : false)
   const ecmaFeatures = {
     ...(options.ecmaFeatures ?? {}),
     jsx: jsxEnabled
@@ -57,8 +58,8 @@ function createParserOptions(options = {}, filePath) {
   }
 }
 
-function transpileTypeScript(code, options = {}, filePath) {
-  const fileName = filePath ?? options.filePath ?? (options.ecmaFeatures?.jsx ? 'inline.tsx' : 'inline.ts')
+function transpileTypeScript(code, options = {}) {
+  const fileName = options.filePath ?? (options.ecmaFeatures?.jsx ? 'inline.tsx' : 'inline.ts')
   const compilerOptions = {
     target: ts.ScriptTarget.ES2022,
     module: ts.ModuleKind.ESNext,
@@ -79,10 +80,10 @@ export function parse(code, options = {}) {
   return parseForESLint(code, options).ast
 }
 
-export function parseForESLint(code, options = {}, context) {
-  const filePath = extractFilePath(context)
+export function parseForESLint(code, options = {}) {
+  const filePath = extractFilePath(options)
   const parserOptions = createParserOptions(options, filePath)
-  const transpiled = transpileTypeScript(code, parserOptions, filePath)
+  const transpiled = transpileTypeScript(code, { ...parserOptions, filePath })
   const ast = espree.parse(transpiled, parserOptions)
 
   return {
