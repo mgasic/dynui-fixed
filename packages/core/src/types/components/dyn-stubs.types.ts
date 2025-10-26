@@ -1,14 +1,17 @@
 import type {
   ButtonHTMLAttributes,
+  ChangeEvent,
+  ComponentPropsWithoutRef,
   CSSProperties,
+  ElementType,
+  FocusEvent,
   HTMLAttributes,
   InputHTMLAttributes,
+  MouseEventHandler,
   ReactNode,
-  TableHTMLAttributes,
-  ChangeEvent,
-  FocusEvent,
-  MouseEventHandler
+  TableHTMLAttributes
 } from 'react'
+import type { SpacingValue } from '../common.types'
 
 export interface DynCheckboxProps {
   id?: string
@@ -183,14 +186,14 @@ export interface DynTreeNodeProps extends Omit<HTMLAttributes<HTMLDivElement>, '
   'data-testid'?: string
 }
 
-export interface DynBoxProps extends HTMLAttributes<HTMLElement> {
-  as?: keyof JSX.IntrinsicElements
-  p?: number | string
-  m?: number | string
-  gap?: number | string
+export type DynBoxProps<T extends ElementType = 'div'> = {
+  as?: T
+  p?: SpacingValue
+  m?: SpacingValue
+  gap?: SpacingValue
   style?: CSSProperties
   'data-testid'?: string
-}
+} & Omit<ComponentPropsWithoutRef<T>, 'as'>
 
 export interface DynContainerProps {
   as?: keyof JSX.IntrinsicElements

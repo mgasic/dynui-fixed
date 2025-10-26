@@ -1,4 +1,4 @@
-import type { MouseEvent as ReactMouseEvent, MouseEventHandler } from 'react'
+import type { ElementType, MouseEvent as ReactMouseEvent, MouseEventHandler } from 'react'
 import type { DynBreadcrumbProps, DynBreadcrumbItemProps } from '../types/components/dyn-breadcrumb.types'
 import { classNames } from '../utils'
 

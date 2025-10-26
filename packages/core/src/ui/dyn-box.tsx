@@ -21,10 +21,15 @@ export function DynBox<T extends ElementType = 'div'>({
     ...(gap !== undefined ? { gap } : {})
   })
 
+  const combinedStyle = {
+    ...spacingStyles,
+    ...(style ?? {})
+  }
+
   return (
     <As
       className={cls}
-      style={spacingStyles}
+      style={combinedStyle}
       data-testid={dataTestId}
       {...(props as Record<string, unknown>)}
     >
