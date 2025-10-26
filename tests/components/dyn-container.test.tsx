@@ -8,12 +8,12 @@ describe('DynContainer', () => {
         <div>Content</div>
       </DynContainer>
     )
-    
+
     expect(screen.getByTestId('container')).toBeInTheDocument()
     expect(screen.getByText('Content')).toBeInTheDocument()
   })
 
-  it('applies max width style when provided', () => {
+  it('applies max width style when provided as a number', () => {
     render(
       <DynContainer maxWidth={640} data-testid="container">
         Content
@@ -23,15 +23,22 @@ describe('DynContainer', () => {
     expect(screen.getByTestId('container')).toHaveStyle({ maxWidth: '640px' })
   })
 
-  it('applies spacing styles for padding and margin', () => {
+  it('merges custom class names and inline styles', () => {
     render(
-      <DynContainer p={24} m="3rem" data-testid="container">
+      <DynContainer
+        data-testid="container"
+        className="custom-container"
+        maxWidth="50%"
+        style={{ margin: '2rem' }}
+      >
         Content
       </DynContainer>
     )
 
     const container = screen.getByTestId('container')
-    expect(container).toHaveStyle({ padding: '24px' })
-    expect(container).toHaveStyle({ margin: '3rem' })
+    expect(container).toHaveClass('dyn-container')
+    expect(container).toHaveClass('custom-container')
+    expect(container).toHaveStyle({ maxWidth: '50%' })
+    expect(container).toHaveStyle({ margin: '2rem' })
   })
 })
