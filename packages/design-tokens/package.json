@@ -3,19 +3,24 @@
   "version": "0.1.0",
   "description": "Design token primitives for the DynUI design system.",
   "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "types": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./build/*": "./build/*"
   },
-  "files": ["src", "build", "README.md"],
+  "files": ["dist", "build", "README.md"],
   "sideEffects": false,
   "scripts": {
-    "build": "tsup --config tsup.config.ts",
+    "build": "rm -f tsconfig.tsbuildinfo && tsup --config tsup.config.ts && tsc --emitDeclarationOnly -p tsconfig.json",
     "dev": "tsup --config tsup.config.ts --watch",
-    "build:css": "node ./build/generate-css-variables.mjs",
+    "build:css": "pnpm run build && node ./build/generate-css-variables.mjs",
+    "test": "cd ../.. && vitest run --config packages/design-tokens/vitest.config.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint --config ../../tools/eslint-config/react.cjs --ext .ts,.tsx src"
   },
