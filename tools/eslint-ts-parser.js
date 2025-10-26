@@ -38,8 +38,8 @@ function extractFilePath(context) {
 function createParserOptions(options = {}, filePath) {
   const ecmaVersion = options.ecmaVersion ?? DEFAULT_ECMA_VERSION
   const sourceType = options.sourceType ?? 'module'
-  const resolvedFilePath = filePath ?? options.filePath
-  const jsxEnabled = options.ecmaFeatures?.jsx ?? (resolvedFilePath ? isTSXFile(resolvedFilePath) : true)
+  const jsxEnabled =
+    options.ecmaFeatures?.jsx ?? (options.filePath ? isTSXFile(options.filePath) : true)
   const ecmaFeatures = {
     ...(options.ecmaFeatures ?? {}),
     jsx: jsxEnabled
@@ -79,10 +79,9 @@ export function parse(code, options = {}) {
   return parseForESLint(code, options).ast
 }
 
-export function parseForESLint(code, options = {}, context) {
-  const filePath = extractFilePath(context)
-  const parserOptions = createParserOptions(options, filePath)
-  const transpiled = transpileTypeScript(code, parserOptions, filePath)
+export function parseForESLint(code, options = {}) {
+  const parserOptions = createParserOptions(options)
+  const transpiled = transpileTypeScript(code, { ...parserOptions, filePath: options.filePath })
   const ast = espree.parse(transpiled, parserOptions)
 
   return {
