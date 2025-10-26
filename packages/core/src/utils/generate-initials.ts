@@ -7,9 +7,14 @@ export function generateInitials(name: string): string {
   if (!name?.trim()) return '??'
   
   const words = name.trim().split(/\s+/)
-  if (words.length === 1) {
-    return words[0].charAt(0).toUpperCase()
+  const [firstWord, secondWord] = words
+
+  const firstInitial = firstWord?.charAt(0)?.toUpperCase() ?? ''
+  if (!secondWord) {
+    return firstInitial || '??'
   }
-  
-  return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase()
+
+  const secondInitial = secondWord.charAt(0).toUpperCase()
+  const initials = `${firstInitial}${secondInitial}`.trim()
+  return initials || '??'
 }

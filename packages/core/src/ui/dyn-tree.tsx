@@ -1,4 +1,5 @@
 import { forwardRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import type { DynTreeViewProps, DynTreeNodeProps, TreeNode } from '../types/components/dyn-tree.types';
 import { classNames } from '../utils';
 
@@ -14,7 +15,8 @@ export const DynTreeView = forwardRef<HTMLDivElement, DynTreeViewProps>(
     'data-testid': testId,
     ...props
   }, ref) => {
-    const [internalExpanded, setInternalExpanded] = useState<string[]>(expandedNodes);
+    const initialExpanded = Array.isArray(expandedNodes) ? expandedNodes : [];
+    const [internalExpanded, setInternalExpanded] = useState<string[]>(initialExpanded);
     const [internalSelected, setInternalSelected] = useState<string[]>([]);
 
     const handleToggle = (nodeId: string) => {
@@ -35,12 +37,16 @@ export const DynTreeView = forwardRef<HTMLDivElement, DynTreeViewProps>(
       onNodeSelect?.(nodeId);
     };
 
-    const renderNode = (node: TreeNode, level = 0): React.ReactNode => {
+    const renderNode = (node: TreeNode, level = 0): ReactNode => {
       const isExpanded = internalExpanded.includes(node.id);
-      const isSelected = multiSelect 
+      const isSelected = multiSelect
         ? internalSelected.includes(node.id)
         : selectedNode === node.id;
-      const hasChildren = node.children && node.children.length > 0;
+      const hasChildren = Array.isArray(node.children) && node.children.length > 0;
+
+      const toggleProps = hasChildren
+        ? { onToggle: () => handleToggle(node.id) }
+        : {}
 
       return (
         <div key={node.id}>
@@ -49,9 +55,9 @@ export const DynTreeView = forwardRef<HTMLDivElement, DynTreeViewProps>(
             level={level}
             expanded={isExpanded}
             selected={isSelected}
-            hasChildren={hasChildren || undefined}
-            onToggle={hasChildren ? () => handleToggle(node.id) : undefined}
+            hasChildren={hasChildren}
             onSelect={() => handleSelect(node.id)}
+            {...toggleProps}
           />
           {isExpanded && hasChildren && (
             <div className="dyn-tree-view__children">
@@ -70,7 +76,7 @@ export const DynTreeView = forwardRef<HTMLDivElement, DynTreeViewProps>(
         className={classNames('dyn-tree-view', className)}
         data-testid={testId}
       >
-        {data.map(node => renderNode(node))}
+        {data?.map(node => renderNode(node))}
       </div>
     );
   }
@@ -103,12 +109,14 @@ export const DynTreeNode = forwardRef<HTMLDivElement, DynTreeNodeProps>(
         tabIndex={0}
         className={classNames(
           'dyn-tree-node',
-          selected && 'dyn-tree-node--selected',
-          hasChildren && 'dyn-tree-node--expandable',
+          selected ? 'dyn-tree-node--selected' : undefined,
+          hasChildren ? 'dyn-tree-node--expandable' : undefined,
           className
         )}
         style={{ paddingLeft: `${level * 20}px` }}
-        onClick={onSelect}
+        onClick={() => {
+          onSelect?.();
+        }}
       >
         {hasChildren && (
           <button

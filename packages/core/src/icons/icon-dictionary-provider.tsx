@@ -1,4 +1,5 @@
-import React, { createContext, ReactNode, useState, useCallback } from 'react'
+import { createContext, useState, useCallback } from 'react'
+import type { ReactNode } from 'react'
 import type { IconDictionary, IconRegistryContextType, IconComponent } from './icons.types'
 
 const IconDictionaryContext = createContext<IconRegistryContextType | undefined>(undefined)

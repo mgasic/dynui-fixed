@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 import type { DynTextAreaProps } from '../types/components/dyn-textarea.types'
 import { useControlled } from '../hooks/use-controlled'
+import type { UseControlledOptions } from '../hooks/use-controlled'
 import { classNames } from '../utils'
 
 /**
@@ -33,21 +34,30 @@ export const DynTextArea = forwardRef<HTMLTextAreaElement, DynTextAreaProps>(
     },
     ref
   ) => {
-    const { value: currentValue, setValue } = useControlled({ value, defaultValue, onChange })
+    const controlOptions: UseControlledOptions<string> = {
+      onChange,
+      defaultValue: defaultValue ?? ''
+    }
+
+    if (value !== undefined) {
+      controlOptions.value = value
+    }
+
+    const { value: currentValue, setValue } = useControlled<string>(controlOptions)
 
     const textareaClasses = classNames(
       'dyn-textarea',
       `dyn-textarea--${size}`,
       `dyn-textarea--${variant}`,
       `dyn-textarea--resize-${resize}`,
-      disabled && 'dyn-textarea--disabled',
-      readonly && 'dyn-textarea--readonly',
-      required && 'dyn-textarea--required'
+      disabled ? 'dyn-textarea--disabled' : undefined,
+      readonly ? 'dyn-textarea--readonly' : undefined,
+      required ? 'dyn-textarea--required' : undefined
     )
 
     const wrapperClasses = classNames(
       'dyn-textarea-wrapper',
-      dataState && `dyn-textarea-wrapper--${dataState}`
+      dataState ? `dyn-textarea-wrapper--${dataState}` : undefined
     )
 
     return (
@@ -71,6 +81,7 @@ export const DynTextArea = forwardRef<HTMLTextAreaElement, DynTextAreaProps>(
           aria-labelledby={ariaLabelledby}
           aria-describedby={ariaDescribedby}
           aria-invalid={dataState === 'error' ? 'true' : undefined}
+          aria-required={required ? 'true' : undefined}
         />
       </div>
     )

@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react'
-
 /**
  * Icon component type - can be any React component that renders an icon
  */

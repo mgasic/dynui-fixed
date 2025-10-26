@@ -1,10 +1,14 @@
 import type {
   ButtonHTMLAttributes,
+  ComponentPropsWithoutRef,
+  ElementType,
   HTMLAttributes,
+  InputHTMLAttributes,
+  TableHTMLAttributes,
   ReactNode,
   ChangeEvent,
   FocusEvent,
-  MouseEvent
+  MouseEventHandler
 } from 'react'
 
 export interface DynCheckboxProps {
@@ -25,7 +29,8 @@ export interface DynCheckboxProps {
   'data-testid'?: string
 }
 
-export interface DynRadioProps {
+export interface DynRadioProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size' | 'children'> {
   value: string
   name?: string
   checked?: boolean
@@ -35,14 +40,11 @@ export interface DynRadioProps {
   className?: string
   children?: ReactNode
   onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void
-  'aria-label'?: string
-  'aria-labelledby'?: string
-  'aria-describedby'?: string
   'data-testid'?: string
-  [key: string]: unknown
 }
 
-export interface DynRadioGroupProps {
+export interface DynRadioGroupProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'children'> {
   value?: string
   defaultValue?: string
   name?: string
@@ -51,12 +53,7 @@ export interface DynRadioGroupProps {
   onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void
   multiSelect?: boolean
   children?: ReactNode
-  className?: string
-  'aria-label'?: string
-  'aria-labelledby'?: string
-  'aria-describedby'?: string
   'data-testid'?: string
-  [key: string]: unknown
 }
 
 export type DynStepperProps = Record<string, unknown>
@@ -96,7 +93,7 @@ export interface DynBreadcrumbItemProps {
   href?: string
   current?: boolean
   disabled?: boolean
-  onClick?: (event: MouseEvent<HTMLElement>) => void
+  onClick?: MouseEventHandler<HTMLElement>
   'aria-current'?: 'page' | 'step' | 'location' | 'date' | 'time' | 'true' | 'false'
   'data-testid'?: string
   [key: string]: unknown
@@ -150,14 +147,12 @@ export interface DynTableColumn {
   sortable?: boolean
 }
 
-export interface DynTableProps {
+export interface DynTableProps extends Omit<TableHTMLAttributes<HTMLTableElement>, 'onSort'> {
   columns: DynTableColumn[]
   data: Array<Record<string, ReactNode>>
   sortable?: boolean
   onSort?: (columnKey: string, direction: 'asc' | 'desc') => void
-  className?: string
   'data-testid'?: string
-  [key: string]: unknown
 }
 
 export interface DynTableSort {
@@ -173,19 +168,17 @@ export interface TreeNode {
   children?: TreeNode[]
 }
 
-export interface DynTreeViewProps {
+export interface DynTreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onSelect'> {
   data?: TreeNode[]
   selectedNode?: string
   expandedNodes?: string[]
   onNodeSelect?: (id: string) => void
   onNodeExpand?: (id: string) => void
   multiSelect?: boolean
-  className?: string
   'data-testid'?: string
-  [key: string]: unknown
 }
 
-export interface DynTreeNodeProps {
+export interface DynTreeNodeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onToggle'> {
   node: TreeNode
   level?: number
   expanded?: boolean
@@ -193,21 +186,15 @@ export interface DynTreeNodeProps {
   hasChildren?: boolean
   onToggle?: () => void
   onSelect?: () => void
-  className?: string
-  [key: string]: unknown
 }
 
-export interface DynBoxProps {
-  as?: keyof JSX.IntrinsicElements
+export type DynBoxProps<T extends ElementType = 'div'> = {
+  as?: T
   p?: number | string
   m?: number | string
   gap?: number | string
-  children?: ReactNode
-  className?: string
-  style?: Record<string, unknown>
   'data-testid'?: string
-  [key: string]: unknown
-}
+} & Omit<ComponentPropsWithoutRef<T>, 'as' | 'p' | 'm' | 'gap'>
 
 export interface DynContainerProps {
   as?: keyof JSX.IntrinsicElements
@@ -220,25 +207,17 @@ export interface DynContainerProps {
   [key: string]: unknown
 }
 
-export interface DynGridProps {
+export interface DynGridProps extends HTMLAttributes<HTMLDivElement> {
   columns?: number | string
   rows?: number | string
   gap?: number | string
-  children?: ReactNode
-  className?: string
-  style?: Record<string, unknown>
   'data-testid'?: string
-  [key: string]: unknown
 }
 
-export interface DynGridItemProps {
+export interface DynGridItemProps extends HTMLAttributes<HTMLDivElement> {
   colSpan?: number | string
   rowSpan?: number | string
-  children?: ReactNode
-  className?: string
-  style?: Record<string, unknown>
   'data-testid'?: string
-  [key: string]: unknown
 }
 
 export interface DynFieldContainerProps {

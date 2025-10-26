@@ -15,7 +15,7 @@ export function DynModal({
   'aria-describedby': ariaDescribedby,
   'data-testid': dataTestId
 }: DynModalProps) {
-  const focusTrapRef = useFocusTrap({ 
+  const focusTrapRef = useFocusTrap<HTMLDivElement>({
     enabled: isOpen,
     returnFocus: true 
   })
