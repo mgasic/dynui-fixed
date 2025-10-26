@@ -120,6 +120,9 @@ importers:
       '@storybook/react-vite':
         specifier: 'catalog:'
         version: 8.6.14(@storybook/test@8.6.14(storybook@8.6.14(prettier@3.6.2)))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(rollup@4.52.5)(storybook@8.6.14(prettier@3.6.2))(typescript@5.9.3)(vite@5.4.21(@types/node@24.9.1))
+      '@stylistic/eslint-plugin':
+        specifier: workspace:*
+        version: link:tools/stylistic-eslint-plugin
       '@testing-library/jest-dom':
         specifier: 'catalog:'
         version: 6.9.1
@@ -135,6 +138,9 @@ importers:
       '@types/react-dom':
         specifier: 'catalog:'
         version: 18.3.7(@types/react@18.3.26)
+      '@typescript-eslint/parser':
+        specifier: workspace:*
+        version: link:tools/typescript-eslint-parser
       '@vitejs/plugin-react':
         specifier: 'catalog:'
         version: 4.7.0(vite@5.4.21(@types/node@24.9.1))
@@ -150,12 +156,9 @@ importers:
       eslint-plugin-react:
         specifier: 'catalog:'
         version: 7.37.5(eslint@9.38.0)
-      '@typescript-eslint/parser':
+      husky:
         specifier: workspace:*
-        version: link:tools/typescript-eslint-parser
-      '@stylistic/eslint-plugin':
-        specifier: workspace:*
-        version: link:tools/stylistic-eslint-plugin
+        version: link:tools/husky
       jsdom:
         specifier: 'catalog:'
         version: 25.0.1
@@ -395,11 +398,11 @@ importers:
         specifier: 'catalog:'
         version: 9.38.0
 
-  tools/stylistic-eslint-plugin:
-    dependencies: {}
+  tools/husky: {}
 
-  tools/typescript-eslint-parser:
-    dependencies: {}
+  tools/stylistic-eslint-plugin: {}
+
+  tools/typescript-eslint-parser: {}
 
 packages:
 
