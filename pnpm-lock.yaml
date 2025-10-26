@@ -146,6 +146,12 @@ importers:
       eslint-plugin-react:
         specifier: 'catalog:'
         version: 7.37.5(eslint@9.38.0)
+      '@typescript-eslint/parser':
+        specifier: workspace:*
+        version: link:tools/typescript-eslint-parser
+      '@stylistic/eslint-plugin':
+        specifier: workspace:*
+        version: link:tools/stylistic-eslint-plugin
       jsdom:
         specifier: 'catalog:'
         version: 25.0.1
@@ -384,6 +390,12 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 9.38.0
+
+  tools/stylistic-eslint-plugin:
+    dependencies: {}
+
+  tools/typescript-eslint-parser:
+    dependencies: {}
 
 packages:
 

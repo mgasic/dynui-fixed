@@ -17,12 +17,13 @@
   "files": ["dist", "build", "README.md"],
   "sideEffects": false,
   "scripts": {
-    "build": "rm -f tsconfig.tsbuildinfo && tsup --config tsup.config.ts && tsc --emitDeclarationOnly -p tsconfig.json",
+    "build": "node -e \"try{require('fs').rmSync('tsconfig.tsbuildinfo',{force:true})}catch(e){}\" && tsup --config tsup.config.ts && tsc --emitDeclarationOnly -p tsconfig.json",
     "dev": "tsup --config tsup.config.ts --watch",
     "build:css": "pnpm run build && node ./build/generate-css-variables.mjs",
     "test": "cd ../.. && vitest run --config packages/design-tokens/vitest.config.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "eslint --config ../../tools/eslint-config/react.cjs --ext .ts,.tsx src"
+    "lint": "node ../../tools/run-eslint-if-files.cjs --config ../../eslint.config.js \"src/**/*.{ts,tsx}\"",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true }); require('fs').rmSync('tsconfig.tsbuildinfo', { force: true })\""
   },
   "devDependencies": {
     "@dynui/build-config": "workspace:*",
