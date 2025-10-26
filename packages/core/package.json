@@ -23,7 +23,7 @@
     "test:a11y": "vitest run -t a11y --config vitest.config.ts",
     "test:contracts": "tsd",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint": "eslint --config ../../tools/eslint-config/react.cjs --ext .ts,.tsx src",
     "clean": "rm -rf dist"
   },
   "dependencies": {
