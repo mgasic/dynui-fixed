@@ -18,7 +18,15 @@ const meta: Meta<typeof DynContainer> = {
     },
     maxWidth: {
       control: { type: 'select' },
-      options: ['xs', 'sm', 'md', 'lg', 'xl']
+      options: ['xs', 'sm', 'md', 'lg', 'xl', 'full']
+    },
+    p: {
+      control: { type: 'select' },
+      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl']
+    },
+    m: {
+      control: { type: 'select' },
+      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl']
     }
   }
 }
