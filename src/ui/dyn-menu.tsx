@@ -91,6 +91,7 @@ export const DynMenuItem = forwardRef<HTMLElement, DynMenuItemProps>(
   }, ref) => {
     if (item?.type === 'divider') {
       const menuSeparatorProps: MenuSeparatorProps = {
+        ...restProps,
         className: classNames('dyn-menu-divider', className)
       };
 
