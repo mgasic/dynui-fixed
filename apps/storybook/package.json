@@ -5,7 +5,9 @@
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
-    "test:storybook": "test-storybook"
+    "test:storybook": "test-storybook",
+    "lint": "eslint --config ../../eslint.config.js \"src/**/*.{ts,tsx}\" || echo \"No files to lint\"",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
   },
   "dependencies": {
     "@dynui/core": "workspace:*",
