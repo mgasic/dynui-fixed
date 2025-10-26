@@ -14,15 +14,15 @@ const meta: Meta<typeof DynContainer> = {
   argTypes: {
     maxWidth: {
       control: { type: 'text' },
-      description: 'Sets a maximum width for the container (number will be treated as pixels).'
+      description: 'Maximum width of the container. Accepts numbers (pixels) or CSS length values.'
     },
     p: {
       control: { type: 'text' },
-      description: 'Padding applied to the container. Numbers are treated as pixels.'
+      description: 'Padding applied to the container. Accepts numbers (pixels) or CSS length values.'
     },
     m: {
       control: { type: 'text' },
-      description: 'Margin applied to the container. Numbers are treated as pixels.'
+      description: 'Margin applied to the container. Accepts numbers (pixels) or CSS length values.'
     }
   }
 }
@@ -43,30 +43,37 @@ export const Default: Story = {
   }
 }
 
-export const MaxWidthExamples: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <DynContainer maxWidth={360}>
-        <div style={{ background: '#e3f2fd', padding: '1rem' }}>360px max width</div>
-      </DynContainer>
-      <DynContainer maxWidth="48rem">
-        <div style={{ background: '#f3e5f5', padding: '1rem' }}>48rem max width</div>
-      </DynContainer>
-      <DynContainer>
-        <div style={{ background: '#e8f5e8', padding: '1rem' }}>No max width</div>
-      </DynContainer>
-    </div>
-  )
-}
-
-export const WithSpacing: Story = {
+export const WithPadding: Story = {
   args: {
-    p: 32,
-    m: '2rem',
+    p: '2rem',
     children: (
       <div style={{ background: '#f5f5f5', minHeight: '200px' }}>
-        Container with padding and margin applied via inline styles
+        Container with large padding
       </div>
     )
   }
+}
+
+export const WithMargin: Story = {
+  args: {
+    m: '1.5rem',
+    children: (
+      <div style={{ background: '#e1f5fe', padding: '1rem' }}>
+        Container with outer margin applied via props
+      </div>
+    )
+  }
+}
+
+export const ConstrainedWidth: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: '2rem' }}>
+      <DynContainer maxWidth={480} style={{ background: '#fff3e0', padding: '1.5rem' }}>
+        Container constrained to 480px with numeric maxWidth
+      </DynContainer>
+      <DynContainer maxWidth="60ch" style={{ background: '#f3e5f5', padding: '1.5rem' }}>
+        Container constrained to 60ch with CSS maxWidth value
+      </DynContainer>
+    </div>
+  )
 }
