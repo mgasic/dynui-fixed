@@ -16,7 +16,7 @@ function PlaygroundShell() {
         </h1>
         <p style={{ color: colors.neutral['600'], maxWidth: 560 }}>
           Lightweight Vite/React host app for manually validating DynUI
-          components and tokens during Phase 1.
+          components and tokens during Phase 1.
         </p>
       </header>
 
