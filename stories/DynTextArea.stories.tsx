@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { DynTextArea } from '../src/ui/dyn-textarea'
 
 const meta: Meta<typeof DynTextArea> = {
