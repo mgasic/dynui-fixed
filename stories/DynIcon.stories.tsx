@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { DynIcon } from '../src/ui/dyn-icon'
 
 const meta: Meta<typeof DynIcon> = {

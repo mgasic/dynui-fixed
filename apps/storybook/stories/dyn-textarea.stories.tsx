@@ -2,20 +2,22 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { DynTextArea } from '@dynui/core'
 
 const meta: Meta<typeof DynTextArea> = {
-  title: 'Form/DynTextArea',
+  title: 'Form/DynTextArea Advanced',
   component: DynTextArea,
   parameters: {
     docs: {
       description: {
         component:
-          'Multi-line text input with controlled/uncontrolled support, resize options, and full accessibility.'
+          'Advanced textarea with auto-resize, character counting, and enhanced accessibility features.'
       }
     }
   },
   argTypes: {
     size: { control: { type: 'select' }, options: ['sm', 'md', 'lg'] },
-    variant: { control: { type: 'select' }, options: ['solid', 'outline', 'ghost', 'link'] },
-    resize: { control: { type: 'select' }, options: ['none', 'vertical', 'horizontal', 'both'] }
+    variant: { control: { type: 'select' }, options: ['solid', 'outline', 'ghost'] },
+    resize: { control: { type: 'select' }, options: ['none', 'vertical', 'horizontal', 'both'] },
+    autoResize: { control: 'boolean' },
+    maxLength: { control: { type: 'number', min: 0 } }
   }
 }
 
@@ -25,28 +27,33 @@ type Story = StoryObj<typeof DynTextArea>
 
 export const Default: Story = {
   args: {
-    placeholder: 'Enter description...',
-    rows: 4
+    placeholder: 'Enter your message...'
   }
 }
 
-export const Variants: Story = {
-  render: () => (
-    <div style={{ display: 'grid', gap: '12px' }}>
-      <DynTextArea placeholder="Solid" variant="solid" />
-      <DynTextArea placeholder="Outline" variant="outline" />
-      <DynTextArea placeholder="Ghost" variant="ghost" />
-      <DynTextArea placeholder="Link" variant="link" />
-    </div>
-  )
+export const WithCharacterCount: Story = {
+  args: {
+    placeholder: 'Type something...',
+    maxLength: 200,
+    showCharacterCount: true
+  }
+}
+
+export const AutoResize: Story = {
+  args: {
+    placeholder: 'This textarea will grow as you type...',
+    autoResize: true,
+    minRows: 2,
+    maxRows: 8
+  }
 }
 
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: '12px' }}>
-      <DynTextArea placeholder="Small" size="sm" />
-      <DynTextArea placeholder="Medium" size="md" />
-      <DynTextArea placeholder="Large" size="lg" />
+      <DynTextArea size="sm" placeholder="Small textarea" />
+      <DynTextArea size="md" placeholder="Medium textarea" />
+      <DynTextArea size="lg" placeholder="Large textarea" />
     </div>
   )
 }
@@ -54,9 +61,11 @@ export const Sizes: Story = {
 export const States: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: '12px' }}>
-      <DynTextArea placeholder="Disabled" disabled />
-      <DynTextArea placeholder="Readonly" readonly />
+      <DynTextArea placeholder="Normal state" />
+      <DynTextArea placeholder="Disabled state" disabled />
+      <DynTextArea placeholder="Readonly state" readonly value="This is readonly text" />
       <DynTextArea placeholder="Error state" data-state="error" />
+      <DynTextArea placeholder="Success state" data-state="success" />
     </div>
   )
 }
