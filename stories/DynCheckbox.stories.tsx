@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react'
 import { DynCheckbox } from '../src/ui/dyn-checkbox'
 
 const meta: Meta<typeof DynCheckbox> = {
@@ -10,9 +10,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  args: { children: 'Accept terms' }
-}
-
-export const Indeterminate: Story = {
-  args: { children: 'Select all', indeterminate: true }
+  args: {
+    label: 'Accept terms and conditions'
+  }
 }

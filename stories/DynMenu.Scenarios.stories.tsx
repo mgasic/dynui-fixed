@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react'
 import { DynMenu } from '../src/ui/dyn-menu'
 
 const meta: Meta<typeof DynMenu> = {
