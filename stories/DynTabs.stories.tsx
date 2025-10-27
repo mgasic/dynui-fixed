@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react'
 import { DynTabs, DynTab, DynTabPanel } from '../src/ui/dyn-tabs'
 
 const meta: Meta<typeof DynTabs> = {
