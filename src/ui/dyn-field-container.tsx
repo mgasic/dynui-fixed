@@ -1,4 +1,5 @@
 import { cloneElement, forwardRef, isValidElement, useId } from 'react';
+import type { ReactNode } from 'react';
 import type { DynFieldContainerProps } from '../types/components/dyn-field-container.types';
 import { classNames } from '../utils';
 
@@ -38,7 +39,7 @@ export const DynFieldContainer = forwardRef<HTMLDivElement, DynFieldContainerPro
           'aria-describedby'?: string;
           'aria-labelledby'?: string;
           'aria-invalid'?: boolean;
-        })
+        }) => ReactNode
         )({
           id: inputId,
           inputId,
