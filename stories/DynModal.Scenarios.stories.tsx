@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react'
 import { DynModal } from '../src/ui/dyn-modal'
 
 const meta: Meta<typeof DynModal> = {

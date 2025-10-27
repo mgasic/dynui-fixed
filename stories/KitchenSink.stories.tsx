@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react'
 import { DynButton } from '../src/ui/dyn-button'
 import { DynInput } from '../src/ui/dyn-input'
 import { DynSelect } from '../src/ui/dyn-select'
