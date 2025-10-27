@@ -17,7 +17,6 @@
   "devDependencies": {
     "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-essentials": "catalog:",
-    "@storybook/react": "catalog:",
     "@storybook/react-vite": "catalog:",
     "@storybook/test": "catalog:",
     "@storybook/test-runner": "catalog:",
