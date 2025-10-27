@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { DynListView } from '../src/ui/dyn-listview'
 import { DynTreeView } from '../src/ui/dyn-tree'
 import { DynTable } from '../src/ui/dyn-table'
