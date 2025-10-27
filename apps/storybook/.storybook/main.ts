@@ -1,9 +1,21 @@
+import path from 'node:path'
+
 import type { StorybookConfig } from '@storybook/react-vite'
 
 const config: StorybookConfig = {
   stories: [
-    '../../../packages/*/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
-    '../../../stories/**/*.stories.@(js|jsx|ts|tsx|mdx)'
+    path.join(
+      path.resolve(__dirname, '..', '..', '..', 'packages'),
+      '*/src/**/*.stories.@(js|jsx|ts|tsx|mdx)'
+    ),
+    path.join(
+      path.resolve(__dirname, '..', '..', '..', 'stories'),
+      '**/*.stories.@(js|jsx|ts|tsx|mdx)'
+    ),
+    path.join(
+      path.resolve(__dirname, '..', 'stories'),
+      '**/*.stories.@(js|jsx|ts|tsx|mdx)'
+    )
   ],
   addons: [
     '@storybook/addon-essentials',
