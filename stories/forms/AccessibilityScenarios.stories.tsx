@@ -1,27 +1,49 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { DynInput } from '../../src/ui/dyn-input'
-import { DynFieldContainer } from '../../src/ui/dyn-field-container'
+import { DynButton } from '../../src/ui/dyn-button'
+import { DynSelect } from '../../src/ui/dyn-select'
 
-const meta: Meta<typeof DynInput> = {
-  title: 'Forms/Accessibility Scenarios',
-  component: DynInput,
+const meta: Meta = {
+  title: 'Examples/Accessibility Scenarios',
+  parameters: {
+    docs: {
+      description: {
+        component: 'Examples demonstrating proper accessibility patterns with DynUI components.'
+      }
+    }
+  }
 }
+
 export default meta
+type Story = StoryObj
 
-type Story = StoryObj<typeof meta>
-
-export const DescribedByAndError: Story = {
+export const FormWithLabels: Story = {
   render: () => (
-    <DynFieldContainer label="Email" description="We will never share your email." error="Invalid email format" required>
-      <DynInput type="email" aria-invalid aria-describedby="email-error" />
-    </DynFieldContainer>
-  )
-}
-
-export const RequiredIndicator: Story = {
-  render: () => (
-    <DynFieldContainer label="Username" required>
-      <DynInput />
-    </DynFieldContainer>
+    <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
+      <div>
+        <label htmlFor="name-input">Full Name</label>
+        <DynInput id="name-input" placeholder="Enter your full name" required />
+      </div>
+      <div>
+        <label htmlFor="email-input">Email Address</label>
+        <DynInput id="email-input" type="email" placeholder="Enter your email" required />
+      </div>
+      <div>
+        <label htmlFor="country-select">Country</label>
+        <DynSelect 
+          id="country-select"
+          placeholder="Select your country"
+          options={[
+            { value: 'us', label: 'United States' },
+            { value: 'ca', label: 'Canada' },
+            { value: 'uk', label: 'United Kingdom' }
+          ]}
+          required
+        />
+      </div>
+      <DynButton type="submit" variant="solid" color="primary">
+        Submit Form
+      </DynButton>
+    </form>
   )
 }
