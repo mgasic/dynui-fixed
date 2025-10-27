@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { DynTextArea } from '../src/ui/dyn-textarea'
 
 const meta: Meta<typeof DynTextArea> = {
@@ -10,9 +10,8 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  args: { placeholder: 'Enter text...', rows: 4 }
-}
-
-export const Resizable: Story = {
-  args: { placeholder: 'Resizable both', resize: 'both', rows: 6 }
+  args: {
+    placeholder: 'Enter description...',
+    rows: 4
+  }
 }
