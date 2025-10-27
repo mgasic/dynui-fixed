@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react'
 import { userEvent, within, expect } from '@storybook/test'
 import { DynSelect } from '@dynui/core'
 import type { DynSelectRef } from '@dynui/core'

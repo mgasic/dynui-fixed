@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react'
 import { DynRadioGroup } from '../src/ui/dyn-radio'
 
 const meta: Meta<typeof DynRadioGroup> = {
