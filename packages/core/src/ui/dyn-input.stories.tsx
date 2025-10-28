@@ -183,7 +183,7 @@ export const Interactive: Story = {
         <DynInput
           id="interactive-input"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={setValue}
           placeholder="Type something..."
         />
         <div style={{ fontSize: '0.875rem', color: '#666' }}>
