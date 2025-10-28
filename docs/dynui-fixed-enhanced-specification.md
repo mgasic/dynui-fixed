@@ -1,5 +1,5 @@
 
-## Detaljno Specifikacija po Fazama
+## Detaljno Specifikacija po Fazama V1
 
 
 
