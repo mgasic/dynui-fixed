@@ -1,0 +1,8 @@
+{
+  "name": "@stylistic/eslint-plugin",
+  "version": "0.0.0-dev",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  }
+}

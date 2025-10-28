@@ -1,4 +1,4 @@
-import { useState, forwardRef } from 'react';
+import { useState, forwardRef, useCallback, type MutableRefObject } from 'react';
 import type { DynListViewProps } from '../types/components/dyn-listview.types';
 import { useArrowNavigation } from '../hooks/use-arrow-navigation';
 import { classNames } from '../utils';
@@ -14,11 +14,24 @@ export const DynListView = forwardRef<HTMLDivElement, DynListViewProps>(
     ...props
   }, ref) => {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
-    
+
     const { containerRef } = useArrowNavigation({
       orientation: 'vertical',
       selector: '.dyn-list-item:not(.dyn-list-item--disabled)'
     });
+
+    const assignRefs = useCallback(
+      (node: HTMLDivElement | null) => {
+        (containerRef as MutableRefObject<HTMLDivElement | null>).current = node;
+        if (!ref) return;
+        if (typeof ref === 'function') {
+          (ref as (instance: HTMLDivElement | null) => void)(node);
+        } else {
+          (ref as MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+      },
+      [containerRef, ref]
+    );
 
     const handleItemSelect = (itemId: string) => {
       if (multiSelect) {
@@ -35,7 +48,7 @@ export const DynListView = forwardRef<HTMLDivElement, DynListViewProps>(
     return (
       <div
         {...props}
-        ref={ref || (containerRef as React.RefObject<HTMLDivElement>)}
+        ref={assignRefs}
         role="listbox"
         aria-multiselectable={multiSelect}
         className={classNames('dyn-list-view', className)}

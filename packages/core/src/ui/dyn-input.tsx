@@ -51,7 +51,7 @@ export function DynInput({
         placeholder={placeholder}
         readOnly={readonly}
         className={cls}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange?.(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange?.(e.target.value)}
         onFocus={onFocus}
         onBlur={onBlur}
         aria-label={ariaLabel}

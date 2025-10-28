@@ -1,0 +1,23 @@
+{
+  "name": "@dynui/build-config",
+  "version": "0.1.0",
+  "description": "Shared build configuration for DynUI packages.",
+  "type": "module",
+  "exports": {
+    "./tsconfig.base": "./tsconfig.base.json",
+    "./tsup.library.config": {
+      "types": "./tsup.library.config.d.ts",
+      "default": "./tsup.library.config.js"
+    }
+  },
+  "files": [
+    "tsconfig.base.json",
+    "tsconfig.shared.json",
+    "tsup.library.config.js",
+    "tsup.library.config.d.ts",
+    "README.md"
+  ],
+  "devDependencies": {
+    "tsup": "catalog:"
+  }
+}

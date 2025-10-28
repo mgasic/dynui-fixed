@@ -2,7 +2,31 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "baseUrl": "."
+    "rootDir": "src",
+    "baseUrl": ".",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "paths": {
+      "@dynui/design-tokens": ["../design-tokens/dist/index.d.ts"],
+      "@dynui/icons": ["../icons/src"]
+    }
   },
-  "include": ["src/**/*"]
+  "references": [
+    { "path": "../design-tokens" },
+    { "path": "../icons" }
+  ],
+  "include": [
+    "src/**/*.ts", 
+    "src/**/*.tsx",
+    "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.stories.ts",
+    "**/*.stories.tsx"
+  ]
 }

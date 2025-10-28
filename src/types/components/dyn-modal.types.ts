@@ -1,7 +1,9 @@
+import type { ReactNode } from 'react'
+
 export interface DynModalProps {
   open?: boolean
   onClose?: () => void
-  children?: React.ReactNode
+  children?: ReactNode
   title?: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
   'aria-label'?: string

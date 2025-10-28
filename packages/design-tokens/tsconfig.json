@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "composite": true
+  },
+  "files": [
+    "src/index.ts",
+    "src/colors.ts",
+    "src/spacing.ts",
+    "src/typography.ts",
+    "src/radii.ts",
+    "src/shadows.ts",
+    "src/token-map.ts",
+    "src/css-generator.ts"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": ["dist", "node_modules"]
+}

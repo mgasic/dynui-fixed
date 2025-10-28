@@ -1,75 +1,78 @@
-import type { ReactNode } from 'react'
+import type {
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  ReactNode
+} from 'react'
 
-/**
- * Individual tab item interface
- */
 export interface TabItem {
-  /** Unique key for React rendering */
-  key: string
-  /** Value used for selection state */
   value: string
-  /** Display label for the tab */
-  label: string
-  /** Whether tab is disabled */
+  label?: ReactNode
+  panel?: ReactNode
   disabled?: boolean
+  tabId?: string
+  panelId?: string
+  className?: string
+  key?: string
+  'aria-controls'?: string
+  'aria-label'?: string
+  'aria-labelledby'?: string
 }
 
-/**
- * Props for DynTabs container component
- * Manages tab selection state and keyboard navigation
- */
-export interface DynTabsProps {
-  /** Currently selected tab value (controlled) */
+export type DynTabItem = TabItem
+
+export interface DynTabsRef {
+  root: HTMLDivElement | null
+  focusTab: (value: string) => void
+  focusFirstTab: () => void
+  focusLastTab: () => void
+  focusNextTab: () => void
+  focusPreviousTab: () => void
+}
+
+export interface DynTabsProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onChange'> {
   value?: string
-  /** Default selected tab value (uncontrolled) */
   defaultValue?: string
-  /** Called when selected tab changes */
-  onChange?: (value: string) => void
-  /** Tab orientation */
   orientation?: 'horizontal' | 'vertical'
-  /** Activation behavior (auto activates on focus, manual requires Enter/Space) */
   activation?: 'auto' | 'manual'
-  /** Tab and panel children */
   children?: ReactNode
-  /** Accessible label for the tablist */
-  'aria-label'?: string
-  /** Test identifier */
+  className?: string
+  onChange?: (value: string) => void
+  items?: DynTabItem[]
   'data-testid'?: string
 }
 
-/**
- * Props for individual DynTab component
- */
-export interface DynTabProps {
-  /** Tab item configuration */
-  item: TabItem
-  /** Whether tab is disabled */
-  disabled?: boolean
-}
-
-/**
- * Props for DynTabPanel component
- */
-export interface DynTabPanelProps {
-  /** Associated tab item */
-  item: TabItem
-  /** Panel content */
+export interface DynTabProps
+  extends Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    | 'children'
+    | 'onSelect'
+    | 'onFocus'
+    | 'onKeyDown'
+    | 'disabled'
+    | 'type'
+  > {
+  item?: DynTabItem
   children?: ReactNode
+  isActive?: boolean
+  onSelect?: (value: string) => void
+  onFocusTab?: (value: string) => void
+  activation?: 'auto' | 'manual'
+  disabled?: boolean
+  className?: string
+  tabId?: string
+  panelId?: string
+  onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
+  onKeyDown?: ButtonHTMLAttributes<HTMLButtonElement>['onKeyDown']
+  onFocus?: ButtonHTMLAttributes<HTMLButtonElement>['onFocus']
 }
 
-/**
- * Ref methods for DynTabs mini API
- * Provides programmatic control over tab focus and selection
- */
-export interface DynTabsRef {
-  /** Focus the first tab */
-  focusFirst(): void
-  /** Focus the last tab */
-  focusLast(): void
-  /** Focus tab with specific value */
-  focus(value: string): void
-  /** Get currently focused tab value */
-  getFocused(): string | null
-  /** Get currently selected tab value */
-  getSelected(): string | null
+export interface DynTabPanelProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+  item?: DynTabItem
+  children?: ReactNode
+  isActive?: boolean
+  className?: string
+  panelId?: string
+  tabId?: string
 }

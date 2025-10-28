@@ -1,3 +1,4 @@
+import type { ChangeEvent } from 'react'
 import type { DynTextAreaProps } from '../types/components/dyn-textarea.types'
 import { classNames } from '../utils'
 
@@ -51,7 +52,7 @@ export function DynTextArea({
       cols={cols}
       maxLength={maxLength}
       className={cls}
-      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange?.(e.target.value)}
+      onChange={(e: ChangeEvent<HTMLTextAreaElement>) => onChange?.(e.target.value)}
       onFocus={onFocus}
       onBlur={onBlur}
       aria-label={ariaLabel}

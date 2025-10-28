@@ -1,16 +1,20 @@
 import type { Preview } from '@storybook/react'
 import { ThemeProvider } from '@dynui/core'
 import '@dynui/core/styles'
+import { createElement } from 'react'
 
 const preview: Preview = {
   decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div style={{ padding: '1rem' }}>
-          <Story />
-        </div>
-      </ThemeProvider>
-    )
+    (Story) =>
+      createElement(
+        ThemeProvider,
+        null,
+        createElement(
+          'div',
+          { style: { padding: '1rem' } },
+          createElement(Story)
+        )
+      )
   ],
   parameters: {
     controls: {

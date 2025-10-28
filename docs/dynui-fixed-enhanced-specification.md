@@ -207,6 +207,7 @@ Originalne faze 1-6 su zadržane u potpunosti, ali su **prioritizovane** i **pro
 
 **`pnpm-workspace.yaml`**:
 
+
 ```yaml
 packages:
   - 'packages/*'
@@ -289,6 +290,7 @@ frozen-lockfile=true
 
 **Ažuriranje sa catalog references:**
 
+
 ```json
 {
   "name": "@dynui/fixed-monorepo",
@@ -351,6 +353,7 @@ frozen-lockfile=true
 
 **Root `tsconfig.json`**:
 
+
 ```json
 {
   "compilerOptions": {
@@ -389,6 +392,7 @@ frozen-lockfile=true
 
 **Package-specific configs**:
 
+
 ```json
 // packages/core/tsconfig.json
 {
@@ -413,28 +417,119 @@ frozen-lockfile=true
 
 **`turbo.json`**:
 
+
 ```json
 {
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**"],
+      "outputs": ["dist/**", "build/**", "storybook-static/**"],
       "inputs": ["src/**/*.ts", "src/**/*.tsx", "package.json", "tsconfig*.json"]
     },
     "test": {
       "dependsOn": ["build"],
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"]
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"],
+      "outputs": ["coverage/**"]
     },
     "lint": {
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "*.json"]
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "*.json", "*.js", "*.ts"]
     },
     "typecheck": {
       "dependsOn": ["^build"],
       "inputs": ["src/**/*.ts", "src/**/*.tsx", "tsconfig*.json"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "test:a11y": {
+      "dependsOn": ["build"],
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "storybook": {
+      "cache": false,
+      "persistent": true
+    },
+    "build:storybook": {
+      "dependsOn": ["^build"],
+      "outputs": ["storybook-static/**"]
     }
   }
 }
 ```
+
+#### 2.3 Standardizacija Storybook-a, Accessibility i Quality Gates
+
+**Cilj:** Disciplinovano, automatski verifikovati sve aspekte kvaliteta kroz GitHub Actions, turbo orkestraciju i moderni monorepo pristup korišćenjem apps/storybook, CSF args/controls i test-runnera.
+
+##### Storybook Setup
+
+- **Lokacija:** `apps/storybook` (zasebna aplikacija)
+- **Builder:** `@storybook/react-vite`
+- **Konvencije za stories:**
+  - CSF 3 format, .stories.tsx po komponenti
+  - Export default meta plus varijante sa args/controls
+  - Pokriti: default, error, disabled, RTL, dark, keyboard/focus, edge cases
+
+**Primer:**
+
+```tsx
+// packages/core/src/ui/dyn-input.stories.tsx
+import { DynInput } from "./dyn-input"
+export default {
+  title: "Form/DynInput",
+  component: DynInput,
+  parameters: { a11y: { test: 'todo' } }
+}
+export const Default = { args: { label: "Email", required: true }}
+export const Error = { args: { label: "Email", error: "Invalid!" }}
+export const RTL = { args: { label: "Email", style: { direction: "rtl" }}}
+```
+
+**Konfiguracija:**
+
+- `.storybook/main.ts`: stories glob, addons essentials, a11y, interactions
+- `.storybook/preview.ts`: ThemeProvider, decorators, parameters.a11y.test ('todo' local/ 'error' CI)
+
+**Build/test komande:**
+
+- `pnpm storybook`, `pnpm build:storybook`, `pnpm test-storybook`
+- CI korak: build storybook & test-runner, artefakt: storybook-static
+
+##### Quality Gates
+
+- **Gate A:** Static analysis (eslint, prettier, typecheck) - fail on error
+- **Gate B:** Test coverage ≥ 80% (unit, integration), enforced u vitest.config
+- **Gate C:** Accessibility (Storybook test-runner/axe): parameters.a11y.test='error' u CI, izuzetke dokumentovati na nivou priče
+- **Gate D:** Bundle limit < 150KB za @dynui/core, tree-shakeability proveriti
+- **Gate E:** Vizuelna regresija - workflow spreman (Chromatic aktivan u FAZA 8)
+
+**Primer CI koraka:**
+
+```yaml
+jobs:
+  gate-c:
+    name: Gate C - Accessibility Testing
+    steps:
+      - run: pnpm build:storybook
+      - run: |
+          pnpm dlx serve storybook-static -p 6006 &
+          sleep 10
+          pnpm dlx @storybook/test-runner --url http://localhost:6006
+```
+
+##### CI/CD Workflow & Artefakti
+
+- Turbo orchestration: storybook-static kao output
+- PR mora proći sve gates pre merge
+- Artefakti: storybook-static, coverage, bundle reports, test logs
+
+##### Definition of Done
+
+- apps/storybook aktivan, stories standardizovane, CI pipeline verifikuje quality gates (A-D) na PRu i na main/develop; Gate E blokira merge tek u FAZA 8 kad Chromatic baseline bude aktivan
 
 ---
 
@@ -443,6 +538,7 @@ frozen-lockfile=true
 #### 🔴 KRITIČNO: Ova faza je identifikovana kao BLOCKER u analizi
 
 **Razlog povećanja prioriteta:**
+
 
 - Specifikacija FAZA 3 eksplicitno zahteva design tokens paket
 - Trenutno ne postoji `packages/design-tokens/` direktorijum
@@ -557,6 +653,7 @@ export function useTheme(): Theme {
 
 **Trenutno stanje po gate-ovima:**
 
+
 - Gate A (Static Analysis): 100% ✅
 - Gate B (Unit Tests): 70% ⚠️ - coverage nije verifikovan
 - Gate C (Accessibility): 95% ✅
@@ -568,6 +665,7 @@ export function useTheme(): Theme {
 #### 4.1 GitHub Actions Workflow
 
 **`.github/workflows/quality-gates.yml`**:
+
 
 ```yaml
 name: Quality Gates Pipeline
@@ -795,6 +893,7 @@ export default defineConfig({
 
 **`.husky/pre-commit`**:
 
+
 ```bash
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
@@ -927,6 +1026,61 @@ describe('Form Components Integration', () => {
   })
 })
 ```
+
+#### 5.3 Test Piramida, Accessibility i Interaction Testing
+
+**Cilj:** Potpuni test pyramid (unit, integracija, play/interaction, a11y) uz standardized test slučajeve i strukturu.
+
+##### Standardi Pokrivenosti i Lokacija Testova
+
+- **Unit:** `packages/core/src/**/*.test.ts(x)`
+- **Integracija:** `packages/core/tests/integration/**/*.test.ts(x)`
+- **Stories:** `.stories.tsx` (CSF args/controls + barem jedan play/interaction)
+
+**Primer:**
+
+```typescript
+// packages/core/tests/components/dyn-input.test.tsx
+import { render, screen } from '@testing-library/react'
+import { DynInput } from '../../src/ui/dyn-input'
+
+describe('DynInput', () => {
+  it('renders label', () => {
+    render(<DynInput label="Email" />)
+    expect(screen.getByLabelText('Email')).toBeInTheDocument()
+  })
+  
+  it('throws validation error', () => {
+    render(<DynInput label="Email" required validation={[{type:'email', message:'Invalid'}]} />)
+    screen.getByLabelText('Email').value = 'notemail'
+    fireEvent.blur(screen.getByLabelText('Email'))
+    expect(screen.getByText('Invalid')).toBeVisible()
+  })
+})
+```
+
+##### Obavezni test scenariji
+
+- Render, props (disabled/loading/state), events (onChange/onClick/keyboard navigation)
+- Accessibility: jest-axe/vitest-axe, plus Storybook test-runner (axe-playwright)
+- Play/interaction: upis/klik/error case kroz play funkciju u priči
+- Coverage prag: ≥80% global (critical path branch ≥85%)
+
+##### Tooling & Setup
+
+- Vitest config: thresholds enforced, environment jsdom
+- Helper: test-utils wrapper (ThemeProvider, tokens)
+- Skripte: `pnpm test`, `pnpm test:watch`, `pnpm test:a11y`, `pnpm storybook`, `pnpm test-storybook`
+- CI: Gate B/C paralelno
+
+##### Definition of Done
+
+- Kritični UI i hooks pokriveni funkcionalnim i accessibility testom
+- Coverage ≥ 80% u CI
+- Stories prolaze axe (default/error/RTL)
+- Play/interaction scenario za ključne komponente i edge cases
+
+---
 
 ---
 
@@ -1543,11 +1697,13 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 
 **Razlog za P3-LOW prioritet:**
 
+
 - Core library mora biti stabilan i validiran pre arhitektonskog proširenja
 - Hybrid arhitektura je preambiciozna bez traction
 - Community adoption je trenutno minimalna (0 stars, 1 fork)
 
 **Prerequisites:**
+
 
 - ✅ Core library published na NPM
 - ✅ >100 GitHub stars
@@ -1556,6 +1712,7 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 - ✅ External validation i feedback
 
 **Arhitektura:**
+
 
 - Config service za runtime configuration
 - Theme service za dynamic theming
@@ -1611,11 +1768,13 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 
 ### Sprint 1 (Week 1): Critical Infrastructure
 
+
 **Dani 1-3:** FAZA 1 - Package Management  
 **Dani 4-5:** FAZA 4 - CI/CD Stabilization  
 **Milestone:** CI/CD passing, dependency conflicts resolved
 
 ### Sprint 2 (Week 2): Core Platform
+
 
 **Dani 6-7:** FAZA 7 - Verification  
 **Dani 8-10 (parallel):** FAZA 2 (TypeScript) + FAZA 3 (Design Tokens)  
@@ -1623,11 +1782,13 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 
 ### Sprint 3 (Week 3): Testing & Quality
 
+
 **Dani 11-12:** FAZA 5 - Testing Infrastructure  
 **Dani 13-15:** FAZA 8 - Visual Regression & NPM  
 **Milestone:** 80% coverage enforced, Chromatic integrated, first NPM release
 
 ### Sprint 4 (Week 4): Polish & Release
+
 
 **Dani 16-17:** FAZA 6 - Production Prep  
 **Dani 18-19:** FAZA 9 - Documentation  
@@ -1642,6 +1803,7 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 
 **Technical Criteria:**
 
+
 - [x] All 29 komponenti implementirane (100%)
 - [ ] Design tokens paket kreiran i integrisan
 - [ ] Test coverage >= 80% (verified)
@@ -1653,6 +1815,7 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 
 **Distribution Criteria:**
 
+
 - [ ] NPM package published (@dynui/core v1.0.0)
 - [ ] Live Storybook demo deployed
 - [ ] API documentation complete
@@ -1660,6 +1823,7 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 - [ ] CHANGELOG.md established
 
 **Community Criteria:**
+
 
 - [ ] External code review completed
 - [ ] Real-world validation app deployed
@@ -1675,11 +1839,13 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 
 **1. Test Coverage Verification (RISK: HIGH)**
 
+
 - **Issue:** Claimed >80%, nije verifikovano
 - **Mitigation:** FAZA 7 mandatory verification, CI enforcement
 - **Contingency:** Dodavanje testova u FAZA 5, može extend na +3 dana
 
 **2. Design Tokens Implementation (RISK: MEDIUM)**
+
 
 - **Issue:** Kompletan nov paket, integration sa core
 - **Mitigation:** FAZA 3 detaljno specificirana
@@ -1687,11 +1853,13 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 
 **3. CI/CD Stability (RISK: MEDIUM)**
 
+
 - **Issue:** Dependency conflicts, failing builds
 - **Mitigation:** FAZA 1 rešava root cause, FAZA 4 stabilizacija
 - **Contingency:** Manual quality checks kao backup
 
 **4. Chromatic Integration (RISK: LOW)**
+
 
 - **Issue:** Novi servis, setup complexity
 - **Mitigation:** FAZA 8 step-by-step integracija
@@ -1704,6 +1872,7 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 ### Immediate Changes Required
 
 **README.md Update:**
+
 
 ```markdown
 # DynUI-Fixed
@@ -1733,6 +1902,7 @@ import { ThemeProvider, DynButton } from '@dynui/core'
 
 **GitHub Topics Update:**
 
+
 ```
 Topics: 
 - react
@@ -1753,12 +1923,14 @@ Topics:
 
 **Infrastructure Excellence:**
 
+
 - ✅ Centralizovano dependency management sa PNPM catalog
 - ✅ Robust CI/CD sa svih 5 Quality Gates (A-E) **fully operational**
 - ✅ Comprehensive testing sa **verified >80% coverage**
 - ✅ Bundle optimization i **automated performance monitoring**
 
 **Component Library Maturity:**
+
 
 - ✅ Sve 29 komponenti 100% FS-compliant
 - ✅ Advanced accessibility i keyboard navigation
@@ -1767,12 +1939,14 @@ Topics:
 
 **Developer Experience:**
 
+
 - ✅ Unified tooling across packages
 - ✅ Automated quality checks sa **pre-commit hooks**
 - ✅ **Visual regression testing** (Chromatic + Playwright)
 - ✅ API contract validation
 
 **Enterprise Readiness:**
+
 
 - ✅ **NPM publishing pipeline** automated
 - ✅ **Auto-generated documentation**
@@ -1788,10 +1962,14 @@ Topics:
 
 **Ukupno vreme:**
 
+**Ukupno vreme:**
+
 - Kritični put: 7 dana
 - High priority: 5 dana (parallel)
 - Medium priority: 4 dana
 - **Total: 16-20 radnih dana (3.2-4 sedmice)**
+
+**ROI:**
 
 **ROI:**
 

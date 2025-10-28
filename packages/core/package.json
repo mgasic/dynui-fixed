@@ -8,9 +8,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     },
     "./styles": "./dist/styles.css"
   },
@@ -23,14 +23,18 @@
     "test:a11y": "vitest run -t a11y --config vitest.config.ts",
     "test:contracts": "tsd",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "eslint src/**/*.{ts,tsx}",
-    "clean": "rm -rf dist"
+    "lint": "eslint --config ../../eslint.config.js \"src/**/*.{ts,tsx}\"",
+    "clean": "rimraf dist"
   },
   "dependencies": {
+    "@dynui/design-tokens": "workspace:*",
+    "@dynui/icons": "workspace:*",
     "classnames": "^2.5.1"
   },
   "devDependencies": {
     "@axe-core/react": "catalog:",
+    "@dynui/build-config": "workspace:*",
+    "@dynui/eslint-config": "workspace:*",
     "@testing-library/jest-dom": "catalog:",
     "@testing-library/react": "catalog:",
     "@testing-library/user-event": "catalog:",
@@ -41,15 +45,17 @@
     "jsdom": "catalog:",
     "prettier": "catalog:",
     "tsup": "catalog:",
-    "tsd": "^0.30.7",
+    "tsd": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:",
-    "vitest-axe": "catalog:"
+    "vitest-axe": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -70,7 +76,7 @@
   },
   "keywords": [
     "react",
-    "component-library", 
+    "component-library",
     "typescript",
     "accessibility",
     "design-system"

@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
+import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import type { 
   DynSelectProps, 
   DynSelectOptionProps, 
@@ -6,6 +6,7 @@ import type {
   SelectOption 
 } from '../types/components/dyn-select.types'
 import { useControlled } from '../hooks/use-controlled'
+import type { UseControlledOptions } from '../hooks/use-controlled'
 import { useKeyboard } from '../hooks/use-keyboard'
 import { classNames } from '../utils'
 
@@ -37,7 +38,6 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
       multiple = false,
       searchable = false,
       options,
-      children,
       open: controlledOpen,
       onOpenChange,
       'aria-label': ariaLabel,
@@ -52,30 +52,57 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
     const listboxRef = useRef<HTMLUListElement>(null)
     
     // Controlled/uncontrolled patterns
-    const { value: currentValue, setValue } = useControlled({
-      value: multiple ? (value as string[]) : (value as string),
-      defaultValue: multiple ? (defaultValue as string[]) : (defaultValue as string),
-      onChange
-    })
-    
-    const { value: isOpen, setValue: setIsOpen } = useControlled({
-      value: controlledOpen,
-      defaultValue: false,
-      onChange: onOpenChange
-    })
+    const controlOptions: UseControlledOptions<string | string[]> = {
+      defaultValue: multiple
+        ? (Array.isArray(defaultValue) ? defaultValue : [])
+        : (typeof defaultValue === 'string' ? defaultValue : '')
+    }
+
+    if (onChange) {
+      controlOptions.onChange = (newValue) => onChange(newValue)
+    }
+
+    if (value !== undefined) {
+      controlOptions.value = multiple
+        ? (Array.isArray(value) ? value : [])
+        : (typeof value === 'string' ? value : '')
+    }
+
+    const { value: rawValue, setValue: setRawValue } = useControlled(controlOptions)
+
+    const currentValue = multiple
+      ? (Array.isArray(rawValue) ? rawValue : [])
+      : (typeof rawValue === 'string' ? rawValue : '')
+
+    const setValue = (next: string | string[]) => {
+      setRawValue(next)
+    }
+
+    const openControlOptions: UseControlledOptions<boolean> = {
+      defaultValue: false
+    }
+    if (typeof controlledOpen === 'boolean') {
+      openControlOptions.value = controlledOpen
+    }
+    if (typeof onOpenChange === 'function') {
+      openControlOptions.onChange = onOpenChange
+    }
+    const { value: isOpen, setValue: setIsOpen } = useControlled<boolean>(openControlOptions)
     
     const [searchQuery, setSearchQuery] = useState('')
     const [focusedIndex, setFocusedIndex] = useState(-1)
-    
+
     // Process options from props or children
-    const processedOptions: SelectOption[] = options || []
+    const processedOptions: SelectOption[] = useMemo(() => options || [], [options])
     
     // Filter options if searchable
-    const filteredOptions = searchable 
-      ? processedOptions.filter(opt => 
-          opt.label.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : processedOptions
+    const filteredOptions = useMemo(() => {
+      if (!searchable) return processedOptions
+      const query = searchQuery.toLowerCase()
+      return processedOptions.filter(opt =>
+        opt.label.toLowerCase().includes(query)
+      )
+    }, [processedOptions, searchable, searchQuery])
     
     // Mini API implementation
     useImperativeHandle(ref, () => ({
@@ -118,7 +145,9 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
       if (isOpen && focusedIndex >= 0) {
         e.preventDefault()
         const option = filteredOptions[focusedIndex]
-        handleOptionSelect(option.value)
+        if (option) {
+          handleOptionSelect(option.value)
+        }
       }
     })
     
@@ -156,20 +185,20 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
     
     const wrapperClasses = classNames(
       'dyn-select-wrapper',
-      dataState && `dyn-select-wrapper--${dataState}`
+      dataState ? `dyn-select-wrapper--${dataState}` : undefined
     )
-    
+
     const triggerClasses = classNames(
       'dyn-select-trigger',
       `dyn-select-trigger--${size}`,
       `dyn-select-trigger--${variant}`,
-      disabled && 'dyn-select-trigger--disabled',
-      isOpen && 'dyn-select-trigger--open'
+      disabled ? 'dyn-select-trigger--disabled' : undefined,
+      isOpen ? 'dyn-select-trigger--open' : undefined
     )
-    
+
     const listboxClasses = classNames(
       'dyn-select-listbox',
-      isOpen && 'dyn-select-listbox--open'
+      isOpen ? 'dyn-select-listbox--open' : undefined
     )
     
     return (
@@ -179,7 +208,6 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
           type="button"
           id={id}
           disabled={disabled}
-          required={required}
           className={triggerClasses}
           onClick={handleTriggerClick}
           aria-label={ariaLabel}
@@ -188,6 +216,7 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-invalid={dataState === 'error' ? 'true' : undefined}
+          aria-required={required ? 'true' : undefined}
         >
           {getDisplayValue()}
           <span className="dyn-select-trigger__icon" aria-hidden="true">
@@ -257,7 +286,10 @@ export const DynSelect = forwardRef<DynSelectRef, DynSelectProps>(
         <input
           type="hidden"
           name={name}
-          value={multiple ? JSON.stringify(currentValue) : (currentValue as string) || ''}
+          value={multiple
+            ? JSON.stringify(Array.isArray(currentValue) ? currentValue : [])
+            : (typeof currentValue === 'string' ? currentValue : '')}
+          required={required}
         />
       </div>
     )
@@ -269,12 +301,7 @@ DynSelect.displayName = 'DynSelect'
 /**
  * DynSelectOption - Individual option component for children pattern
  */
-export function DynSelectOption({
-  value,
-  disabled = false,
-  children,
-  description
-}: DynSelectOptionProps) {
+export function DynSelectOption(_props: DynSelectOptionProps) {
   // This is used when DynSelect receives children instead of options prop
   // The parent DynSelect will process these children to build the options array
   return null // This component is used for type checking and API consistency

@@ -9,12 +9,13 @@ export function DynDivider({
   'aria-label': ariaLabel,
   'data-testid': dataTestId
 }: DynDividerProps) {
+  const hasLabel = label !== null && label !== undefined && label !== false
   const cls = classNames(
     'dyn-divider',
     `dyn-divider--${orientation}`,
     `dyn-divider--${variant}`,
     `dyn-divider--${size}`,
-    label && 'dyn-divider--with-label'
+    hasLabel ? 'dyn-divider--with-label' : undefined
   )
 
   return (
@@ -25,7 +26,7 @@ export function DynDivider({
       aria-label={ariaLabel}
       data-testid={dataTestId}
     >
-      {label && (
+      {hasLabel && (
         <span className="dyn-divider__label">{label}</span>
       )}
     </div>

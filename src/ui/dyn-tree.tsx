@@ -1,4 +1,5 @@
 import { forwardRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import type { DynTreeViewProps, DynTreeNodeProps, TreeNode } from '../types/components/dyn-tree.types';
 import { classNames } from '../utils';
 
@@ -35,7 +36,7 @@ export const DynTreeView = forwardRef<HTMLDivElement, DynTreeViewProps>(
       onNodeSelect?.(nodeId);
     };
 
-    const renderNode = (node: TreeNode, level = 0): React.ReactNode => {
+    const renderNode = (node: TreeNode, level = 0): ReactNode => {
       const isExpanded = internalExpanded.includes(node.id);
       const isSelected = multiSelect 
         ? internalSelected.includes(node.id)
@@ -107,7 +108,11 @@ export const DynTreeNode = forwardRef<HTMLDivElement, DynTreeNodeProps>(
           hasChildren && 'dyn-tree-node--expandable',
           className
         )}
-        style={{ paddingLeft: `${level * 20}px` }}
+        style={{
+          paddingLeft: level
+            ? `calc(${level} * var(--dyn-spacing-4, var(--dyn-spacing-md, 1rem)))`
+            : undefined
+        }}
         onClick={onSelect}
       >
         {hasChildren && (

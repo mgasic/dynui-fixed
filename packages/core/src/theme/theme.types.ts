@@ -1,52 +1,29 @@
-export interface ColorScale {
-  50: string
-  100: string
-  200?: string
-  300?: string
-  400?: string
-  500: string
-  600: string
-  700: string
-  800?: string
-  900: string
+import type {
+  Colors,
+  Radii,
+  Shadows,
+  SpacingScale,
+  Typography,
+  Tokens
+} from '@dynui/design-tokens'
+
+export type ThemeTokens = Tokens
+
+export type ThemeColors = {
+  primary: Colors['primary']
+  gray: Colors['neutral']
+  danger: Colors['semantic']['danger']
+  success: Colors['semantic']['success']
+  warning: Colors['semantic']['warning']
+  info: Colors['semantic']['info']
 }
 
 export interface Theme {
-  colors: {
-    primary: ColorScale
-    gray: ColorScale
-    danger: Partial<ColorScale>
-    success: Partial<ColorScale>
-    warning: Partial<ColorScale>
-  }
-  spacing: {
-    xs: string
-    sm: string
-    md: string
-    lg: string
-    xl: string
-    '2xl': string
-  }
-  typography: {
-    fontFamily: {
-      sans: string[]
-      mono: string[]
-    }
-    fontSize: {
-      [key: string]: [string, { lineHeight: string }]
-    }
-  }
-  borderRadius: {
-    sm: string
-    md: string
-    lg: string
-    full: string
-  }
-  shadow: {
-    sm: string
-    md: string
-    lg: string
-  }
+  colors: ThemeColors
+  spacing: Pick<SpacingScale, 'none' | 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'>
+  typography: Typography
+  borderRadius: Pick<Radii, 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full'>
+  shadow: Pick<Shadows, 'xs' | 'sm' | 'md' | 'lg'>
 }
 
 export interface ThemeContextType {
