@@ -20,8 +20,10 @@
     "format:check": "prettier --check .",
     "clean": "node ./tools/run-turbo-task.js clean",
     "prepare": "husky install",
-    "storybook": "cd apps/storybook && pnpm storybook",
-    "build:storybook": "cd apps/storybook && pnpm build:storybook",
+    "storybook": "storybook dev -p 6006",
+    "storybook:apps": "cd apps/storybook && pnpm storybook",
+    "build:storybook": "storybook build",
+    "build:storybook:apps": "cd apps/storybook && pnpm build:storybook",
     "playground": "pnpm --filter playground dev"
   },
   "dependencies": {
@@ -32,6 +34,7 @@
     "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-essentials": "catalog:",
+    "@storybook/addon-interactions": "catalog:",
     "@storybook/react-vite": "catalog:",
     "@testing-library/jest-dom": "catalog:",
     "@testing-library/react": "catalog:",
