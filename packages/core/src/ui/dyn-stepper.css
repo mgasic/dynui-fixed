@@ -1,0 +1,336 @@
+/* DynStepper Component Styles */
+
+.dyn-stepper {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--dyn-spacing-4);
+  font-family: var(--dyn-font-family-sans);
+  
+  /* Horizontal orientation (default) */
+  &--horizontal {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  /* Vertical orientation */
+  &--vertical {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 400px;
+  }
+  
+  /* Size variants */
+  &--sm {
+    font-size: var(--dyn-font-size-sm);
+  }
+  
+  &--md {
+    font-size: var(--dyn-font-size-base);
+  }
+  
+  &--lg {
+    font-size: var(--dyn-font-size-lg);
+  }
+}
+
+.dyn-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  
+  /* Horizontal layout */
+  .dyn-stepper--horizontal & {
+    flex-direction: row;
+    min-width: 0;
+  }
+  
+  /* Vertical layout */
+  .dyn-stepper--vertical & {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  /* Step states */
+  &--pending {
+    .dyn-step__indicator {
+      background-color: var(--dyn-color-background);
+      border-color: var(--dyn-color-border);
+      color: var(--dyn-color-text-secondary);
+    }
+    
+    .dyn-step__title {
+      color: var(--dyn-color-text-secondary);
+    }
+  }
+  
+  &--current {
+    .dyn-step__indicator {
+      background-color: var(--dyn-color-primary-600);
+      border-color: var(--dyn-color-primary-600);
+      color: var(--dyn-color-white);
+      box-shadow: var(--dyn-shadow-focus);
+    }
+    
+    .dyn-step__title {
+      color: var(--dyn-color-primary-600);
+      font-weight: var(--dyn-font-weight-semibold);
+    }
+  }
+  
+  &--completed {
+    .dyn-step__indicator {
+      background-color: var(--dyn-color-success-600);
+      border-color: var(--dyn-color-success-600);
+      color: var(--dyn-color-white);
+    }
+    
+    .dyn-step__title {
+      color: var(--dyn-color-text-primary);
+    }
+    
+    .dyn-step__connector {
+      background-color: var(--dyn-color-success-600);
+    }
+  }
+  
+  &--disabled {
+    .dyn-step__button {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    .dyn-step__indicator {
+      background-color: var(--dyn-color-background-disabled);
+      border-color: var(--dyn-color-border-disabled);
+      color: var(--dyn-color-text-disabled);
+    }
+    
+    .dyn-step__title {
+      color: var(--dyn-color-text-disabled);
+    }
+  }
+}
+
+.dyn-step__button {
+  display: flex;
+  align-items: center;
+  gap: var(--dyn-spacing-3);
+  background: none;
+  border: none;
+  padding: var(--dyn-spacing-2);
+  border-radius: var(--dyn-radius-base);
+  cursor: pointer;
+  transition: var(--dyn-transition-colors);
+  text-align: left;
+  
+  /* Focus styles */
+  &:focus {
+    outline: none;
+  }
+  
+  &:focus-visible {
+    box-shadow: var(--dyn-shadow-focus);
+  }
+  
+  /* Hover styles */
+  &:hover:not(:disabled) {
+    .dyn-step__indicator {
+      transform: scale(1.05);
+      transition: transform var(--dyn-duration-fast) var(--dyn-ease-out);
+    }
+  }
+  
+  /* Vertical layout adjustments */
+  .dyn-stepper--vertical & {
+    align-items: flex-start;
+    width: 100%;
+  }
+}
+
+.dyn-step__indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid;
+  font-size: var(--dyn-font-size-sm);
+  font-weight: var(--dyn-font-weight-semibold);
+  transition: var(--dyn-transition-all);
+  flex-shrink: 0;
+  
+  /* Size variants */
+  .dyn-stepper--sm & {
+    width: 24px;
+    height: 24px;
+    font-size: var(--dyn-font-size-xs);
+  }
+  
+  .dyn-stepper--lg & {
+    width: 40px;
+    height: 40px;
+    font-size: var(--dyn-font-size-base);
+  }
+}
+
+.dyn-step__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dyn-step__check-icon {
+  width: 16px;
+  height: 16px;
+  
+  .dyn-stepper--sm & {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .dyn-stepper--lg & {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.dyn-step__content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  
+  .dyn-stepper--vertical & {
+    margin-top: var(--dyn-spacing-2);
+    margin-bottom: var(--dyn-spacing-4);
+  }
+}
+
+.dyn-step__title {
+  font-weight: var(--dyn-font-weight-medium);
+  line-height: var(--dyn-line-height-snug);
+  transition: var(--dyn-transition-colors);
+  
+  /* Size variants */
+  .dyn-stepper--sm & {
+    font-size: var(--dyn-font-size-sm);
+  }
+  
+  .dyn-stepper--md & {
+    font-size: var(--dyn-font-size-base);
+  }
+  
+  .dyn-stepper--lg & {
+    font-size: var(--dyn-font-size-lg);
+  }
+}
+
+.dyn-step__description {
+  color: var(--dyn-color-text-secondary);
+  font-size: var(--dyn-font-size-sm);
+  line-height: var(--dyn-line-height-normal);
+  margin-top: var(--dyn-spacing-1);
+  
+  .dyn-stepper--sm & {
+    font-size: var(--dyn-font-size-xs);
+  }
+  
+  .dyn-stepper--lg & {
+    font-size: var(--dyn-font-size-base);
+  }
+}
+
+.dyn-step__panel {
+  margin-top: var(--dyn-spacing-4);
+  
+  &[hidden] {
+    display: none;
+  }
+  
+  /* Vertical layout */
+  .dyn-stepper--vertical & {
+    margin-left: var(--dyn-spacing-8);
+    margin-top: var(--dyn-spacing-2);
+    padding-bottom: var(--dyn-spacing-6);
+  }
+}
+
+.dyn-step__connector {
+  flex: 1;
+  height: 2px;
+  background-color: var(--dyn-color-border);
+  margin: 0 var(--dyn-spacing-4);
+  transition: var(--dyn-transition-colors);
+  
+  /* Completed state */
+  &--completed {
+    background-color: var(--dyn-color-success-600);
+  }
+  
+  /* Vertical layout connector */
+  .dyn-stepper--vertical & {
+    position: absolute;
+    left: 15px; /* Half of indicator width (32px) - connector width (2px) */
+    top: 40px;  /* Below indicator */
+    width: 2px;
+    height: calc(100% - 32px);
+    margin: 0;
+    background-color: var(--dyn-color-border);
+    
+    &--completed {
+      background-color: var(--dyn-color-success-600);
+    }
+  }
+  
+  .dyn-stepper--vertical.dyn-stepper--sm & {
+    left: 11px; /* Adjust for smaller indicator */
+    top: 32px;
+  }
+  
+  .dyn-stepper--vertical.dyn-stepper--lg & {
+    left: 19px; /* Adjust for larger indicator */
+    top: 48px;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .dyn-stepper--horizontal {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .dyn-step__connector {
+      display: none;
+    }
+    
+    .dyn-step {
+      margin-bottom: var(--dyn-spacing-4);
+    }
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .dyn-step__indicator {
+    border-width: 3px;
+  }
+  
+  .dyn-step--current .dyn-step__indicator {
+    box-shadow: var(--dyn-shadow-focus), inset 0 0 0 2px var(--dyn-color-white);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .dyn-step__indicator,
+  .dyn-step__title,
+  .dyn-step__connector {
+    transition: none;
+  }
+  
+  .dyn-step__button:hover .dyn-step__indicator {
+    transform: none;
+  }
+}
