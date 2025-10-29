@@ -1,1 +1,0 @@
-{"version":3,"file":"colors.d.ts","sourceRoot":"","sources":["../src/colors.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,MAAM;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;CA+CT,CAAA;AAEV,MAAM,MAAM,UAAU,GAAG,OAAO,MAAM,CAAC,OAAO,CAAA;AAC9C,MAAM,MAAM,YAAY,GAAG,OAAO,MAAM,CAAC,OAAO,CAAA;AAChD,MAAM,MAAM,gBAAgB,GAAG,OAAO,MAAM,CAAC,QAAQ,CAAA;AACrD,MAAM,MAAM,MAAM,GAAG,OAAO,MAAM,CAAA"}
