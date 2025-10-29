@@ -174,6 +174,10 @@ export const States: Story = {
 export const Interactive: Story = {
   render: () => {
     const [value, setValue] = useState('')
+
+    const handleChange = (newValue: string) => {
+      setValue(newValue)
+    }
     
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -183,7 +187,7 @@ export const Interactive: Story = {
         <DynInput
           id="interactive-input"
           value={value}
-          onChange={setValue}
+          onChange={handleChange}
           placeholder="Type something..."
         />
         <div style={{ fontSize: '0.875rem', color: '#666' }}>
