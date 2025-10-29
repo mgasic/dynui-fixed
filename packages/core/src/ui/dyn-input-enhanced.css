@@ -1,0 +1,242 @@
+/* DynInputEnhanced Component Styles */
+
+.dyn-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--dyn-color-input-background);
+  border: 1px solid var(--dyn-color-input-border);
+  border-radius: var(--dyn-radius-input);
+  transition: var(--dyn-transition-colors), var(--dyn-transition-shadow);
+  
+  &--sm {
+    min-height: var(--dyn-size-height-sm);
+    font-size: var(--dyn-font-size-sm);
+  }
+  
+  &--md {
+    min-height: var(--dyn-size-height-md);
+    font-size: var(--dyn-font-size-base);
+  }
+  
+  &--lg {
+    min-height: var(--dyn-size-height-lg);
+    font-size: var(--dyn-font-size-lg);
+  }
+  
+  &--focused {
+    border-color: var(--dyn-color-input-border-focus);
+    box-shadow: var(--dyn-shadow-focus);
+  }
+  
+  &--error {
+    border-color: var(--dyn-color-danger-500);
+    
+    &.dyn-input-container--focused {
+      border-color: var(--dyn-color-danger-600);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+  }
+  
+  &--warning {
+    border-color: var(--dyn-color-warning-500);
+    
+    &.dyn-input-container--focused {
+      border-color: var(--dyn-color-warning-600);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    }
+  }
+  
+  &--success {
+    border-color: var(--dyn-color-success-500);
+    
+    &.dyn-input-container--focused {
+      border-color: var(--dyn-color-success-600);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+  }
+  
+  &--disabled {
+    background-color: var(--dyn-color-background-disabled);
+    border-color: var(--dyn-color-border-disabled);
+    cursor: not-allowed;
+  }
+  
+  &--readonly {
+    background-color: var(--dyn-color-background-subtle);
+    cursor: default;
+  }
+  
+  &--loading {
+    cursor: wait;
+  }
+}
+
+.dyn-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--dyn-color-text);
+  font-family: inherit;
+  font-size: inherit;
+  padding: var(--dyn-spacing-2) var(--dyn-spacing-3);
+  
+  &::placeholder {
+    color: var(--dyn-color-text-placeholder);
+  }
+  
+  &:disabled {
+    color: var(--dyn-color-text-disabled);
+    cursor: not-allowed;
+  }
+  
+  .dyn-input-container--sm & {
+    padding: var(--dyn-spacing-1) var(--dyn-spacing-2);
+  }
+  
+  .dyn-input-container--lg & {
+    padding: var(--dyn-spacing-3) var(--dyn-spacing-4);
+  }
+  
+  .dyn-input-container--has-prefix & {
+    padding-left: var(--dyn-spacing-1);
+  }
+  
+  .dyn-input-container--has-suffix & {
+    padding-right: var(--dyn-spacing-1);
+  }
+}
+
+.dyn-input__prefix,
+.dyn-input__suffix {
+  display: flex;
+  align-items: center;
+  gap: var(--dyn-spacing-2);
+  padding: 0 var(--dyn-spacing-2);
+  color: var(--dyn-color-text-secondary);
+  
+  .dyn-input-container--sm & {
+    padding: 0 var(--dyn-spacing-1);
+    gap: var(--dyn-spacing-1);
+  }
+  
+  .dyn-input-container--lg & {
+    padding: 0 var(--dyn-spacing-3);
+    gap: var(--dyn-spacing-3);
+  }
+}
+
+.dyn-input__start-icon,
+.dyn-input__end-icon {
+  display: flex;
+  align-items: center;
+  color: var(--dyn-color-text-tertiary);
+  
+  svg {
+    width: var(--dyn-size-icon-sm);
+    height: var(--dyn-size-icon-sm);
+  }
+}
+
+.dyn-input__clean-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--dyn-spacing-1);
+  background: none;
+  border: none;
+  color: var(--dyn-color-text-tertiary);
+  cursor: pointer;
+  border-radius: var(--dyn-radius-sm);
+  transition: var(--dyn-transition-colors);
+  
+  &:hover {
+    color: var(--dyn-color-text-secondary);
+    background-color: var(--dyn-color-background-hover);
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: var(--dyn-shadow-focus);
+  }
+  
+  svg {
+    width: var(--dyn-size-icon-sm);
+    height: var(--dyn-size-icon-sm);
+  }
+}
+
+.dyn-input__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--dyn-size-icon-sm);
+  height: var(--dyn-size-icon-sm);
+  color: var(--dyn-color-primary-600);
+}
+
+.dyn-input__loading-spinner {
+  width: 16px;
+  height: 16px;
+  animation: dyn-spin 1s linear infinite;
+}
+
+.dyn-input__loading-circle {
+  opacity: 0.25;
+}
+
+.dyn-input__loading-path {
+  opacity: 0.75;
+}
+
+@keyframes dyn-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Variant styles */
+.dyn-input-container--outline {
+  border-style: solid;
+}
+
+.dyn-input-container--filled {
+  background-color: var(--dyn-color-background-subtle);
+  border: 1px solid transparent;
+  
+  &:hover {
+    background-color: var(--dyn-color-background-hover);
+  }
+  
+  &--focused {
+    background-color: var(--dyn-color-input-background);
+    border-color: var(--dyn-color-input-border-focus);
+  }
+}
+
+.dyn-input-container--underline {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--dyn-color-border);
+  border-radius: 0;
+  
+  &--focused {
+    border-bottom-color: var(--dyn-color-input-border-focus);
+    box-shadow: none;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .dyn-input-container {
+    min-height: 44px; /* Minimum touch target */
+  }
+  
+  .dyn-input {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
