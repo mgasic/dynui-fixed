@@ -1,0 +1,85 @@
+/* DynIcon Component Styles */
+
+.dyn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  
+  /* Size variants */
+  &--sm {
+    width: var(--dyn-size-icon-sm);
+    height: var(--dyn-size-icon-sm);
+  }
+  
+  &--md {
+    width: var(--dyn-size-icon-md);
+    height: var(--dyn-size-icon-md);
+  }
+  
+  &--lg {
+    width: var(--dyn-size-icon-lg);
+    height: var(--dyn-size-icon-lg);
+  }
+  
+  /* Color variants */
+  &--neutral {
+    color: var(--dyn-color-text-secondary);
+  }
+  
+  &--info {
+    color: var(--dyn-color-info-500);
+  }
+  
+  &--success {
+    color: var(--dyn-color-success-500);
+  }
+  
+  &--warning {
+    color: var(--dyn-color-warning-500);
+  }
+  
+  &--danger {
+    color: var(--dyn-color-danger-500);
+  }
+  
+  /* SVG styling */
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+  }
+}
+
+/* Common icon animations */
+@keyframes dyn-icon-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dyn-icon--spinning svg {
+  animation: dyn-icon-spin 1s linear infinite;
+}
+
+/* Accessibility */
+.dyn-icon[aria-hidden="true"] {
+  pointer-events: none;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .dyn-icon--neutral {
+    color: var(--dyn-color-text-primary);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .dyn-icon--spinning svg {
+    animation: none;
+  }
+}
