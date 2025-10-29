@@ -42,8 +42,5 @@ export { useEnhancedValidation, useSimpleValidation } from '../hooks/use-enhance
 // Enhanced Utilities
 export { cn, classNames, generateInitials, formatFileSize, debounce, throttle } from '../utils/classNames'
 
-// Re-export types (Original + Enhanced)
-export type * from '../types/components'
-export type * from '../ui/dyn-input'
-export type * from '../ui/dyn-checkbox'
-export type * from '../hooks/use-enhanced-validation'
+
+                         
