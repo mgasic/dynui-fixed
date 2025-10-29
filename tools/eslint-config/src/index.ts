@@ -35,7 +35,10 @@ export function withOverrides(overrides: Linter.Config): Linter.Config {
   return {
     ...baseEslintConfig,
     ...overrides,
-    rules: { ...baseEslintConfig.rules, ...overrides.rules }
+    rules: {
+      ...(baseEslintConfig.rules ?? {}),
+      ...(overrides.rules ?? {})
+    }
   };
 }
 

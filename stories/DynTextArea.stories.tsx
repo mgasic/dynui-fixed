@@ -10,9 +10,8 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  args: { placeholder: 'Enter text...', rows: 4 }
-}
-
-export const Resizable: Story = {
-  args: { placeholder: 'Resizable both', resize: 'both', rows: 6 }
+  args: {
+    placeholder: 'Enter description...',
+    rows: 4
+  }
 }

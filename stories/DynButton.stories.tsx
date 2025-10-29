@@ -22,7 +22,7 @@ const meta: Meta<typeof DynButton> = {
     },
     color: {
       control: { type: 'select' },
-      options: ['neutral', 'info', 'success', 'warning', 'danger']
+      options: ['primary', 'secondary', 'success', 'warning', 'error']
     }
   }
 }
@@ -30,15 +30,25 @@ const meta: Meta<typeof DynButton> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Primary: Story = {
   args: {
-    children: 'Button'
+    children: 'Button',
+    variant: 'solid',
+    color: 'primary'
   }
 }
 
-export const Variants: Story = {
+export const Secondary: Story = {
+  args: {
+    children: 'Button',
+    variant: 'outline',
+    color: 'secondary'
+  }
+}
+
+export const AllVariants: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
       <DynButton variant="solid">Solid</DynButton>
       <DynButton variant="outline">Outline</DynButton>
       <DynButton variant="ghost">Ghost</DynButton>
@@ -46,7 +56,7 @@ export const Variants: Story = {
   )
 }
 
-export const Sizes: Story = {
+export const AllSizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
       <DynButton size="sm">Small</DynButton>
@@ -56,31 +66,19 @@ export const Sizes: Story = {
   )
 }
 
-export const Colors: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-      <DynButton color="neutral">Neutral</DynButton>
-      <DynButton color="info">Info</DynButton>
-      <DynButton color="success">Success</DynButton>
-      <DynButton color="warning">Warning</DynButton>
-      <DynButton color="danger">Danger</DynButton>
-    </div>
-  )
-}
-
 export const WithIcons: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-      <DynButton startIcon="📋">Save</DynButton>
-      <DynButton endIcon="→">Next</DynButton>
-      <DynButton startIcon="🚫" color="danger">Delete</DynButton>
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <DynButton startIcon="→">Start Icon</DynButton>
+      <DynButton endIcon="←">End Icon</DynButton>
+      <DynButton startIcon="→" endIcon="←">Both Icons</DynButton>
     </div>
   )
 }
 
 export const States: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
       <DynButton>Normal</DynButton>
       <DynButton disabled>Disabled</DynButton>
       <DynButton loading>Loading</DynButton>

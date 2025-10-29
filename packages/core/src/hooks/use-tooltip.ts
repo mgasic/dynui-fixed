@@ -19,9 +19,9 @@ export function useTooltip({
 }: UseTooltipOptions = {}) {
   const [isVisible, setIsVisible] = useState(false)
   const [position, setPosition] = useState<TooltipPosition>({ x: 0, y: 0, placement })
-  const triggerRef = useRef<HTMLElement>(null)
-  const timeoutRef = useRef<NodeJS.Timeout>()
-  const hideTimeoutRef = useRef<NodeJS.Timeout>()
+  const triggerRef = useRef<HTMLElement | null>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const calculatePosition = useCallback(() => {
     if (!triggerRef.current) return
@@ -69,11 +69,13 @@ export function useTooltip({
   const hide = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
     }
-    
+
     if (hideDelay > 0) {
       hideTimeoutRef.current = setTimeout(() => {
         setIsVisible(false)
+        hideTimeoutRef.current = null
       }, hideDelay)
     } else {
       setIsVisible(false)
@@ -82,8 +84,14 @@ export function useTooltip({
 
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current)
+        hideTimeoutRef.current = null
+      }
     }
   }, [])
 

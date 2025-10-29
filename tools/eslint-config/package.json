@@ -1,27 +1,23 @@
 {
   "name": "@dynui/eslint-config",
   "version": "0.1.0",
-  "description": "Central ESLint configuration for DynUI packages and apps.",
-  "type": "module",
-  "private": true,
-  "files": ["src", "README.md"],
+  "description": "Shared ESLint configuration presets for DynUI.",
+  "type": "commonjs",
+  "main": "index.cjs",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./index.cjs",
+    "./react": "./react.cjs"
   },
-  "scripts": {
-    "build": "echo 'Lint configuration ships as source-only'",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
-  },
+  "files": ["index.cjs", "react.cjs", "README.md"],
   "peerDependencies": {
-    "eslint": "catalog:",
-    "eslint-plugin-react": "catalog:",
-    "typescript": "catalog:"
+    "eslint": ">=9"
+  },
+  "dependencies": {
+    "@eslint/js": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-react": "catalog:"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "catalog:",
-    "@typescript-eslint/parser": "catalog:",
-    "eslint": "catalog:",
-    "eslint-plugin-react": "catalog:",
-    "typescript": "catalog:"
+    "eslint": "catalog:"
   }
 }

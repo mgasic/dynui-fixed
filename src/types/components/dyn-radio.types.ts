@@ -1,5 +1,5 @@
+import type { ChangeEvent, ReactNode } from 'react';
 import type { Size } from '../common.types';
-import type React from 'react';
 
 export interface RadioOption {
   value: string;
@@ -16,8 +16,8 @@ export interface DynRadioGroupProps {
   orientation?: 'horizontal' | 'vertical';
   size?: Size;
   className?: string;
-  children?: React.ReactNode;
-  onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement>) => void;
+  children?: ReactNode;
+  onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
   'aria-label'?: string;
   'aria-labelledby'?: string;
   'aria-describedby'?: string;
@@ -32,9 +32,9 @@ export interface DynRadioProps {
   defaultChecked?: boolean;
   disabled?: boolean;
   size?: Size;
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
-  onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
   'aria-label'?: string;
   'aria-labelledby'?: string;
   'aria-describedby'?: string;

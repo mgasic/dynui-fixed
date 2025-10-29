@@ -1,10 +1,11 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "@dynui/build-config/tsconfig.base",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@dynui/core": ["../../packages/core/src"]
-    }
+    "jsx": "react-jsx",
+    "types": ["vite/client"]
   },
-  "include": ["src", "vite.config.ts", "tsconfig.node.json"]
+  "include": ["src/**/*", "vite.config.ts"],
+  "references": [
+    { "path": "./tsconfig.node.json" }
+  ]
 }

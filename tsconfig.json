@@ -1,33 +1,15 @@
 {
+  "extends": "./tools/build-config/tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    
-    // Strict type checking
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    
-    // Module handling
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "skipLibCheck": true,
-    
-    // Output
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "removeComments": true,
-    
-    // JSX
-    "jsx": "react-jsx"
+    "baseUrl": ".",
+    "paths": {
+      "@dynui/design-tokens": ["packages/design-tokens/src"]
+    }
   },
-  "exclude": ["node_modules", "dist", "build", "storybook-static"]
+  "exclude": [
+    "./dist",
+    "./build",
+    "./node_modules",
+    "./storybook-static"
+  ]
 }

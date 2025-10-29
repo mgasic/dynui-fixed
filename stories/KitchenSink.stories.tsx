@@ -1,54 +1,40 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { DynListView } from '../src/ui/dyn-listview'
-import { DynTreeView } from '../src/ui/dyn-tree'
-import { DynTable } from '../src/ui/dyn-table'
-import { DynInput } from '../src/ui/dyn-input'
 import { DynButton } from '../src/ui/dyn-button'
-import { DynTabs, DynTab, DynTabPanel } from '../src/ui/dyn-tabs'
-import { DynMenu, DynMenuItem } from '../src/ui/dyn-menu'
-import { DynModal } from '../src/ui/dyn-modal'
+import { DynInput } from '../src/ui/dyn-input'
+import { DynSelect } from '../src/ui/dyn-select'
+import { DynCheckbox } from '../src/ui/dyn-checkbox'
 
 const meta: Meta = {
-  title: 'KitchenSink/All Components',
+  title: 'Examples/KitchenSink',
+  parameters: {
+    docs: {
+      description: {
+        component: 'A comprehensive example showing multiple DynUI components working together.'
+      }
+    }
+  }
 }
-export default meta
 
+export default meta
 type Story = StoryObj
 
-export const All: Story = {
+export const FormExample: Story = {
   render: () => (
-    <div style={{ display: 'grid', gap: 24 }}>
-      <section>
-        <h3>Navigation</h3>
-        <DynTabs defaultValue="tab1">
-          <DynTab item={{ key: 'tab1', value: 'tab1', label: 'Tab 1' }} />
-          <DynTab item={{ key: 'tab2', value: 'tab2', label: 'Tab 2' }} />
-          <DynTabPanel item={{ key: 'tab1', value: 'tab1', label: 'Tab 1' }}>Content 1</DynTabPanel>
-          <DynTabPanel item={{ key: 'tab2', value: 'tab2', label: 'Tab 2' }}>Content 2</DynTabPanel>
-        </DynTabs>
-        <DynMenu>
-          <DynMenuItem item={{ type: 'item', value: 'new', label: 'New' }} />
-          <DynMenuItem item={{ type: 'item', value: 'open', label: 'Open' }} />
-        </DynMenu>
-      </section>
-
-      <section>
-        <h3>Form</h3>
-        <DynInput placeholder="Your name" />
-        <DynButton>Submit</DynButton>
-      </section>
-
-      <section>
-        <h3>Data</h3>
-        <DynListView items={[{ key: '1', value: '1', label: 'One' }, { key: '2', value: '2', label: 'Two' }]} />
-        <DynTreeView nodes={[{ key: 'root', value: 'root', label: 'Root' }]} />
-        <DynTable columns={[{ key: 'name', label: 'Name' }]} data={[{ name: 'Alice' }]} />
-      </section>
-
-      <section>
-        <h3>Overlays</h3>
-        <DynModal open title="Sample Modal">Body</DynModal>
-      </section>
-    </div>
+    <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
+      <DynInput placeholder="Enter your name" />
+      <DynInput type="email" placeholder="Enter your email" />
+      <DynSelect 
+        placeholder="Choose country"
+        options={[
+          { value: 'us', label: 'United States' },
+          { value: 'ca', label: 'Canada' },
+          { value: 'uk', label: 'United Kingdom' }
+        ]}
+      />
+      <DynCheckbox label="I agree to the terms and conditions" />
+      <DynButton type="submit" variant="solid" color="primary">
+        Submit
+      </DynButton>
+    </form>
   )
 }
