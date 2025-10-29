@@ -1,5 +1,5 @@
-// DynUI Core Components - Enhanced Barrel Exports
-// All components now include enhanced features while maintaining backward compatibility
+// DynUI Core Components - Barrel Exports
+// Migration from src/components/ to packages/core/src/components/
 
 // Core Components
 export { DynTabs, DynTab, DynTabPanel } from '../ui/dyn-tabs'
@@ -7,10 +7,10 @@ export { DynStepper, DynStep } from '../ui/dyn-stepper'
 export { DynMenu, DynMenuItem } from '../ui/dyn-menu'
 export { DynListView } from '../ui/dyn-listview'
 
-// Enhanced Form Components (backward compatible + new features)
-export { DynInput } from '../ui/dyn-input'            // Now enhanced!
-export { DynCheckbox } from '../ui/dyn-checkbox'      // Now enhanced!
+// Form Components
+export { DynInput } from '../ui/dyn-input'
 export { DynButton } from '../ui/dyn-button'
+export { DynCheckbox } from '../ui/dyn-checkbox'
 export { DynSelect, DynSelectOption } from '../ui/dyn-select'
 export { DynTextArea } from '../ui/dyn-textarea'
 export { DynRadioGroup, DynRadio } from '../ui/dyn-radio'
@@ -36,14 +36,5 @@ export { DynBreadcrumb, DynBreadcrumbItem } from '../ui/dyn-breadcrumb'
 // Tree
 export { DynTreeView, DynTreeNode } from '../ui/dyn-tree'
 
-// Enhanced Validation System
-export { useEnhancedValidation, useSimpleValidation } from '../hooks/use-enhanced-validation'
-
-// Enhanced Utilities
-export { cn, classNames, generateInitials, formatFileSize, debounce, throttle } from '../utils/classNames'
-
-// Re-export types (Original + Enhanced)
+// Re-export types
 export type * from '../types/components'
-export type * from '../ui/dyn-input'
-export type * from '../ui/dyn-checkbox'
-export type * from '../hooks/use-enhanced-validation'
