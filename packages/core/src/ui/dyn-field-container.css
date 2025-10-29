@@ -1,0 +1,278 @@
+/* DynFieldContainer Component Styles */
+
+.dyn-field-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dyn-spacing-2);
+  font-family: var(--dyn-font-family-sans);
+  
+  /* Size variants */
+  &--sm {
+    gap: var(--dyn-spacing-1);
+    font-size: var(--dyn-font-size-sm);
+  }
+  
+  &--md {
+    gap: var(--dyn-spacing-2);
+    font-size: var(--dyn-font-size-base);
+  }
+  
+  &--lg {
+    gap: var(--dyn-spacing-3);
+    font-size: var(--dyn-font-size-lg);
+  }
+  
+  /* State variants */
+  &--error {
+    .dyn-field-container__field input,
+    .dyn-field-container__field select,
+    .dyn-field-container__field textarea {
+      border-color: var(--dyn-color-danger-500);
+      
+      &:focus {
+        border-color: var(--dyn-color-danger-600);
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      }
+    }
+  }
+  
+  &--warning {
+    .dyn-field-container__field input,
+    .dyn-field-container__field select,
+    .dyn-field-container__field textarea {
+      border-color: var(--dyn-color-warning-500);
+      
+      &:focus {
+        border-color: var(--dyn-color-warning-600);
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+      }
+    }
+  }
+  
+  &--success {
+    .dyn-field-container__field input,
+    .dyn-field-container__field select,
+    .dyn-field-container__field textarea {
+      border-color: var(--dyn-color-success-500);
+      
+      &:focus {
+        border-color: var(--dyn-color-success-600);
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+      }
+    }
+  }
+  
+  &--disabled {
+    opacity: 0.6;
+    
+    .dyn-field-container__label {
+      color: var(--dyn-color-text-disabled);
+    }
+    
+    .dyn-field-container__description {
+      color: var(--dyn-color-text-disabled);
+    }
+  }
+}
+
+.dyn-field-container__label {
+  display: flex;
+  align-items: center;
+  gap: var(--dyn-spacing-1);
+  font-weight: var(--dyn-font-weight-medium);
+  color: var(--dyn-color-text-primary);
+  line-height: var(--dyn-line-height-snug);
+  
+  &--required {
+    .dyn-field-container__required-indicator {
+      color: var(--dyn-color-danger-600);
+    }
+  }
+}
+
+.dyn-field-container__required-indicator {
+  font-weight: var(--dyn-font-weight-bold);
+  margin-left: var(--dyn-spacing-1);
+}
+
+.dyn-field-container__description {
+  color: var(--dyn-color-text-secondary);
+  font-size: var(--dyn-font-size-sm);
+  line-height: var(--dyn-line-height-normal);
+  
+  .dyn-field-container--sm & {
+    font-size: var(--dyn-font-size-xs);
+  }
+  
+  .dyn-field-container--lg & {
+    font-size: var(--dyn-font-size-base);
+  }
+}
+
+.dyn-field-container__field {
+  display: flex;
+  flex-direction: column;
+  
+  /* Default input styling */
+  input,
+  select,
+  textarea {
+    padding: var(--dyn-spacing-component-padding-md);
+    border: 1px solid var(--dyn-color-border);
+    border-radius: var(--dyn-radius-input);
+    background-color: var(--dyn-color-input-background);
+    color: var(--dyn-color-input-text);
+    font-family: inherit;
+    font-size: inherit;
+    line-height: var(--dyn-line-height-normal);
+    transition: var(--dyn-transition-colors), var(--dyn-transition-shadow);
+    
+    &:focus {
+      outline: none;
+      border-color: var(--dyn-color-input-border-focus);
+      box-shadow: var(--dyn-shadow-focus);
+    }
+    
+    &:disabled {
+      background-color: var(--dyn-color-background-disabled);
+      color: var(--dyn-color-text-disabled);
+      cursor: not-allowed;
+    }
+    
+    &::placeholder {
+      color: var(--dyn-color-text-placeholder);
+    }
+  }
+  
+  /* Size-specific padding */
+  .dyn-field-container--sm & {
+    input,
+    select,
+    textarea {
+      padding: var(--dyn-spacing-component-padding-sm);
+    }
+  }
+  
+  .dyn-field-container--lg & {
+    input,
+    select,
+    textarea {
+      padding: var(--dyn-spacing-component-padding-lg);
+    }
+  }
+}
+
+/* Validation message containers */
+.dyn-field-container__error,
+.dyn-field-container__warning,
+.dyn-field-container__success {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dyn-spacing-1);
+}
+
+.dyn-field-container__error {
+  color: var(--dyn-color-danger-600);
+}
+
+.dyn-field-container__warning {
+  color: var(--dyn-color-warning-600);
+}
+
+.dyn-field-container__success {
+  color: var(--dyn-color-success-600);
+}
+
+/* Validation message items */
+.dyn-field-container__error-message,
+.dyn-field-container__warning div,
+.dyn-field-container__success div {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--dyn-spacing-2);
+  font-size: var(--dyn-font-size-sm);
+  line-height: var(--dyn-line-height-normal);
+  
+  .dyn-field-container--sm & {
+    font-size: var(--dyn-font-size-xs);
+    gap: var(--dyn-spacing-1);
+  }
+  
+  .dyn-field-container--lg & {
+    font-size: var(--dyn-font-size-base);
+  }
+}
+
+/* Icons for validation messages */
+.dyn-field-container__error-icon,
+.dyn-field-container__warning-icon,
+.dyn-field-container__success-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px; /* Align with text baseline */
+  
+  .dyn-field-container--sm & {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .dyn-field-container--lg & {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.dyn-field-container__error-icon {
+  color: var(--dyn-color-danger-600);
+}
+
+.dyn-field-container__warning-icon {
+  color: var(--dyn-color-warning-600);
+}
+
+.dyn-field-container__success-icon {
+  color: var(--dyn-color-success-600);
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .dyn-field-container__field {
+    input,
+    select,
+    textarea {
+      background-color: var(--dyn-color-neutral-800);
+      border-color: var(--dyn-color-neutral-600);
+      color: var(--dyn-color-text-primary-dark);
+      
+      &:focus {
+        border-color: var(--dyn-color-primary-500);
+      }
+      
+      &:disabled {
+        background-color: var(--dyn-color-neutral-700);
+        color: var(--dyn-color-text-disabled);
+      }
+    }
+  }
+}
+
+/* Forced theme support */
+[data-theme="dark"] .dyn-field-container__field {
+  input,
+  select,
+  textarea {
+    background-color: var(--dyn-color-neutral-800);
+    border-color: var(--dyn-color-neutral-600);
+    color: var(--dyn-color-text-primary-dark);
+    
+    &:focus {
+      border-color: var(--dyn-color-primary-500);
+    }
+    
+    &:disabled {
+      background-color: var(--dyn-color-neutral-700);
+      color: var(--dyn-color-text-disabled);
+    }
+  }
+}
